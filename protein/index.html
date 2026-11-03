@@ -266,6 +266,9 @@ footer{font-size:.8rem;color:var(--muted);line-height:1.5;max-width:75ch}
       <div class="field"><span class="lbl" data-t="supp"></span>
         <div class="seg" id="supp"><button type="button" data-v="none" data-t="sNone"></button><button type="button" data-v="balanced" data-t="sBal"></button><button type="button" data-v="easy" data-t="sEasy"></button></div>
         <div class="hint" id="suppHint"></div></div>
+      <div class="field"><span class="lbl" data-t="shop"></span>
+        <div class="seg" id="shop"><button type="button" data-v="local" data-t="shopLocal"></button><button type="button" data-v="online" data-t="shopOnline"></button></div>
+        <div class="hint" id="shopHint"></div></div>
       <div class="field"><span class="lbl" data-t="leaveOut"></span><div class="chips" id="excl"></div></div>
       <div class="field"><span class="lbl" data-t="conditions"></span>
         <div class="chips" id="cond">
@@ -282,6 +285,11 @@ footer{font-size:.8rem;color:var(--muted);line-height:1.5;max-width:75ch}
           <div class="field"><label for="pnote" data-t="docNote"></label><textarea id="pnote" maxlength="300"></textarea></div>
           <div class="actions"><button type="button" class="btn sm" id="copyLink" data-t="copyLink"></button><button type="button" class="btn sm ghost" id="waLink" data-t="waLink"></button></div>
           <div class="msg" id="linkMsg"></div>
+          <div class="field"><span class="lbl" data-t="custTitle"></span>
+            <div id="custList" class="chips"></div>
+            <div class="row2"><input id="cn" type="text" maxlength="40" data-ph="custName"><select id="cw"><option value="local">—</option><option value="online">—</option></select></div>
+            <div class="row2"><input id="cp" type="number" min="1" max="60" step="0.5" data-ph="custP"><input id="cc" type="number" min="0" step="1" data-ph="custC"></div>
+            <div class="actions"><button type="button" class="btn sm ghost" id="cadd" data-t="custAdd"></button></div></div>
           <div class="field"><span class="lbl" data-t="prices"></span>
             <div class="prices" id="priceGrid"></div></div>
         </div>
@@ -347,6 +355,10 @@ en:{
  habit:"Food habit", veg:"Vegetarian", nonveg:"Non-veg", eggs:"Eggs", noEggs:"No eggs", yesEggs:"Eats eggs",
  supp:"Supplements", sNone:"Food only", sBal:"Food first", sEasy:"Easy mix",
  hNone:"Home food only.", hBal:"Home food first. Amul buttermilk, paneer or whey only if food falls short.", hEasy:"Adds ready supplements early for busy days. Still capped at one-third of the target.",
+ shop:"Where you can buy", shopLocal:"Shops near me", shopOnline:"Shops + online",
+ hShopLocal:"Only what Amul parlours, dairies and kirana shops in Vadodara usually stock.", hShopOnline:"Also items from Blinkit, Zepto, Amazon and shop.amul.com.",
+ wLocal:"Amul parlour / dairy / kirana", wOnline:"Blinkit, Zepto, Amazon, shop.amul.com", wBoth:"Amul parlour or online",
+ custTitle:"Add a supplement available near you", custName:"Name", custP:"Protein (g) per serving", custC:"Price (₹) per serving", custAdd:"Add", custDel:"Remove", custWhere:"Sold at",
  leaveOut:"Tap to leave out", conditions:"Health conditions", gdm:"Diabetes / GDM", kidney:"Kidney disease", lactose:"Milk upsets stomach",
  x_paneer:"Paneer", x_soya:"Soya", x_chana:"Roasted chana", x_peanuts:"Peanuts", x_nuts:"Nuts & seeds", x_kathol:"Kathol (beans)", x_sprouts:"Sprouts", x_chicken:"Chicken", x_fish:"Fish", x_whey:"Whey powder", x_shakes:"Flavoured shakes",
  target:"Daily protein target", perDay:"g / day",
@@ -372,7 +384,7 @@ en:{
  docTitle:"For the doctor", docSub:"Set the plan, then send the patient a link that opens with everything filled in.",
  patName:"Patient name", docNote:"Doctor's note to patient", copyLink:"Copy link for patient", linkCopied:"Link copied.", waLink:"Send on WhatsApp",
  prices:"Prices (₹), edit when they change",
- p_hpButtermilk:"High Protein Buttermilk, 200 ml", p_hpPaneer400:"High Protein Paneer, 400 g pack", p_wheyBox:"Amul Whey, box of 30 sachets", p_blueberry:"Blueberry Protein Shake, 200 ml", p_importedWheyPerG:"Imported whey, ₹ per g protein",
+ p_hpButtermilk:"Amul High Protein Buttermilk, 200 ml", p_hpLassi:"Amul High Protein Lassi, 200 ml", p_hpPaneer400:"Amul High Protein Paneer, 400 g", p_hpMilk:"Amul High Protein Milk, 250 ml", p_kool:"Amul Kool Protein Shake, 180 ml", p_wheyBox:"Amul Whey, box of 30 sachets", p_indWheyKg:"Indian unflavoured whey, 1 kg", p_blueberry:"Amul Blueberry Protein Shake, 200 ml", p_skyr:"Milky Mist Skyr, 100 g", p_sattuKg:"Sattu (roasted chana flour), 1 kg", p_importedWheyPerG:"Imported whey, ₹ per g protein",
  banner:"This plan was prepared at Madhuvan Maternity Hospital{name}.", bannerFor:" for {name}", bannerEdit:"Edit",
  docNoteHead:"Doctor's note",
  stopTitle:"Please see your doctor first", stopBody:"With kidney disease, extra protein can do harm. A high-protein plan or protein powder should only be started after your doctor checks your kidney tests and sets your protein amount.", stopSub:"This also applies to high blood pressure in pregnancy with protein in the urine.",
@@ -389,6 +401,8 @@ en:{
  nMilk:"Use packet (pasteurised) milk, or boil loose milk. Make dahi and paneer from boiled milk.",
  nSoya:"Keep soya to one item a day.",
  nShake:"Only one flavoured protein shake a day. It contains sweeteners that can cause gas. Avoid coffee-flavoured protein drinks{p}.", nShakeP:" in pregnancy",
+ nIndWhey:"Indian unflavoured whey (Nakpro, AS-IT-IS, Avvatar and similar) costs about a third of imported whey. Buy unflavoured, no added sugar, and check the FSSAI mark on the pack.",
+ nSattu:"Sattu is roasted chana flour. Stir 2 tablespoons into chaas or water with a pinch of salt and jeera.",
  nWhey:"Plain Amul Whey has no sugar or sweetener and is lactose-free. Stir it into room-temperature milk, chaas or dahi, not boiling liquid.",
  nGdm:"Diabetes / GDM: flavoured shakes and sweet maternity powders (Protinex Mama, Prohance Mom) are left out. Plain whey, high-protein buttermilk and paneer are fine.",
  nLactose:"Milk is left out. Small amounts of dahi, chaas or high-protein buttermilk are often tolerated; stop them if they upset your stomach.",
@@ -415,6 +429,10 @@ gu:{
  habit:"ખોરાકની ટેવ", veg:"શાકાહારી", nonveg:"માંસાહારી", eggs:"ઈંડાં", noEggs:"ઈંડાં નહીં", yesEggs:"ઈંડાં ખાઉં છું",
  supp:"સપ્લિમેન્ટ", sNone:"ફક્ત ખોરાક", sBal:"પહેલાં ખોરાક", sEasy:"સહેલું મિશ્રણ",
  hNone:"ફક્ત ઘરનો ખોરાક.", hBal:"પહેલાં ઘરનો ખોરાક. ખૂટે તો જ અમૂલ છાશ, પનીર કે વ્હે.", hEasy:"વ્યસ્ત દિવસો માટે તૈયાર સપ્લિમેન્ટ વહેલાં ઉમેરે છે. તો પણ લક્ષ્યના ત્રીજા ભાગથી વધુ નહીં.",
+ shop:"ક્યાંથી ખરીદી શકો", shopLocal:"નજીકની દુકાનો", shopOnline:"દુકાનો + ઓનલાઇન",
+ hShopLocal:"ફક્ત તે જે વડોદરાના અમૂલ પાર્લર, ડેરી અને કરિયાણાની દુકાનોમાં સામાન્ય રીતે મળે.", hShopOnline:"Blinkit, Zepto, Amazon અને shop.amul.com પરની વસ્તુઓ પણ.",
+ wLocal:"અમૂલ પાર્લર / ડેરી / કરિયાણું", wOnline:"Blinkit, Zepto, Amazon, shop.amul.com", wBoth:"અમૂલ પાર્લર કે ઓનલાઇન",
+ custTitle:"તમારી નજીક મળતું સપ્લિમેન્ટ ઉમેરો", custName:"નામ", custP:"એક માપમાં પ્રોટીન (ગ્રામ)", custC:"એક માપનો ભાવ (₹)", custAdd:"ઉમેરો", custDel:"કાઢો", custWhere:"ક્યાં મળે",
  leaveOut:"ન ખાવું હોય તે દબાવો", conditions:"બીમારી", gdm:"ડાયાબિટીસ / GDM", kidney:"કિડનીની બીમારી", lactose:"દૂધ માફક નથી",
  x_paneer:"પનીર", x_soya:"સોયા", x_chana:"દાળિયા", x_peanuts:"સીંગદાણા", x_nuts:"સૂકો મેવો", x_kathol:"કઠોળ", x_sprouts:"ફણગાવેલા", x_chicken:"ચિકન", x_fish:"માછલી", x_whey:"વ્હે પાઉડર", x_shakes:"ફ્લેવર્ડ શેક",
  target:"રોજનું પ્રોટીન લક્ષ્ય", perDay:"ગ્રામ / દિવસ",
@@ -440,7 +458,7 @@ gu:{
  docTitle:"ડૉક્ટર માટે", docSub:"પ્લાન સેટ કરો, પછી દર્દીને લિંક મોકલો જે બધું ભરેલું ખૂલે.",
  patName:"દર્દીનું નામ", docNote:"ડૉક્ટરની નોંધ", copyLink:"દર્દી માટે લિંક કૉપી", linkCopied:"લિંક કૉપી થઈ.", waLink:"WhatsApp પર મોકલો",
  prices:"ભાવ (₹), બદલાય ત્યારે સુધારો",
- p_hpButtermilk:"હાઈ પ્રોટીન છાશ, 200 મિલી", p_hpPaneer400:"હાઈ પ્રોટીન પનીર, 400 ગ્રામ પેક", p_wheyBox:"અમૂલ વ્હે, 30 પાઉચનું બોક્સ", p_blueberry:"બ્લુબેરી પ્રોટીન શેક, 200 મિલી", p_importedWheyPerG:"વિદેશી વ્હે, ₹ પ્રતિ ગ્રામ પ્રોટીન",
+ p_hpButtermilk:"અમૂલ હાઈ પ્રોટીન છાશ, 200 મિલી", p_hpLassi:"અમૂલ હાઈ પ્રોટીન લસ્સી, 200 મિલી", p_hpPaneer400:"અમૂલ હાઈ પ્રોટીન પનીર, 400 ગ્રામ", p_hpMilk:"અમૂલ હાઈ પ્રોટીન દૂધ, 250 મિલી", p_kool:"અમૂલ કૂલ પ્રોટીન શેક, 180 મિલી", p_wheyBox:"અમૂલ વ્હે, 30 પાઉચનું બોક્સ", p_indWheyKg:"ભારતીય સાદો વ્હે, 1 કિલો", p_blueberry:"અમૂલ બ્લુબેરી પ્રોટીન શેક, 200 મિલી", p_skyr:"મિલ્કી મિસ્ટ સ્કાયર, 100 ગ્રામ", p_sattuKg:"સત્તુ (દાળિયાનો લોટ), 1 કિલો", p_importedWheyPerG:"વિદેશી વ્હે, ₹ પ્રતિ ગ્રામ પ્રોટીન",
  banner:"આ પ્લાન મધુવન મેટરનિટી હોસ્પિટલમાં{name} બનાવ્યો છે.", bannerFor:" {name} માટે", bannerEdit:"બદલો",
  docNoteHead:"ડૉક્ટરની નોંધ",
  stopTitle:"પહેલાં ડૉક્ટરને મળો", stopBody:"કિડનીની બીમારીમાં વધારાનું પ્રોટીન નુકસાન કરી શકે. ડૉક્ટર કિડનીના રિપોર્ટ તપાસીને પ્રોટીનનું પ્રમાણ નક્કી કરે પછી જ વધુ પ્રોટીનનો પ્લાન કે પાઉડર શરૂ કરવો.", stopSub:"સગર્ભાવસ્થામાં ઊંચા બીપી સાથે પેશાબમાં પ્રોટીન હોય તો પણ આ લાગુ પડે છે.",
@@ -457,6 +475,8 @@ gu:{
  nMilk:"પેકેટનું (પાશ્ચરાઇઝ્ડ) દૂધ વાપરો, અથવા છૂટું દૂધ ઉકાળો. દહીં અને પનીર ઉકાળેલા દૂધમાંથી બનાવો.",
  nSoya:"સોયા દિવસમાં એક જ વાર.",
  nShake:"ફ્લેવર્ડ પ્રોટીન શેક દિવસમાં એક જ. તેમાં ગળપણ હોય છે જેનાથી ગેસ થઈ શકે. કૉફી ફ્લેવરનું પ્રોટીન પીણું ટાળો{p}.", nShakeP:" સગર્ભાવસ્થામાં",
+ nIndWhey:"ભારતીય સાદો વ્હે (Nakpro, AS-IT-IS, Avvatar વગેરે) વિદેશી વ્હે કરતાં લગભગ ત્રીજા ભાગના ભાવે મળે છે. સાદો, ખાંડ વગરનો લો અને પેક પર FSSAI નિશાન તપાસો.",
+ nSattu:"સત્તુ એટલે દાળિયાનો લોટ. 2 ચમચી છાશ કે પાણીમાં મીઠું-જીરું નાખીને હલાવો.",
  nWhey:"સાદા અમૂલ વ્હેમાં ખાંડ કે ગળપણ નથી અને લેક્ટોઝ નથી. ઠંડા કે હૂંફાળા દૂધ, છાશ કે દહીંમાં ભેળવો, ઊકળતામાં નહીં.",
  nGdm:"ડાયાબિટીસ / GDM: ફ્લેવર્ડ શેક અને મીઠા મેટરનિટી પાઉડર (પ્રોટીનેક્સ મામા, પ્રોહાન્સ મોમ) કાઢ્યા છે. સાદો વ્હે, હાઈ પ્રોટીન છાશ અને પનીર ચાલે.",
  nLactose:"દૂધ કાઢ્યું છે. થોડું દહીં, છાશ કે હાઈ પ્રોટીન છાશ ઘણાને માફક આવે છે; પેટ બગડે તો બંધ કરો.",
@@ -483,6 +503,10 @@ hi:{
  habit:"खाने की आदत", veg:"शाकाहारी", nonveg:"मांसाहारी", eggs:"अंडे", noEggs:"अंडे नहीं", yesEggs:"अंडे खाते हैं",
  supp:"सप्लीमेंट", sNone:"सिर्फ़ खाना", sBal:"पहले खाना", sEasy:"आसान मिश्रण",
  hNone:"सिर्फ़ घर का खाना।", hBal:"पहले घर का खाना। कम पड़े तभी अमूल छाछ, पनीर या व्हे।", hEasy:"व्यस्त दिनों के लिए तैयार सप्लीमेंट जल्दी जोड़ता है। फिर भी लक्ष्य के एक-तिहाई से ज़्यादा नहीं।",
+ shop:"कहाँ से खरीद सकते हैं", shopLocal:"पास की दुकानें", shopOnline:"दुकानें + ऑनलाइन",
+ hShopLocal:"सिर्फ़ वह जो वडोदरा के अमूल पार्लर, डेयरी और किराना दुकानों में आमतौर पर मिलता है।", hShopOnline:"Blinkit, Zepto, Amazon और shop.amul.com की चीज़ें भी।",
+ wLocal:"अमूल पार्लर / डेयरी / किराना", wOnline:"Blinkit, Zepto, Amazon, shop.amul.com", wBoth:"अमूल पार्लर या ऑनलाइन",
+ custTitle:"अपने पास मिलने वाला सप्लीमेंट जोड़ें", custName:"नाम", custP:"एक माप में प्रोटीन (ग्राम)", custC:"एक माप का दाम (₹)", custAdd:"जोड़ें", custDel:"हटाएँ", custWhere:"कहाँ मिलता है",
  leaveOut:"जो नहीं खाना, उसे दबाएँ", conditions:"बीमारी", gdm:"डायबिटीज़ / GDM", kidney:"किडनी की बीमारी", lactose:"दूध से पेट खराब",
  x_paneer:"पनीर", x_soya:"सोया", x_chana:"भुने चने", x_peanuts:"मूंगफली", x_nuts:"मेवे", x_kathol:"दालें-बीन्स", x_sprouts:"अंकुरित", x_chicken:"चिकन", x_fish:"मछली", x_whey:"व्हे पाउडर", x_shakes:"फ्लेवर्ड शेक",
  target:"रोज़ का प्रोटीन लक्ष्य", perDay:"ग्राम / दिन",
@@ -508,7 +532,7 @@ hi:{
  docTitle:"डॉक्टर के लिए", docSub:"प्लान सेट करें, फिर मरीज़ को लिंक भेजें जो सब भरा हुआ खुले।",
  patName:"मरीज़ का नाम", docNote:"डॉक्टर की टिप्पणी", copyLink:"मरीज़ के लिए लिंक कॉपी", linkCopied:"लिंक कॉपी हो गई।", waLink:"WhatsApp पर भेजें",
  prices:"दाम (₹), बदलने पर सुधारें",
- p_hpButtermilk:"हाई प्रोटीन छाछ, 200 मि.ली.", p_hpPaneer400:"हाई प्रोटीन पनीर, 400 ग्राम पैक", p_wheyBox:"अमूल व्हे, 30 पाउच का डिब्बा", p_blueberry:"ब्लूबेरी प्रोटीन शेक, 200 मि.ली.", p_importedWheyPerG:"विदेशी व्हे, ₹ प्रति ग्राम प्रोटीन",
+ p_hpButtermilk:"अमूल हाई प्रोटीन छाछ, 200 मि.ली.", p_hpLassi:"अमूल हाई प्रोटीन लस्सी, 200 मि.ली.", p_hpPaneer400:"अमूल हाई प्रोटीन पनीर, 400 ग्राम", p_hpMilk:"अमूल हाई प्रोटीन दूध, 250 मि.ली.", p_kool:"अमूल कूल प्रोटीन शेक, 180 मि.ली.", p_wheyBox:"अमूल व्हे, 30 पाउच का डिब्बा", p_indWheyKg:"भारतीय सादा व्हे, 1 किलो", p_blueberry:"अमूल ब्लूबेरी प्रोटीन शेक, 200 मि.ली.", p_skyr:"मिल्की मिस्ट स्कायर, 100 ग्राम", p_sattuKg:"सत्तू (भुने चने का आटा), 1 किलो", p_importedWheyPerG:"विदेशी व्हे, ₹ प्रति ग्राम प्रोटीन",
  banner:"यह प्लान मधुवन मैटरनिटी हॉस्पिटल में{name} बनाया गया है।", bannerFor:" {name} के लिए", bannerEdit:"बदलें",
  docNoteHead:"डॉक्टर की टिप्पणी",
  stopTitle:"पहले डॉक्टर से मिलें", stopBody:"किडनी की बीमारी में ज़्यादा प्रोटीन नुकसान कर सकता है। डॉक्टर किडनी की रिपोर्ट देखकर प्रोटीन की मात्रा तय करें, उसके बाद ही ज़्यादा प्रोटीन का प्लान या पाउडर शुरू करें।", stopSub:"गर्भावस्था में ऊँचे बीपी के साथ पेशाब में प्रोटीन हो तो भी यह लागू है।",
@@ -525,6 +549,8 @@ hi:{
  nMilk:"पैकेट का (पाश्चुरीकृत) दूध लें, या खुला दूध उबालें। दही और पनीर उबले दूध से बनाएँ।",
  nSoya:"सोया दिन में एक ही बार।",
  nShake:"फ्लेवर्ड प्रोटीन शेक दिन में एक ही। इसमें मिठास होती है जिससे गैस हो सकती है। कॉफ़ी फ्लेवर का प्रोटीन पेय न लें{p}।", nShakeP:" गर्भावस्था में",
+ nIndWhey:"भारतीय सादा व्हे (Nakpro, AS-IT-IS, Avvatar आदि) विदेशी व्हे के लगभग एक-तिहाई दाम में मिलता है। सादा, बिना चीनी वाला लें और पैक पर FSSAI का निशान देखें।",
+ nSattu:"सत्तू भुने चने का आटा है। 2 चम्मच छाछ या पानी में नमक-जीरा डालकर घोलें।",
  nWhey:"सादे अमूल व्हे में चीनी या मिठास नहीं और लैक्टोज़ नहीं। ठंडे या गुनगुने दूध, छाछ या दही में मिलाएँ, उबलते में नहीं।",
  nGdm:"डायबिटीज़ / GDM: फ्लेवर्ड शेक और मीठे मैटरनिटी पाउडर (प्रोटीनेक्स मामा, प्रोहांस मॉम) हटा दिए हैं। सादा व्हे, हाई प्रोटीन छाछ और पनीर ठीक हैं।",
  nLactose:"दूध हटा दिया है। थोड़ा दही, छाछ या हाई प्रोटीन छाछ अक्सर पच जाता है; पेट खराब हो तो बंद करें।",
@@ -541,10 +567,10 @@ let lang="en";
 const t=(k,v)=>{ let s=(L[lang][k]??L.en[k]??k); if(typeof s==="string"&&v) for(const x in v) s=s.split("{"+x+"}").join(v[x]); return s; };
 
 /* ============ PRICES (editable in app) ============ */
-const PRICE_DEF = {hpButtermilk:30, hpPaneer400:165, wheyBox:2400, blueberry:55, importedWheyPerG:10};
+const PRICE_DEF = {hpButtermilk:30, hpLassi:30, hpPaneer400:165, hpMilk:110, kool:40, wheyBox:2400, indWheyKg:1300, blueberry:55, skyr:40, sattuKg:120, importedWheyPerG:10};
 let PRICES={...PRICE_DEF};
 try{ Object.assign(PRICES, JSON.parse(localStorage.getItem("mpp-prices")||"{}")); }catch(e){}
-const price={ hpBm:()=>+PRICES.hpButtermilk, hpPan:()=>+PRICES.hpPaneer400/8, whey:()=>+PRICES.wheyBox/30, shake:()=>+PRICES.blueberry };
+const price={ hpBm:()=>+PRICES.hpButtermilk, hpLassi:()=>+PRICES.hpLassi, hpPan:()=>+PRICES.hpPaneer400/8, hpMilk:()=>+PRICES.hpMilk, kool:()=>+PRICES.kool, whey:()=>+PRICES.wheyBox/30, indWhey:()=>+PRICES.indWheyKg*0.03, shake:()=>+PRICES.blueberry, skyr:()=>+PRICES.skyr, sattu:()=>+PRICES.sattuKg*0.03 };
 
 /* ============ FOOD ITEMS FOR THE PLAN ============ */
 const MEALS=[["early","6–7 am"],["bf","8–9 am"],["mid","11 am"],["lunch","1 pm"],["eve","4–5 pm"],["dinner","8 pm"],["bed","10 pm"]];
@@ -576,13 +602,24 @@ const S = {
  kadhi:{meal:"lunch",n:["1 katori kadhi (thick, with besan)","1 વાટકી જાડી કઢી","1 कटोरी गाढ़ी कढ़ी"],q:["1 katori","1 વાટકી","1 कटोरी"],p:4,kcal:100,grp:"milk"},
  chanaSalad:{meal:"lunch",n:["Kala chana salad","કાળા ચણાનું સલાડ","काले चने का सलाद"],q:["1 katori, 40 g dry","1 વાટકી, 40 ગ્રામ સૂકા","1 कटोरी, 40 ग्राम सूखे"],p:7.5,kcal:115,grp:"kathol"},
  tofu:{meal:"dinner",n:["Tofu sabzi","ટોફુનું શાક","टोफू की सब्ज़ी"],q:["100 g firm tofu","100 ગ્રામ ટોફુ","100 ग्राम टोफू"],p:10,kcal:100,grp:"soya"},
- skyr:{meal:"mid",n:["Milky Mist Skyr","મિલ્કી મિસ્ટ સ્કાયર","मिल्की मिस्ट स्कायर"],q:["100 g cup","100 ગ્રામ કપ","100 ग्राम कप"],p:11,kcal:70,grp:"milk"},
- /* supplements */
- hpBm:{meal:"mid",n:["Amul High Protein Buttermilk","અમૂલ હાઈ પ્રોટીન છાશ","अमूल हाई प्रोटीन छाछ"],q:["1 bottle, 200 ml","1 બોટલ, 200 મિલી","1 बोतल, 200 मि.ली."],p:15,kcal:90,supp:1,rtd:1,cost:price.hpBm,grp:"milk",bought:"shop.amul.com / Blinkit"},
- hpPan:{meal:"lunch",n:["Amul High Protein Paneer","અમૂલ હાઈ પ્રોટીન પનીર","अमूल हाई प्रोटीन पनीर"],q:["50 g, in sabzi or grilled","50 ગ્રામ, શાકમાં કે શેકીને","50 ग्राम, सब्ज़ी में या ग्रिल"],p:12.5,kcal:85,supp:1,cost:price.hpPan,grp:"paneer",bought:"shop.amul.com, 400 g pack"},
- whey:{meal:"bf",n:["Amul Whey (plain) in milk or chaas","અમૂલ વ્હે (સાદો) દૂધ કે છાશમાં","अमूल व्हे (सादा) दूध या छाछ में"],q:["1 sachet","1 પાઉચ","1 पाउच"],p:25,kcal:120,supp:1,cost:price.whey,grp:"whey",lf:1,bought:"shop.amul.com, 30 sachets"},
- shake:{meal:"eve",n:["Amul Blueberry Protein Shake","અમૂલ બ્લુબેરી પ્રોટીન શેક","अमूल ब्लूबेरी प्रोटीन शेक"],q:["1 bottle, 200 ml","1 બોટલ, 200 મિલી","1 बोतल, 200 मि.ली."],p:20,kcal:138,supp:1,rtd:1,cost:price.shake,grp:"shakes",gdm:1,bought:"Blinkit / Zepto / shop.amul.com"}
+ /* supplements: where = local (Amul parlour, dairy, kirana), online, or both */
+ sattu:{meal:"mid",n:["Sattu in chaas or water","સત્તુ છાશ કે પાણીમાં","सत्तू छाछ या पानी में"],q:["30 g (2 tbsp)","30 ગ્રામ (2 ચમચી)","30 ग्राम (2 चम्मच)"],p:6.5,kcal:110,supp:1,cost:price.sattu,grp:"chana",where:"local"},
+ hpBm:{meal:"mid",n:["Amul High Protein Buttermilk","અમૂલ હાઈ પ્રોટીન છાશ","अमूल हाई प्रोटीन छाछ"],q:["1 bottle, 200 ml","1 બોટલ, 200 મિલી","1 बोतल, 200 मि.ली."],p:15,kcal:90,supp:1,rtd:1,cost:price.hpBm,grp:"milk",where:"both"},
+ hpLassi:{meal:"eve",n:["Amul High Protein Lassi (plain)","અમૂલ હાઈ પ્રોટીન લસ્સી (સાદી)","अमूल हाई प्रोटीन लस्सी (सादी)"],q:["1 bottle, 200 ml","1 બોટલ, 200 મિલી","1 बोतल, 200 मि.ली."],p:15,kcal:120,supp:1,rtd:1,cost:price.hpLassi,grp:"milk",where:"both"},
+ hpPan:{meal:"lunch",n:["Amul High Protein Paneer","અમૂલ હાઈ પ્રોટીન પનીર","अमूल हाई प्रोटीन पनीर"],q:["50 g, in sabzi or grilled","50 ગ્રામ, શાકમાં કે શેકીને","50 ग्राम, सब्ज़ी में या ग्रिल"],p:12.5,kcal:85,supp:1,cost:price.hpPan,grp:"paneer",where:"both"},
+ hpMilk:{meal:"bed",n:["Amul High Protein Milk","અમૂલ હાઈ પ્રોટીન દૂધ","अमूल हाई प्रोटीन दूध"],q:["1 pack, 250 ml","1 પેક, 250 મિલી","1 पैक, 250 मि.ली."],p:35,kcal:225,supp:1,rtd:1,cost:price.hpMilk,grp:"milk",lf:1,where:"online"},
+ kool:{meal:"eve",n:["Amul Kool Protein Shake (vanilla / kesar)","અમૂલ કૂલ પ્રોટીન શેક (વેનીલા / કેસર)","अमूल कूल प्रोटीन शेक (वनीला / केसर)"],q:["1 pack, 180 ml","1 પેક, 180 મિલી","1 पैक, 180 मि.ली."],p:10,kcal:133,supp:1,rtd:1,cost:price.kool,grp:"shakes",gdm:1,where:"both"},
+ indWhey:{meal:"bf",n:["Indian unflavoured whey in milk or chaas","ભારતીય સાદો વ્હે દૂધ કે છાશમાં","भारतीय सादा व्हे दूध या छाछ में"],q:["1 scoop, 30 g (Nakpro / AS-IT-IS / Avvatar)","1 સ્કૂપ, 30 ગ્રામ (Nakpro / AS-IT-IS / Avvatar)","1 स्कूप, 30 ग्राम (Nakpro / AS-IT-IS / Avvatar)"],p:24,kcal:120,supp:1,cost:price.indWhey,grp:"whey",where:"online"},
+ whey:{meal:"bf",n:["Amul Whey (plain) in milk or chaas","અમૂલ વ્હે (સાદો) દૂધ કે છાશમાં","अमूल व्हे (सादा) दूध या छाछ में"],q:["1 sachet","1 પાઉચ","1 पाउच"],p:25,kcal:120,supp:1,cost:price.whey,grp:"whey",lf:1,where:"online"},
+ skyr:{meal:"mid",n:["Milky Mist Skyr","મિલ્કી મિસ્ટ સ્કાયર","मिल्की मिस्ट स्कायर"],q:["100 g cup","100 ગ્રામ કપ","100 ग्राम कप"],p:11,kcal:70,supp:1,rtd:1,cost:price.skyr,grp:"milk",where:"online"},
+ shake:{meal:"eve",n:["Amul Blueberry Protein Shake","અમૂલ બ્લુબેરી પ્રોટીન શેક","अमूल ब्लूबेरी प्रोटीन शेक"],q:["1 bottle, 200 ml","1 બોટલ, 200 મિલી","1 बोतल, 200 मि.ली."],p:20,kcal:138,supp:1,rtd:1,cost:price.shake,grp:"shakes",gdm:1,where:"online"}
 };
+const whereText=w=>t(w==="local"?"wLocal":w==="online"?"wOnline":"wBoth");
+/* doctor-added supplements become items c0, c1, … */
+function syncCustom(){
+  Object.keys(S).filter(k=>/^c\d+$/.test(k)).forEach(k=>delete S[k]);
+  (st.custom||[]).forEach((c,i)=>{ const n=[c.n,c.n,c.n]; S["c"+i]={meal:"mid",n,q:["1 serving","1 માપ","1 माप"],p:+c.p||0,kcal:Math.round((+c.p||0)*5),supp:1,rtd:1,cost:()=>+c.c||0,grp:"custom",where:c.w||"local"}; });
+}
 /* weekly variants: dish changes by day, same slot */
 const VAR = {
  dal:[ {n:["1 katori thick tuvar dal","1 વાટકી જાડી તુવેર દાળ","1 कटोरी गाढ़ी अरहर दाल"],p:6.5,kcal:99},
@@ -611,7 +648,7 @@ const resolve=(k,d)=>{ const v=(VAR[k]||[]); return v.length? {...S[k],...v[d%v.
 const EXCL=["paneer","soya","chana","peanuts","nuts","kathol","sprouts","chicken","fish","whey","shakes"];
 
 /* ============ STATE ============ */
-const st={mode:"preg",tri:"3",lact:"1",method:"auto",perkg:1.0,fixed:70,diet:"veg",eggs:"no",supp:"balanced",wt:60,ht:"",excl:[],cond:[],day:0,mult:{},swap:{},removed:[],name:"",note:"",fromDoc:false};
+const st={mode:"preg",tri:"3",lact:"1",method:"auto",perkg:1.0,fixed:70,diet:"veg",eggs:"no",supp:"balanced",wt:60,ht:"",excl:[],cond:[],shop:"online",custom:[],day:0,mult:{},swap:{},removed:[],name:"",note:"",fromDoc:false};
 try{ Object.assign(st, JSON.parse(localStorage.getItem("mpp2-state")||"{}")); }catch(e){}
 const save=()=>{ try{ localStorage.setItem("mpp2-state",JSON.stringify(st)); }catch(e){} };
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
@@ -625,7 +662,7 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",
   try{
     const b=m[1].replace(/-/g,"+").replace(/_/g,"/");
     const o=JSON.parse(decodeURIComponent(escape(atob(b))));
-    const keys=["mode","tri","lact","method","perkg","fixed","diet","eggs","supp","wt","ht","excl","cond","mult","swap","removed","name","note","lang"];
+    const keys=["mode","tri","lact","method","perkg","fixed","diet","eggs","supp","wt","ht","excl","cond","shop","custom","mult","swap","removed","name","note","lang"];
     for(const k of keys) if(k in o) st[k]=o[k];
     st.fromDoc=true; save();
     history.replaceState(null,"",location.pathname+location.search);
@@ -670,11 +707,13 @@ function allowed(s,ctx){
   if(s.need==="nonveg"&&!ctx.nv) return false;
   if(s.grp&&ctx.ex.has(s.grp)) return false;
   if(s.supp&&st.supp==="none") return false;
+  if(s.supp&&s.where==="online"&&st.shop==="local") return false;
   if(s.gdm&&ctx.gdm) return false;
   if(ctx.lf&&s.grp==="milk"&&!s.supp) return false;
   return true;
 }
 function build(T,d){
+  syncCustom();
   const ctx={eggs:st.eggs==="yes",nv:st.diet==="nonveg",gdm:st.cond.includes("gdm"),lf:st.cond.includes("lactose"),ex:new Set(st.excl)};
   const plan=[]; let total=0,supp=0,rtd=0;
   const unavailable=new Set([...st.removed,...Object.keys(st.swap)]);
@@ -692,17 +731,18 @@ function build(T,d){
   const Q=[];
   if(ctx.eggs) Q.push("eggs2"); else Q.push("chilla");
   Q.push("dahi");
-  if(st.supp==="easy") Q.push("hpBm","whey","hpPan","shake");
+  const CUST=Object.keys(S).filter(k=>/^c\d+$/.test(k));
+  if(st.supp==="easy") Q.push(...CUST,"hpBm","indWhey","whey","hpPan","sattu","hpLassi","skyr","hpMilk","shake","kool");
   if(ctx.nv){ if(d%2) Q.push("fish","chicken"); else Q.push("chicken","fish"); }
   Q.push("paneer","chana","sprouts","milkBed","almonds");
-  if(st.supp==="balanced") Q.push("hpBm","hpPan");
+  if(st.supp==="balanced") Q.push(...CUST,"hpBm","sattu","hpPan");
   Q.push("chaas","soya"); if(ctx.eggs) Q.push("chilla");
-  if(st.supp==="balanced") Q.push("whey","shake");
+  if(st.supp==="balanced") Q.push("indWhey","whey","hpLassi","skyr","hpMilk","shake","kool");
   Q.push("egg3","kathol","dahi2","peanuts","pumpkin","skyr","chanaSalad","khichdi","tofu","kadhi");
   if(ctx.lf) Q.splice(Q.indexOf("chana")+1,0,"kathol");
   const cand=()=>Q.filter((k,i)=>Q.indexOf(k)===i&&can(k)
     &&!(S[k].supp&&(supp+S[k].p*mult(k)>T/3+0.5||(S[k].rtd&&rtd>=2)))
-    &&!((k==="soya"||k==="tofu")&&(used.has("milkLF")||used.has("soya")||used.has("tofu")))&&!(k==="khichdi"&&(used.has("rotliD")||used.has("dal")&&d%3)));
+    &&!((k==="soya"||k==="tofu")&&(used.has("milkLF")||used.has("soya")||used.has("tofu")))&&!(k==="hpMilk"&&used.has("milkBed"))&&!(k==="milkBed"&&used.has("hpMilk"))&&!(k==="khichdi"&&(used.has("rotliD")||used.has("dal")&&d%3)));
   let guard=0;
   while(T-total>1&&guard++<40){
     const c=cand(); if(!c.length) break;
@@ -726,8 +766,10 @@ function notes(B){
   if(ks.has("chicken")) N.push(t("nChicken"));
   if(["dahi","paneer","milkBf","milkBed","chaas","dahi2"].some(k=>ks.has(k))) N.push(t("nMilk"));
   if(ks.has("soya")||ks.has("milkLF")) N.push(t("nSoya"));
-  if(ks.has("shake")) N.push(t("nShake",{p:preg?t("nShakeP"):""}));
+  if(ks.has("shake")||ks.has("kool")) N.push(t("nShake",{p:preg?t("nShakeP"):""}));
   if(ks.has("whey")) N.push(t("nWhey"));
+  if(ks.has("indWhey")) N.push(t("nIndWhey"));
+  if(ks.has("sattu")) N.push(t("nSattu"));
   if(st.cond.includes("gdm")) N.push(t("nGdm"));
   if(st.cond.includes("lactose")) N.push(t("nLactose"));
   if(ks.has("peanuts")) N.push(t("nPeanuts"));
@@ -792,7 +834,7 @@ function renderPlan(){
     <div class="stat"><div class="lbl">${t("stKcal")}</div><div class="v num">${Math.round(kcal/10)*10}</div><div class="small muted">${t("kcalSub")}</div></div>
     <div class="stat"><div class="lbl">${t("stCost")}</div><div class="v num">₹${Math.round(cost)}${t("perDayCost")}</div><div class="small muted">${cost?t("monthly",{m:Math.round(cost*30).toLocaleString("en-IN"),w:wheyCost}):t("noSupp")}</div></div>
   </div>
-  ${B.plan.some(p=>p.supp)?`<div class="panel" style="gap:8px"><h3>${t("buy")}</h3><ul class="notes">${B.plan.filter(p=>p.supp).map(p=>`<li><b>${p.n[L_]}</b>: ${p.bought}. ₹${r1(p.cost()/p.p)} ${t("perG")}.</li>`).join("")}</ul></div>`:""}
+  ${B.plan.some(p=>p.supp)?`<div class="panel" style="gap:8px"><h3>${t("buy")}</h3><ul class="notes">${B.plan.filter(p=>p.supp).map(p=>`<li><b>${p.n[L_]}</b>: ${whereText(p.where)}. ₹${p.p?r1(p.cost()/p.p):0} ${t("perG")}.</li>`).join("")}</ul></div>`:""}
   <div class="panel" style="gap:8px"><h3>${t("keep")}</h3><ul class="notes">${N.map(n=>`<li>${n}</li>`).join("")}</ul></div>
   <div class="actions">
     <button class="btn" id="copy" type="button">${t("copy")}</button>
@@ -855,7 +897,9 @@ function sync(){
   $("#perkgOut").textContent=(+st.perkg).toFixed(2)+" g/kg";
   $("#methodHint").textContent=t(st.method==="auto"?"hintAuto":st.method==="perkg"?"hintPerkg":"hintFixed");
   $("#suppHint").textContent=t({none:"hNone",balanced:"hBal",easy:"hEasy"}[st.supp]);
-  ["mode","tri","lact","method","diet","eggs","supp"].forEach(k=>seg(k,k));
+  $("#shopHint").textContent=t(st.shop==="local"?"hShopLocal":"hShopOnline");
+  ["mode","tri","lact","method","diet","eggs","supp","shop"].forEach(k=>seg(k,k));
+  renderCustom();
   chips("excl","excl"); chips("cond","cond");
   $("#wt").value=st.wt; $("#ht").value=st.ht; $("#perkg").value=st.perkg; $("#fixed").value=st.fixed; $("#pname").value=st.name; $("#pnote").value=st.note;
   $("#banner").hidden=!st.fromDoc;
@@ -872,9 +916,16 @@ $("#pnote").oninput=e=>{st.note=e.target.value;save();renderPlan();};
 $("#lang").onchange=e=>{ lang=e.target.value; st.lang=lang; save(); applyText(); sync(); renderFoods(); };
 $("#bannerEdit").onclick=()=>{ st.fromDoc=false; save(); sync(); };
 
+/* doctor-added supplements */
+function renderCustom(){
+  $('#cw option[value="local"]').textContent=t("shopLocal"); $('#cw option[value="online"]').textContent=t("shopOnline");
+  $("#custList").innerHTML=(st.custom||[]).map((c,i)=>`<span class="chip">${esc(c.n)} · ${c.p} g · ₹${c.c} <button type="button" class="mini" data-cdel="${i}" style="padding:0 6px;margin-left:4px">×</button></span>`).join("");
+  $$("[data-cdel]").forEach(b=>b.onclick=()=>{ st.custom.splice(+b.dataset.cdel,1); save(); sync(); renderValue(); });
+}
+$("#cadd").onclick=()=>{ const n=$("#cn").value.trim(), p=+$("#cp").value, c=+$("#cc").value; if(!n||!p) return; (st.custom=st.custom||[]).push({n,p,c,w:$("#cw").value}); $("#cn").value=""; $("#cp").value=""; $("#cc").value=""; save(); sync(); renderValue(); };
 /* doctor link */
 function makeLink(){
-  const o={}; for(const k of ["mode","tri","lact","method","perkg","fixed","diet","eggs","supp","wt","ht","excl","cond","mult","swap","removed","name","note"]) o[k]=st[k]; o.lang=lang;
+  const o={}; for(const k of ["mode","tri","lact","method","perkg","fixed","diet","eggs","supp","wt","ht","excl","cond","shop","custom","mult","swap","removed","name","note"]) o[k]=st[k]; o.lang=lang;
   const b=btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
   return location.origin+location.pathname+"#p="+b;
 }
@@ -954,7 +1005,9 @@ const FOODS=[
  ["Supplements","veg","Amul Blueberry Protein Shake","બ્લુબેરી શેક","200 ml bottle",20,138,"1 a day max; has sweeteners"],
  ["Supplements","veg","Amul High Protein Milk","હાઈ પ્રોટીન દૂધ","250 ml",35,225,"Lactose-free"],
  ["Supplements","veg","Amul Kool Protein Shake","કૂલ પ્રોટીન","180 ml",10,133,"Avoid coffee flavour in pregnancy"],
- ["Supplements","veg","Amul Whey, plain","વ્હે પ્રોટીન","1 sachet",25,120,"No sugar, lactose-free"],
+ ["Supplements","veg","Amul Whey, plain","વ્હે પ્રોટીન","1 sachet",25,120,"No sugar, lactose-free; online"],
+ ["Supplements","veg","Indian unflavoured whey (Nakpro / AS-IT-IS / Avvatar)","ભારતીય વ્હે","1 scoop, 30 g",24,120,"No sugar; online; about ₹1.6 per g protein"],
+ ["Supplements","veg","Sattu (roasted chana flour)","સત્તુ / सत्तू","2 tbsp, 30 g",6.5,110,"Kirana shop; stir into chaas"],
  ["Supplements","veg","Milky Mist Skyr","સ્કાયર","100 g cup",11,70,""],
  ["Supplements","veg","Protinex Mama","પ્રોટીનેક્સ મામા","25 g serving",8,null,"Has sugar; not for GDM"],
  ["Supplements","veg","Prohance Mom","પ્રોહાન્સ મોમ","1 serving",8,null,"Has sugar; not for GDM"]
@@ -1014,9 +1067,11 @@ function renderTally(){
 function renderValue(){
   const VAL=[
    ["Soya chunks (Nutrela)",0.27,"f"],["Dal (any)",0.5,"f"],["Peanuts",0.65,"f"],["Roasted chana",1.1,"f"],["Toned milk",1.6,"f"],["Paneer (home / packet)",2.4,"f"],
-   ["Amul High Protein Paneer",r1(price.hpPan()/12.5),"s"],["Amul High Protein Buttermilk",r1(price.hpBm()/15),"s"],["Amul Blueberry Shake",r1(price.shake()/20),"s"],
-   ["Amul Whey, plain sachet",r1(price.whey()/25),"s"],["Amul High Protein Milk",3.14,"s"],["Milky Mist Skyr",3.5,"s"],["Amul Kool Protein Shake",4.0,"s"],
-   ["Protinex Mama",4.1,"x"],["Prohance Mom",5.3,"x"],["Milky Mist Greek Yogurt",6.6,"s"],["Imported whey (₹15,000 / 2 kg)",+PRICES.importedWheyPerG,"x"]
+   ["Sattu (roasted chana flour)",r1(price.sattu()/6.5),"f"],
+   ["Amul High Protein Paneer",r1(price.hpPan()/12.5),"s"],["Indian unflavoured whey (Nakpro / AS-IT-IS)",r1(price.indWhey()/24),"x"],["Amul High Protein Buttermilk",r1(price.hpBm()/15),"s"],["Amul High Protein Lassi",r1(price.hpLassi()/15),"s"],["Amul Blueberry Shake",r1(price.shake()/20),"s"],
+   ["Amul Whey, plain sachet",r1(price.whey()/25),"s"],["Amul High Protein Milk",r1(price.hpMilk()/35),"s"],["Milky Mist Skyr",r1(price.skyr()/11),"s"],["Amul Kool Protein Shake",r1(price.kool()/10),"s"],
+   ["Protinex Mama",4.1,"x"],["Prohance Mom",5.3,"x"],["Milky Mist Greek Yogurt",6.6,"s"],["Imported whey (₹15,000 / 2 kg)",+PRICES.importedWheyPerG,"x"],
+   ...(st.custom||[]).filter(c=>c.p).map(c=>[c.n,r1(c.c/c.p),"s"])
   ].sort((a,b)=>a[1]-b[1]);
   const mx=Math.max(...VAL.map(v=>v[1]))*1.05;
   $("#vbars").innerHTML=VAL.map(([n,v,k])=>`<div class="vrow"><span>${n}</span><div class="track"><span class="${k}" style="width:${v/mx*100}%"></span></div><span class="val num">₹${v.toFixed(2)}</span></div>`).join("");

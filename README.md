@@ -15,6 +15,7 @@ Single-file, offline-capable nutrition tools from Madhuvan Maternity & Eye Hospi
 - Tap any item to change its portion, swap it for another, or leave it out.
 - "Today's count": tap + for each serving eaten and see what is still needed.
 - Doctor's link: set the plan, add the patient's name and a note, then copy a link or send it on WhatsApp. It opens on the patient's phone with everything filled in.
+- Supplements tagged by where they are sold: "Shops near me" (Amul parlour, dairy, kirana: high-protein buttermilk and lassi, Kool, sattu) or "Shops + online" (adds Amul whey, high-protein milk and paneer, Milky Mist Skyr, Indian unflavoured whey such as Nakpro / AS-IT-IS / Avvatar, blueberry shake). The doctor can add anything a local shop stocks, with its protein and price.
 - Copy for WhatsApp (one day or the whole week), print handout, and a cost-per-gram-of-protein comparison with editable prices.
 - Works offline once opened (service worker) and can be added to the phone's home screen.
 
