@@ -4,8 +4,19 @@ Single-file, offline-capable nutrition tools from Madhuvan Maternity & Eye Hospi
 
 | Tool | Path | For |
 |---|---|---|
-| Nutrition Workstation 2.0 | `index.html` | Clinic desk: energy and diet planning, 7-day review, print |
+| Nutrition Workstation 3.0 | `index.html` | Clinic desk: patient records, BMI and pregnancy weight gain, ICMR targets, Indian diet builder, trilingual patient sheet |
 | Protein Planner 2.0 | `protein/index.html` | Patients: daily protein from Indian home food, with low-cost supplements only to fill the gap |
+
+## Nutrition Workstation 3.0
+
+- Patient list with search; each patient keeps assessment, targets, 7-day plan and visit history. Data stays in the browser (export/import JSON backups from Settings).
+- Assessment: BMI with Indian and WHO cut-offs, waist, anaemia grading from Hb (trimester-specific in pregnancy), gestational weight gain against ICMR-NIN 2024 categories (IOM 2009 for comparison) with a weight chart, 5-10% weight-management goal for non-pregnant adults.
+- Targets: Mifflin-St Jeor x PAL or the ICMR reference table, ICMR pregnancy/lactation additions, 1 g/kg or ICMR 0.83 g/kg protein rule, GDM carbohydrate split, full ICMR-NIN 2020 EAR/RDA table (editable).
+- Diet builder: 542 IFCT 2017 foods (with Gujarati and Hindi names) plus label foods and 75 Gujarati/Indian dishes computed from raw ingredients; household measures; live bars for energy, protein, carbohydrate, fat, fibre, calcium, iron, folate, vitamin C, zinc; templates (Gujarati veg, Jain, eggetarian, non-veg, GDM, protein focus) scaled to the energy target; custom foods and dishes.
+- Patient sheet in English, Gujarati or Hindi: one day or the week, targets, tips tailored to pregnancy/lactation/GDM/supplements, print or save as PDF.
+- Works offline once opened; installable on phone or desktop.
+
+The 2.1 workstation is kept at `legacy/workstation-2.1.html`.
 
 ## Protein Planner 2.0
 
@@ -22,4 +33,4 @@ Single-file, offline-capable nutrition tools from Madhuvan Maternity & Eye Hospi
 Veg / non-veg, eggs yes or no, GDM, kidney-disease stop screen and lactose intolerance are all handled. Values are from ICMR-NIN IFCT 2017 and product labels; prices last checked October 2026.
 
 ## Hosting
-Both tools are static pages. Connect the repository to Netlify or turn on GitHub Pages; the planner then lives at `/protein/`.
+All tools are static pages. Connect the repository to Netlify or turn on GitHub Pages; the workstation is at `/` and the planner at `/protein/`.
