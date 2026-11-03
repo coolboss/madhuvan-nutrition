@@ -1,0 +1,1039 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Madhuvan Protein Planner</title>
+<meta name="description" content="Daily protein plan from Indian home food, with low-cost supplements only to fill the gap. Pregnancy, breastfeeding and adults.">
+<meta name="theme-color" content="#2E6A4B">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hind+Vadodara:wght@400;500;600;700&family=Hind:wght@400;500;600;700&display=swap">
+<style>
+:root{
+  --bg:#F4F6F1; --surface:#FFFFFF; --sunk:#E9EDE5; --line:#D5DDD3;
+  --fg:#18231C; --muted:#5A6A5F;
+  --mung:#2E6A4B; --mung-soft:#DCEBDF; --mung-ink:#FFFFFF;
+  --saffron:#C9781A; --saffron-soft:#F7E6CC;
+  --warn:#A9461F; --warn-soft:#F6E0D6;
+  --body:"Hind Vadodara","Hind","Noto Sans Gujarati","Noto Sans Devanagari","Segoe UI",system-ui,sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#111813; --surface:#19221C; --sunk:#202B23; --line:#2E3B32;
+  --fg:#E4ECE6; --muted:#9AAC9F;
+  --mung:#74C79B; --mung-soft:#203A2B; --mung-ink:#0E1510;
+  --saffron:#EAA449; --saffron-soft:#3A2B16;
+  --warn:#EE8E66; --warn-soft:#3B2219; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#111813; --surface:#19221C; --sunk:#202B23; --line:#2E3B32;
+  --fg:#E4ECE6; --muted:#9AAC9F;
+  --mung:#74C79B; --mung-soft:#203A2B; --mung-ink:#0E1510;
+  --saffron:#EAA449; --saffron-soft:#3A2B16;
+  --warn:#EE8E66; --warn-soft:#3B2219; color-scheme:dark}
+
+*{box-sizing:border-box}
+html{scroll-padding-top:12px}
+body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));
+  padding-top:calc(16px + env(safe-area-inset-top,0px));padding-bottom:calc(48px + env(safe-area-inset-bottom,0px))}
+.wrap{max-width:1140px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+h1,h2,h3{margin:0;line-height:1.2;text-wrap:balance}
+h1{font-size:clamp(1.5rem,4vw,2.1rem);font-weight:700;letter-spacing:-.01em}
+h2{font-size:1.2rem;font-weight:700}
+h3{font-size:1rem;font-weight:600}
+p{margin:0}
+.num{font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+.small{font-size:.875rem}
+[hidden]{display:none!important}
+button{font-family:inherit}
+button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid var(--saffron);outline-offset:2px}
+
+header.top{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:12px}
+.clinic{font-size:.85rem;color:var(--mung);font-weight:600}
+.toprow{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+nav.tabs{display:flex;gap:4px;background:var(--sunk);padding:4px;border-radius:12px;flex-wrap:wrap}
+nav.tabs button{border:0;background:transparent;color:var(--muted);font-weight:600;font-size:.95rem;padding:8px 13px;border-radius:9px;cursor:pointer}
+nav.tabs button[aria-selected="true"]{background:var(--surface);color:var(--fg);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.langsel{width:auto;font-size:.9rem;font-weight:600;color:var(--fg);background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:8px 10px}
+
+.banner{background:var(--mung);color:var(--mung-ink);padding:10px 14px;border-radius:12px;font-weight:600;display:flex;justify-content:space-between;gap:12px;align-items:center;flex-wrap:wrap}
+.banner small{font-weight:400;opacity:.9}
+
+.grid{display:grid;grid-template-columns:330px minmax(0,1fr);gap:22px;align-items:start}
+@media (max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:16px;min-width:0}
+@media (min-width:861px){.inputs{position:sticky;top:12px;max-height:calc(100vh - 24px);overflow:auto}}
+.field{display:flex;flex-direction:column;gap:6px;min-width:0}
+.field>label,.lbl{font-size:.85rem;font-weight:600;color:var(--muted)}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+input[type=number],input[type=search],input[type=text],select,textarea{width:100%;font:500 1rem var(--body);color:var(--fg);background:var(--bg);border:1px solid var(--line);border-radius:10px;padding:9px 11px}
+textarea{min-height:64px;resize:vertical}
+.seg{display:flex;background:var(--sunk);border-radius:10px;padding:3px;gap:3px}
+.seg button{flex:1;border:0;background:transparent;color:var(--muted);font-weight:600;font-size:.9rem;padding:7px 4px;border-radius:8px;cursor:pointer;min-width:0;line-height:1.25}
+.seg button[aria-pressed="true"]{background:var(--mung);color:var(--mung-ink)}
+.seg button .small{display:block;font-weight:500;font-size:.75rem;opacity:.85}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chip{border:1px solid var(--line);background:var(--bg);color:var(--fg);font-weight:500;font-size:.85rem;padding:5px 11px;border-radius:999px;cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--warn-soft);border-color:var(--warn);color:var(--warn);text-decoration:line-through}
+.chip.on[aria-pressed="true"]{background:var(--mung-soft);border-color:var(--mung);color:var(--mung);text-decoration:none}
+.slider{display:flex;align-items:center;gap:10px}
+.slider input{flex:1;accent-color:var(--mung)}
+.slider output{font-weight:700;min-width:4.6em;text-align:right}
+.hint{font-size:.82rem;color:var(--muted);line-height:1.4}
+details.doc{border:1px solid var(--line);border-radius:12px;padding:0}
+details.doc summary{cursor:pointer;padding:10px 12px;font-weight:600;list-style:none;display:flex;justify-content:space-between;align-items:center}
+details.doc summary::after{content:"+";font-size:1.2rem;color:var(--muted)}
+details.doc[open] summary::after{content:"–"}
+details.doc>.in{padding:0 12px 12px;display:flex;flex-direction:column;gap:12px}
+.prices{display:grid;grid-template-columns:minmax(0,1fr) 92px;gap:6px 10px;align-items:center;font-size:.85rem}
+.prices input{padding:6px 8px;font-size:.95rem}
+
+/* result */
+.result{display:flex;flex-direction:column;gap:18px;min-width:0}
+.target{display:flex;flex-wrap:wrap;gap:14px 28px;align-items:flex-end;padding:20px;border-radius:14px;background:var(--mung-soft)}
+.big{font-weight:700;font-size:clamp(3rem,9vw,4.4rem);line-height:.95;color:var(--mung);letter-spacing:-.03em}
+.big small{font-size:.32em;font-weight:600;letter-spacing:0;margin-left:5px}
+.target .why{flex:1;min-width:220px;display:flex;flex-direction:column;gap:4px;font-size:.9rem}
+.bar{position:relative;height:16px;background:var(--sunk);border-radius:8px;display:flex}
+.bar span{height:100%}
+.bar .f{background:var(--mung);border-radius:8px 0 0 8px}
+.bar .s{background:var(--saffron)}
+.bar .mark{position:absolute;top:-5px;bottom:-5px;width:2px;background:var(--fg)}
+.legend{display:flex;flex-wrap:wrap;gap:12px;font-size:.85rem;color:var(--muted)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.alert{padding:12px 14px;border-radius:10px;background:var(--warn-soft);color:var(--fg);border-left:4px solid var(--warn);font-size:.92rem}
+.days{display:flex;gap:4px;background:var(--sunk);padding:4px;border-radius:12px;overflow-x:auto}
+.days button{flex:1;min-width:44px;border:0;background:transparent;color:var(--muted);font-weight:600;font-size:.9rem;padding:7px 4px;border-radius:9px;cursor:pointer}
+.days button[aria-pressed="true"]{background:var(--surface);color:var(--fg);box-shadow:0 1px 2px rgba(0,0,0,.08)}
+.meals{display:flex;flex-direction:column}
+.meal{display:grid;grid-template-columns:105px minmax(0,1fr);gap:12px;padding:12px 0;border-top:1px solid var(--line)}
+.meal:first-child{border-top:0}
+@media (max-width:520px){.meal{grid-template-columns:minmax(0,1fr);gap:6px}}
+.meal .when{font-weight:700;font-size:.95rem}
+.meal .when .t{display:block;font-weight:400;font-size:.8rem;color:var(--muted)}
+.items{display:flex;flex-direction:column;gap:6px}
+.item{border-radius:10px}
+.item .line{display:flex;gap:10px;align-items:baseline;justify-content:space-between;width:100%;border:0;background:transparent;color:inherit;text-align:left;padding:4px 6px;border-radius:8px;cursor:pointer;font-size:1rem}
+.item .line:hover{background:var(--sunk)}
+.item .nm{min-width:0;line-height:1.35}
+.item .nm b{font-weight:600}
+.item .gu{display:block;font-size:.85rem;color:var(--muted)}
+.pg{flex:none;font-weight:600;font-size:.9rem;padding:2px 9px;border-radius:999px;background:var(--mung-soft);color:var(--mung)}
+.pg.supp{background:var(--saffron-soft);color:var(--saffron)}
+.tag{font-size:.72rem;font-weight:600;color:var(--saffron);margin-left:6px}
+.tag.ed{color:var(--muted)}
+.editor{margin:4px 6px 6px;padding:10px;background:var(--sunk);border-radius:10px;display:flex;flex-direction:column;gap:8px;font-size:.9rem}
+.editor .row{display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.editor .lbl{min-width:70px}
+.mini{border:1px solid var(--line);background:var(--surface);color:var(--fg);font-weight:600;font-size:.85rem;padding:5px 10px;border-radius:8px;cursor:pointer}
+.mini[aria-pressed="true"]{background:var(--mung);color:var(--mung-ink);border-color:var(--mung)}
+.mini.warn{color:var(--warn);border-color:var(--warn)}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
+.stat .v{font-weight:700;font-size:1.5rem}
+.notes{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:.93rem}
+.actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.btn{border:0;background:var(--mung);color:var(--mung-ink);font-weight:600;font-size:.95rem;padding:10px 16px;border-radius:10px;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--mung);border:1px solid var(--mung)}
+.btn.sm{padding:7px 12px;font-size:.88rem}
+textarea.copyfb{width:100%;min-height:160px;font-size:.85rem}
+.stop{padding:24px;border-radius:14px;background:var(--warn-soft);border:1px solid var(--warn);display:flex;flex-direction:column;gap:8px}
+.msg{font-size:.88rem;color:var(--muted)}
+
+/* tally */
+.tally-top{display:flex;flex-direction:column;gap:10px}
+.trow{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center;padding:8px 2px;border-top:1px solid var(--line)}
+.trow .ctr{display:flex;align-items:center;gap:4px}
+.trow .ctr button{width:36px;height:36px;border-radius:10px;border:1px solid var(--line);background:var(--surface);color:var(--fg);font-size:1.2rem;font-weight:600;cursor:pointer}
+.trow .ctr output{min-width:2.2em;text-align:center;font-weight:700}
+.trow.has{background:var(--mung-soft);border-radius:10px;padding-left:8px;padding-right:8px}
+.sugg{display:flex;flex-wrap:wrap;gap:6px}
+
+/* food list */
+.flist{display:flex;flex-direction:column}
+.frow{display:grid;grid-template-columns:minmax(0,2fr) minmax(0,1.3fr) 70px 60px;gap:10px;padding:10px 4px;border-top:1px solid var(--line);align-items:baseline}
+.frow.head{font-size:.8rem;font-weight:600;color:var(--muted);border-top:0}
+.frow .p{font-weight:700;color:var(--mung);text-align:right}
+.frow .k{text-align:right;color:var(--muted)}
+.dot{display:inline-block;width:10px;height:10px;border:1.5px solid;border-radius:2px;margin-right:6px;position:relative;vertical-align:0}
+.dot::after{content:"";position:absolute;inset:2px;border-radius:50%;background:currentColor}
+.dot.veg{color:#2E8B3E}.dot.egg{color:var(--saffron)}.dot.nonveg{color:#A33A2A}
+.fnote{grid-column:1/-1;font-size:.82rem;color:var(--warn);margin-top:-4px}
+@media (max-width:560px){.frow{grid-template-columns:minmax(0,1fr) 64px}.frow .srv,.frow .k{display:none}}
+.filters{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+.filters>*{flex:1 1 170px}
+
+/* value */
+.vbars{display:flex;flex-direction:column;gap:10px}
+.vrow{display:grid;grid-template-columns:minmax(0,220px) minmax(0,1fr) 64px;gap:12px;align-items:center}
+@media (max-width:560px){.vrow{grid-template-columns:minmax(0,1fr) 60px}.vrow .track{grid-column:1/-1;order:3}}
+.track{height:12px;background:var(--sunk);border-radius:6px}
+.track span{display:block;height:100%;border-radius:6px;background:var(--mung)}
+.track span.s{background:var(--saffron)}.track span.x{background:var(--warn)}
+.vrow .val{text-align:right;font-weight:700}
+footer{font-size:.8rem;color:var(--muted);line-height:1.5;max-width:75ch}
+@media (prefers-reduced-motion:no-preference){.bar span,.track span{transition:width .35s ease}}
+
+/* print handout */
+.print-head{display:none}
+@media print{
+  body{background:#fff;color:#000;padding:0;font-size:12pt}
+  header.top,nav.tabs,.toprow,form.inputs,.actions,.editor,.days,.banner,#view-tally,#view-foods,#view-value,footer,.stats,.alert,#copyFb,.dayNote{display:none!important}
+  .grid{display:block}
+  .print-head{display:block;border-bottom:2px solid #000;padding-bottom:6px;margin-bottom:10px}
+  .print-head h1{font-size:16pt}
+  .panel,.stat,.target{border:0;padding:0;background:none;box-shadow:none}
+  .target{display:flex;gap:20px;align-items:baseline;margin-bottom:8px}
+  .big{font-size:28pt;color:#000}
+  .bar{display:none}
+  .meal{grid-template-columns:90pt 1fr;padding:6px 0;border-top:1px solid #999;break-inside:avoid}
+  .item .line{padding:1px 0}
+  .pg{background:none;color:#000;padding:0;font-weight:600}
+  .pg.supp{color:#000}
+  .tag{color:#000}
+  .notes{font-size:10.5pt}
+  .gu{color:#333}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="print-head"><h1 id="phTitle"></h1><p id="phSub" class="small"></p></div>
+
+  <header class="top">
+    <div>
+      <div class="clinic" data-t="clinic"></div>
+      <h1 data-t="appName"></h1>
+      <p class="muted small" data-t="tagline" style="margin-top:4px"></p>
+    </div>
+    <div class="toprow">
+      <nav class="tabs" role="tablist">
+        <button role="tab" aria-selected="true" data-view="plan" data-t="tabPlan"></button>
+        <button role="tab" aria-selected="false" data-view="tally" data-t="tabTally"></button>
+        <button role="tab" aria-selected="false" data-view="foods" data-t="tabFoods"></button>
+        <button role="tab" aria-selected="false" data-view="value" data-t="tabValue"></button>
+      </nav>
+      <select id="lang" class="langsel" aria-label="Language">
+        <option value="en">English</option><option value="gu">ગુજરાતી</option><option value="hi">हिन्दी</option>
+      </select>
+    </div>
+  </header>
+
+  <div class="banner" id="banner" hidden><span id="bannerText"></span><button class="btn sm ghost" id="bannerEdit" style="background:var(--surface)" data-t="bannerEdit"></button></div>
+
+  <!-- PLAN -->
+  <section id="view-plan" class="grid">
+    <form class="panel inputs" id="form" onsubmit="return false">
+      <div class="field"><span class="lbl" data-t="who"></span>
+        <div class="seg" id="mode">
+          <button type="button" data-v="preg" data-t="preg"></button>
+          <button type="button" data-v="lact" data-t="lact"></button>
+          <button type="button" data-v="gen" data-t="gen"></button>
+        </div></div>
+      <div class="row2">
+        <div class="field"><label for="wt" data-t="weight"></label><input id="wt" type="number" inputmode="decimal" min="30" max="160" step="0.5"></div>
+        <div class="field"><label for="ht"><span data-t="height"></span> <span class="muted" style="font-weight:400" data-t="optional"></span></label><input id="ht" type="number" inputmode="decimal" min="120" max="210" placeholder="158"></div>
+      </div>
+      <div class="field" id="triBox"><span class="lbl" data-t="trimester"></span>
+        <div class="seg" id="tri">
+          <button type="button" data-v="1"><span data-t="t1"></span><span class="small" data-t="w1"></span></button>
+          <button type="button" data-v="2"><span data-t="t2"></span><span class="small" data-t="w2"></span></button>
+          <button type="button" data-v="3"><span data-t="t3"></span><span class="small" data-t="w3"></span></button>
+        </div></div>
+      <div class="field" id="lactBox" hidden><span class="lbl" data-t="babyAge"></span>
+        <div class="seg" id="lact">
+          <button type="button" data-v="1" data-t="m06"></button>
+          <button type="button" data-v="2" data-t="m612"></button>
+        </div></div>
+      <div class="field"><span class="lbl" data-t="how"></span>
+        <div class="seg" id="method">
+          <button type="button" data-v="auto" data-t="auto"></button>
+          <button type="button" data-v="perkg" data-t="perkg"></button>
+          <button type="button" data-v="fixed" data-t="fixed"></button>
+        </div>
+        <div class="slider" id="perkgBox" hidden><input id="perkg" type="range" min="0.8" max="1.2" step="0.05" aria-label="g per kg"><output id="perkgOut" class="num"></output></div>
+        <div id="fixedBox" hidden><input id="fixed" type="number" inputmode="numeric" min="20" max="200" step="1"></div>
+        <div class="hint" id="methodHint"></div>
+      </div>
+      <div class="field"><span class="lbl" data-t="habit"></span>
+        <div class="seg" id="diet"><button type="button" data-v="veg" data-t="veg"></button><button type="button" data-v="nonveg" data-t="nonveg"></button></div></div>
+      <div class="field"><span class="lbl" data-t="eggs"></span>
+        <div class="seg" id="eggs"><button type="button" data-v="no" data-t="noEggs"></button><button type="button" data-v="yes" data-t="yesEggs"></button></div></div>
+      <div class="field"><span class="lbl" data-t="supp"></span>
+        <div class="seg" id="supp"><button type="button" data-v="none" data-t="sNone"></button><button type="button" data-v="balanced" data-t="sBal"></button><button type="button" data-v="easy" data-t="sEasy"></button></div>
+        <div class="hint" id="suppHint"></div></div>
+      <div class="field"><span class="lbl" data-t="leaveOut"></span><div class="chips" id="excl"></div></div>
+      <div class="field"><span class="lbl" data-t="conditions"></span>
+        <div class="chips" id="cond">
+          <button type="button" class="chip on" data-v="gdm" data-t="gdm"></button>
+          <button type="button" class="chip on" data-v="kidney" data-t="kidney"></button>
+          <button type="button" class="chip on" data-v="lactose" data-t="lactose"></button>
+        </div></div>
+
+      <details class="doc" id="docBox">
+        <summary data-t="docTitle"></summary>
+        <div class="in">
+          <p class="hint" data-t="docSub"></p>
+          <div class="field"><label for="pname" data-t="patName"></label><input id="pname" type="text" maxlength="60" autocomplete="off"></div>
+          <div class="field"><label for="pnote" data-t="docNote"></label><textarea id="pnote" maxlength="300"></textarea></div>
+          <div class="actions"><button type="button" class="btn sm" id="copyLink" data-t="copyLink"></button><button type="button" class="btn sm ghost" id="waLink" data-t="waLink"></button></div>
+          <div class="msg" id="linkMsg"></div>
+          <div class="field"><span class="lbl" data-t="prices"></span>
+            <div class="prices" id="priceGrid"></div></div>
+        </div>
+      </details>
+    </form>
+    <div class="result" id="result" aria-live="polite"></div>
+  </section>
+
+  <!-- TALLY -->
+  <section id="view-tally" class="panel" hidden>
+    <div><h2 data-t="tallyTitle"></h2><p class="muted small" data-t="tallySub" style="margin-top:4px"></p></div>
+    <div class="tally-top" id="tallyTop"></div>
+    <div class="filters">
+      <input id="tq" type="search" data-ph="searchFoods" aria-label="Search">
+      <select id="tcat" aria-label="Category"></select>
+    </div>
+    <div id="tlist"></div>
+    <div class="actions"><button type="button" class="btn ghost sm" id="tclear" data-t="clear"></button></div>
+  </section>
+
+  <!-- FOODS -->
+  <section id="view-foods" class="panel" hidden>
+    <div><h2 data-t="foodsTitle"></h2><p class="muted small" data-t="foodsSub" style="margin-top:4px"></p></div>
+    <div class="filters">
+      <input id="fq" type="search" data-ph="searchFoods" aria-label="Search foods">
+      <select id="fcat" aria-label="Category"></select>
+      <div class="seg" id="ftag" style="flex:1 1 240px">
+        <button type="button" data-v="all" aria-pressed="true" data-t="all"></button>
+        <button type="button" data-v="veg" aria-pressed="false" data-t="veg"></button>
+        <button type="button" data-v="egg" aria-pressed="false" data-t="egg"></button>
+        <button type="button" data-v="nonveg" aria-pressed="false" data-t="nonveg"></button>
+      </div>
+    </div>
+    <div class="flist" id="flist"></div>
+  </section>
+
+  <!-- VALUE -->
+  <section id="view-value" class="panel" hidden>
+    <div><h2 data-t="valueTitle"></h2><p class="muted small" data-t="valueSub" style="margin-top:4px"></p></div>
+    <div class="legend"><span><i style="background:var(--mung)"></i><span data-t="vKitchen"></span></span><span><i style="background:var(--saffron)"></i><span data-t="vAmul"></span></span><span><i style="background:var(--warn)"></i><span data-t="vPowder"></span></span></div>
+    <div class="vbars" id="vbars"></div>
+    <p class="small muted" data-t="vNote"></p>
+  </section>
+
+  <footer data-t="footer"></footer>
+</div>
+
+<script>
+/* ============ TEXT (English, Gujarati, Hindi) ============ */
+const L = {
+en:{
+ clinic:"Madhuvan Maternity & Eye Hospital, Vadodara", appName:"Protein Planner",
+ tagline:"Daily protein from home food first. Low-cost supplements only to fill the gap.",
+ tabPlan:"My plan", tabTally:"Today's count", tabFoods:"Food list", tabValue:"Cost of protein",
+ who:"Who is this for", preg:"Pregnant", lact:"Breastfeeding", gen:"Others",
+ weight:"Weight (kg)", height:"Height (cm)", optional:"optional",
+ trimester:"Trimester", t1:"1st", t2:"2nd", t3:"3rd", w1:"0–13 wk", w2:"14–27 wk", w3:"28+ wk",
+ babyAge:"Baby's age", m06:"0–6 months", m612:"6–12 months",
+ how:"How to set the target", auto:"Doctor's rule", perkg:"Per kg", fixed:"Total grams",
+ hintAuto:"1 g per kg, or the ICMR-NIN 2020 amount for this stage, whichever is higher.",
+ hintPerkg:"0.8 suits most healthy adults. Use 1.0 for a mostly cereal-based veg diet, up to 1.2 for active people or recovery.",
+ hintFixed:"Enter the total your doctor has advised.",
+ habit:"Food habit", veg:"Vegetarian", nonveg:"Non-veg", eggs:"Eggs", noEggs:"No eggs", yesEggs:"Eats eggs",
+ supp:"Supplements", sNone:"Food only", sBal:"Food first", sEasy:"Easy mix",
+ hNone:"Home food only.", hBal:"Home food first. Amul buttermilk, paneer or whey only if food falls short.", hEasy:"Adds ready supplements early for busy days. Still capped at one-third of the target.",
+ leaveOut:"Tap to leave out", conditions:"Health conditions", gdm:"Diabetes / GDM", kidney:"Kidney disease", lactose:"Milk upsets stomach",
+ x_paneer:"Paneer", x_soya:"Soya", x_chana:"Roasted chana", x_peanuts:"Peanuts", x_nuts:"Nuts & seeds", x_kathol:"Kathol (beans)", x_sprouts:"Sprouts", x_chicken:"Chicken", x_fish:"Fish", x_whey:"Whey powder", x_shakes:"Flavoured shakes",
+ target:"Daily protein target", perDay:"g / day",
+ legHome:"Home food", legSupp:"Supplement", legTarget:"Target", legTotal:"Plan total",
+ short:"This plan reaches {total} g, {gap} g short of the target. Allow more foods, or choose “Food first” or “Easy mix” for supplements.",
+ yourDay:"Your day", days:["Mon","Tue","Wed","Thu","Fri","Sat","Sun"],
+ dayNote:"Dishes change through the week. Tap any item to change its portion, swap it, or leave it out.",
+ stProtein:"Protein", perKg:"g per kg", stKcal:"Calories from these items", kcalSub:"kcal, before vegetables, rice and oil",
+ stCost:"Supplement cost", perDayCost:"/day", monthly:"about ₹{m} a month. Imported whey for the same protein: ₹{w}/day", noSupp:"No supplements needed",
+ buy:"Where to buy", perG:"per gram of protein", keep:"Keep in mind",
+ copy:"Copy for WhatsApp", copyWeek:"Copy 7-day plan", copied:"Copied. Paste it into WhatsApp.", copyFallback:"Select all and copy the text below.",
+ share:"Share", print:"Print", reset:"Reset my changes", resetDone:"Plan reset.",
+ portion:"Portion", swap:"Swap for", remove:"Leave out", close:"Done", edited:"changed", half:"½", one:"1×", oneHalf:"1½×", two:"2×",
+ tallyTitle:"What have you eaten today?", tallySub:"Tap + for each serving. The count starts fresh each day.",
+ todayTotal:"So far today", gapLeft:"{gap} g more to reach {t} g", gapDone:"Target reached for today.", suggest:"To close the gap, add any one of these:", clear:"Clear today's count",
+ foodsTitle:"Protein in everyday foods", foodsSub:"Per household serving. Dals and grains are weighed dry, before cooking.",
+ searchFoods:"Search: paneer, મગ, rajma…", allCats:"All categories", all:"All", egg:"Egg",
+ colFood:"Food", colServe:"Serving", colProt:"Protein", noMatch:"No food matches. Try another word.",
+ valueTitle:"What 1 gram of protein costs", valueSub:"Rupees per gram of protein, from online and shop prices. Imported whey at ₹15,000 for 2 kg works out to about ₹10 per gram.",
+ vKitchen:"Kitchen food", vAmul:"Amul / Milky Mist", vPowder:"Powders",
+ vNote:"Protinex Mama and Prohance Mom give about 8 g protein per serving and contain sugar. They are mainly a source of vitamins, minerals and DHA, not a cheap source of protein.",
+ footer:"Protein values: ICMR-NIN Indian Food Composition Tables 2017, product labels and USDA where IFCT has no entry. Targets: ICMR-NIN Nutrient Requirements for Indians 2020. Prices change often; last checked October 2026. This planner supports, and does not replace, your doctor's advice. Ask your doctor before starting any protein powder.",
+ docTitle:"For the doctor", docSub:"Set the plan, then send the patient a link that opens with everything filled in.",
+ patName:"Patient name", docNote:"Doctor's note to patient", copyLink:"Copy link for patient", linkCopied:"Link copied.", waLink:"Send on WhatsApp",
+ prices:"Prices (₹), edit when they change",
+ p_hpButtermilk:"High Protein Buttermilk, 200 ml", p_hpPaneer400:"High Protein Paneer, 400 g pack", p_wheyBox:"Amul Whey, box of 30 sachets", p_blueberry:"Blueberry Protein Shake, 200 ml", p_importedWheyPerG:"Imported whey, ₹ per g protein",
+ banner:"This plan was prepared at Madhuvan Maternity Hospital{name}.", bannerFor:" for {name}", bannerEdit:"Edit",
+ docNoteHead:"Doctor's note",
+ stopTitle:"Please see your doctor first", stopBody:"With kidney disease, extra protein can do harm. A high-protein plan or protein powder should only be started after your doctor checks your kidney tests and sets your protein amount.", stopSub:"This also applies to high blood pressure in pregnancy with protein in the urine.",
+ bmiNote:"BMI is {bmi}, so the target uses a healthy weight of {we} kg instead of {w} kg.",
+ underNote:"BMI is {bmi} (underweight). Do not cut any food. Eat extra rotli, rice and ghee along with this protein.",
+ whyHigh:"ICMR-NIN 2020 for {lab}: 0.83 × {we} kg + {add} g = {icmr} g. This is more than 1 g/kg ({rule} g), so the higher figure is used.",
+ whyRule:"1 g per kg × {we} kg = {rule} g. ICMR-NIN 2020 for {lab} gives {icmr} g, so 1 g/kg is the higher figure.",
+ whyPerkg:"{pk} g per kg × {we} kg.", whyFixed:"Fixed total of {t} g a day.", whyCap:" Capped at {cap} g ({r} g/kg) for safety.",
+ labT:["","1st trimester","2nd trimester","3rd trimester"], labL1:"breastfeeding, 0–6 months", labL2:"breastfeeding, 6–12 months",
+ nEggsPreg:"Eggs must be fully cooked. No runny yolk, half-fry or raw egg in shakes.", nEggs:"Cook eggs well.",
+ nSprouts:"Always steam or boil sprouts. Raw sprouts can carry harmful bacteria{p}.", nSproutsP:", which is risky in pregnancy",
+ nFishPreg:"Choose low-mercury fish: rohu, catla, pomfret, bangda, sardine, prawns. Avoid surmai (king mackerel), shark and swordfish, or keep surmai to 1 piece a week at most.", nFish:"Cook fish and prawns fully.",
+ nChicken:"Cook chicken until no pink meat remains.",
+ nMilk:"Use packet (pasteurised) milk, or boil loose milk. Make dahi and paneer from boiled milk.",
+ nSoya:"Keep soya to one item a day.",
+ nShake:"Only one flavoured protein shake a day. It contains sweeteners that can cause gas. Avoid coffee-flavoured protein drinks{p}.", nShakeP:" in pregnancy",
+ nWhey:"Plain Amul Whey has no sugar or sweetener and is lactose-free. Stir it into room-temperature milk, chaas or dahi, not boiling liquid.",
+ nGdm:"Diabetes / GDM: flavoured shakes and sweet maternity powders (Protinex Mama, Prohance Mom) are left out. Plain whey, high-protein buttermilk and paneer are fine.",
+ nLactose:"Milk is left out. Small amounts of dahi, chaas or high-protein buttermilk are often tolerated; stop them if they upset your stomach.",
+ nPeanuts:"Skip peanuts if there is any nut allergy.",
+ nKcalPreg:"From the 4th month, pregnancy needs about 350 kcal a day more than before (ICMR-NIN). Protein works only with enough food.",
+ nEnergy:"Protein needs enough calories to work. Eat vegetables, fruit, rice or more rotli and a little ghee or oil to feel full; these are not counted here.",
+ waHead:"Protein plan — Madhuvan Maternity Hospital", waPreg:"Pregnant, {tri} trimester", waLact:"Breastfeeding", waGen:"Adult", waTarget:"Target", waPlan:"Plan", waDay:"Day",
+ m_early:"Early morning", m_bf:"Breakfast", m_mid:"Mid-morning", m_lunch:"Lunch", m_eve:"Evening", m_dinner:"Dinner", m_bed:"Bedtime",
+ c_Dairy:"Dairy", "c_Dals & kathol":"Dals & kathol", c_Soy:"Soy", "c_Nuts & seeds":"Nuts & seeds", c_Cereals:"Cereals", "c_Gujarati dishes":"Gujarati dishes", c_Eggs:"Eggs", "c_Meat & fish":"Meat & fish", c_Supplements:"Supplements",
+ printSub:"{who} · {wt} kg · Target {t} g a day · {date}"
+},
+gu:{
+ clinic:"મધુવન મેટરનિટી એન્ડ આઈ હોસ્પિટલ, વડોદરા", appName:"પ્રોટીન પ્લાનર",
+ tagline:"રોજનું પ્રોટીન પહેલાં ઘરના ખોરાકમાંથી. ખૂટે તેટલું જ સસ્તા સપ્લિમેન્ટથી.",
+ tabPlan:"મારો પ્લાન", tabTally:"આજનો હિસાબ", tabFoods:"ખોરાકની યાદી", tabValue:"પ્રોટીનનો ભાવ",
+ who:"કોના માટે", preg:"સગર્ભા", lact:"સ્તનપાન", gen:"અન્ય",
+ weight:"વજન (કિલો)", height:"ઊંચાઈ (સેમી)", optional:"વૈકલ્પિક",
+ trimester:"ત્રિમાસિક", t1:"પહેલું", t2:"બીજું", t3:"ત્રીજું", w1:"0–13 અઠવાડિયાં", w2:"14–27 અઠવાડિયાં", w3:"28+ અઠવાડિયાં",
+ babyAge:"બાળકની ઉંમર", m06:"0–6 મહિના", m612:"6–12 મહિના",
+ how:"લક્ષ્ય કેવી રીતે નક્કી કરવું", auto:"ડૉક્ટરનો નિયમ", perkg:"કિલો દીઠ", fixed:"કુલ ગ્રામ",
+ hintAuto:"1 ગ્રામ પ્રતિ કિલો, અથવા આ તબક્કા માટે ICMR-NIN 2020નો આંકડો — બેમાંથી જે વધુ હોય તે.",
+ hintPerkg:"મોટા ભાગના તંદુરસ્ત લોકો માટે 0.8. ફક્ત અનાજવાળા શાકાહારી ખોરાક માટે 1.0, અને સક્રિય લોકો કે સાજા થવા માટે 1.2 સુધી.",
+ hintFixed:"ડૉક્ટરે કહેલા કુલ ગ્રામ લખો.",
+ habit:"ખોરાકની ટેવ", veg:"શાકાહારી", nonveg:"માંસાહારી", eggs:"ઈંડાં", noEggs:"ઈંડાં નહીં", yesEggs:"ઈંડાં ખાઉં છું",
+ supp:"સપ્લિમેન્ટ", sNone:"ફક્ત ખોરાક", sBal:"પહેલાં ખોરાક", sEasy:"સહેલું મિશ્રણ",
+ hNone:"ફક્ત ઘરનો ખોરાક.", hBal:"પહેલાં ઘરનો ખોરાક. ખૂટે તો જ અમૂલ છાશ, પનીર કે વ્હે.", hEasy:"વ્યસ્ત દિવસો માટે તૈયાર સપ્લિમેન્ટ વહેલાં ઉમેરે છે. તો પણ લક્ષ્યના ત્રીજા ભાગથી વધુ નહીં.",
+ leaveOut:"ન ખાવું હોય તે દબાવો", conditions:"બીમારી", gdm:"ડાયાબિટીસ / GDM", kidney:"કિડનીની બીમારી", lactose:"દૂધ માફક નથી",
+ x_paneer:"પનીર", x_soya:"સોયા", x_chana:"દાળિયા", x_peanuts:"સીંગદાણા", x_nuts:"સૂકો મેવો", x_kathol:"કઠોળ", x_sprouts:"ફણગાવેલા", x_chicken:"ચિકન", x_fish:"માછલી", x_whey:"વ્હે પાઉડર", x_shakes:"ફ્લેવર્ડ શેક",
+ target:"રોજનું પ્રોટીન લક્ષ્ય", perDay:"ગ્રામ / દિવસ",
+ legHome:"ઘરનો ખોરાક", legSupp:"સપ્લિમેન્ટ", legTarget:"લક્ષ્ય", legTotal:"પ્લાનનું કુલ",
+ short:"આ પ્લાનથી {total} ગ્રામ મળે છે, લક્ષ્યથી {gap} ગ્રામ ઓછું. વધુ ખોરાક ચાલુ રાખો, અથવા સપ્લિમેન્ટમાં “પહેલાં ખોરાક” કે “સહેલું મિશ્રણ” પસંદ કરો.",
+ yourDay:"તમારો દિવસ", days:["સોમ","મંગળ","બુધ","ગુરુ","શુક્ર","શનિ","રવિ"],
+ dayNote:"અઠવાડિયા દરમિયાન વાનગીઓ બદલાય છે. કોઈ પણ વસ્તુ દબાવીને તેનું પ્રમાણ બદલો, બીજી વસ્તુ મૂકો, કે કાઢી નાખો.",
+ stProtein:"પ્રોટીન", perKg:"ગ્રામ પ્રતિ કિલો", stKcal:"આ વસ્તુઓની કેલરી", kcalSub:"કિલોકેલરી, શાક, ભાત અને તેલ સિવાય",
+ stCost:"સપ્લિમેન્ટનો ખર્ચ", perDayCost:"/દિવસ", monthly:"મહિને લગભગ ₹{m}. એટલા જ પ્રોટીન માટે વિદેશી વ્હે: ₹{w}/દિવસ", noSupp:"સપ્લિમેન્ટની જરૂર નથી",
+ buy:"ક્યાંથી લેવું", perG:"પ્રતિ ગ્રામ પ્રોટીન", keep:"ધ્યાનમાં રાખો",
+ copy:"WhatsApp માટે કૉપી", copyWeek:"7 દિવસનો પ્લાન કૉપી", copied:"કૉપી થયું. WhatsAppમાં પેસ્ટ કરો.", copyFallback:"નીચેનું લખાણ પસંદ કરીને કૉપી કરો.",
+ share:"શેર", print:"પ્રિન્ટ", reset:"મારા ફેરફાર રદ કરો", resetDone:"પ્લાન ફરી મૂળ જેવો થયો.",
+ portion:"પ્રમાણ", swap:"બદલે લો", remove:"કાઢી નાખો", close:"થયું", edited:"બદલેલું", half:"½", one:"1×", oneHalf:"1½×", two:"2×",
+ tallyTitle:"આજે શું ખાધું?", tallySub:"દરેક વાટકી/ગ્લાસ માટે + દબાવો. હિસાબ રોજ નવો શરૂ થાય છે.",
+ todayTotal:"આજે અત્યાર સુધી", gapLeft:"{t} ગ્રામ સુધી પહોંચવા હજી {gap} ગ્રામ", gapDone:"આજનું લક્ષ્ય પૂરું થયું.", suggest:"ખૂટતું પૂરું કરવા આમાંથી કોઈ એક ઉમેરો:", clear:"આજનો હિસાબ ભૂંસો",
+ foodsTitle:"રોજિંદા ખોરાકમાં પ્રોટીન", foodsSub:"ઘરના માપ પ્રમાણે. દાળ અને અનાજ રાંધ્યા પહેલાંનું સૂકું વજન.",
+ searchFoods:"શોધો: પનીર, મગ, રાજમા…", allCats:"બધા પ્રકાર", all:"બધું", egg:"ઈંડાં",
+ colFood:"ખોરાક", colServe:"માપ", colProt:"પ્રોટીન", noMatch:"કંઈ મળ્યું નહીં. બીજો શબ્દ લખો.",
+ valueTitle:"1 ગ્રામ પ્રોટીનનો ભાવ", valueSub:"ઓનલાઇન અને દુકાનના ભાવ પ્રમાણે પ્રતિ ગ્રામ પ્રોટીનના રૂપિયા. 2 કિલોના ₹15,000વાળો વિદેશી વ્હે લગભગ ₹10 પ્રતિ ગ્રામ પડે છે.",
+ vKitchen:"રસોડાનો ખોરાક", vAmul:"અમૂલ / મિલ્કી મિસ્ટ", vPowder:"પાઉડર",
+ vNote:"પ્રોટીનેક્સ મામા અને પ્રોહાન્સ મોમમાં એક માપે લગભગ 8 ગ્રામ પ્રોટીન અને ખાંડ હોય છે. તે મુખ્યત્વે વિટામિન, ખનિજ અને DHA માટે છે, સસ્તા પ્રોટીન માટે નહીં.",
+ footer:"પ્રોટીનના આંકડા: ICMR-NIN ભારતીય ખોરાક રચના કોષ્ટક 2017, પ્રોડક્ટ લેબલ અને જ્યાં IFCTમાં નથી ત્યાં USDA. લક્ષ્ય: ICMR-NIN ભારતીયો માટે પોષક જરૂરિયાત 2020. ભાવ વારંવાર બદલાય છે; છેલ્લે ઓક્ટોબર 2026માં તપાસ્યા. આ પ્લાનર ડૉક્ટરની સલાહનો આધાર છે, બદલો નથી. કોઈ પણ પ્રોટીન પાઉડર શરૂ કરતાં પહેલાં ડૉક્ટરને પૂછો.",
+ docTitle:"ડૉક્ટર માટે", docSub:"પ્લાન સેટ કરો, પછી દર્દીને લિંક મોકલો જે બધું ભરેલું ખૂલે.",
+ patName:"દર્દીનું નામ", docNote:"ડૉક્ટરની નોંધ", copyLink:"દર્દી માટે લિંક કૉપી", linkCopied:"લિંક કૉપી થઈ.", waLink:"WhatsApp પર મોકલો",
+ prices:"ભાવ (₹), બદલાય ત્યારે સુધારો",
+ p_hpButtermilk:"હાઈ પ્રોટીન છાશ, 200 મિલી", p_hpPaneer400:"હાઈ પ્રોટીન પનીર, 400 ગ્રામ પેક", p_wheyBox:"અમૂલ વ્હે, 30 પાઉચનું બોક્સ", p_blueberry:"બ્લુબેરી પ્રોટીન શેક, 200 મિલી", p_importedWheyPerG:"વિદેશી વ્હે, ₹ પ્રતિ ગ્રામ પ્રોટીન",
+ banner:"આ પ્લાન મધુવન મેટરનિટી હોસ્પિટલમાં{name} બનાવ્યો છે.", bannerFor:" {name} માટે", bannerEdit:"બદલો",
+ docNoteHead:"ડૉક્ટરની નોંધ",
+ stopTitle:"પહેલાં ડૉક્ટરને મળો", stopBody:"કિડનીની બીમારીમાં વધારાનું પ્રોટીન નુકસાન કરી શકે. ડૉક્ટર કિડનીના રિપોર્ટ તપાસીને પ્રોટીનનું પ્રમાણ નક્કી કરે પછી જ વધુ પ્રોટીનનો પ્લાન કે પાઉડર શરૂ કરવો.", stopSub:"સગર્ભાવસ્થામાં ઊંચા બીપી સાથે પેશાબમાં પ્રોટીન હોય તો પણ આ લાગુ પડે છે.",
+ bmiNote:"BMI {bmi} છે, તેથી લક્ષ્ય {w} કિલોને બદલે {we} કિલોના તંદુરસ્ત વજન પર ગણ્યું છે.",
+ underNote:"BMI {bmi} છે (ઓછું વજન). કોઈ ખોરાક ઘટાડશો નહીં. આ પ્રોટીન સાથે વધારાની રોટલી, ભાત અને ઘી લો.",
+ whyHigh:"{lab} માટે ICMR-NIN 2020: 0.83 × {we} કિલો + {add} ગ્રામ = {icmr} ગ્રામ. આ 1 ગ્રામ/કિલો ({rule} ગ્રામ)થી વધુ છે, તેથી વધુ આંકડો લીધો.",
+ whyRule:"1 ગ્રામ પ્રતિ કિલો × {we} કિલો = {rule} ગ્રામ. {lab} માટે ICMR-NIN 2020 {icmr} ગ્રામ આપે છે, તેથી 1 ગ્રામ/કિલો વધુ છે.",
+ whyPerkg:"{pk} ગ્રામ પ્રતિ કિલો × {we} કિલો.", whyFixed:"રોજ કુલ {t} ગ્રામ.", whyCap:" સલામતી માટે {cap} ગ્રામ ({r} ગ્રામ/કિલો) સુધી મર્યાદિત.",
+ labT:["","પહેલા ત્રિમાસિક","બીજા ત્રિમાસિક","ત્રીજા ત્રિમાસિક"], labL1:"સ્તનપાન, 0–6 મહિના", labL2:"સ્તનપાન, 6–12 મહિના",
+ nEggsPreg:"ઈંડાં પૂરાં બાફેલાં જ ખાવાં. કાચો પીળો ભાગ, હાફ-ફ્રાય કે શેકમાં કાચું ઈંડું નહીં.", nEggs:"ઈંડાં બરાબર રાંધો.",
+ nSprouts:"ફણગાવેલા કઠોળ હંમેશાં બાફીને જ ખાવા. કાચા ફણગામાં હાનિકારક જીવાણુ હોઈ શકે{p}.", nSproutsP:", જે સગર્ભાવસ્થામાં જોખમી છે",
+ nFishPreg:"ઓછા પારાવાળી માછલી લો: રોહુ, કટલા, પાપલેટ, બાંગડા, સાર્ડિન, ઝીંગા. સુરમઈ, શાર્ક, સ્વોર્ડફિશ ટાળો, અથવા સુરમઈ અઠવાડિયે વધુમાં વધુ 1 ટુકડો.", nFish:"માછલી અને ઝીંગા પૂરાં રાંધો.",
+ nChicken:"ચિકન ગુલાબી ભાગ ન રહે ત્યાં સુધી રાંધો.",
+ nMilk:"પેકેટનું (પાશ્ચરાઇઝ્ડ) દૂધ વાપરો, અથવા છૂટું દૂધ ઉકાળો. દહીં અને પનીર ઉકાળેલા દૂધમાંથી બનાવો.",
+ nSoya:"સોયા દિવસમાં એક જ વાર.",
+ nShake:"ફ્લેવર્ડ પ્રોટીન શેક દિવસમાં એક જ. તેમાં ગળપણ હોય છે જેનાથી ગેસ થઈ શકે. કૉફી ફ્લેવરનું પ્રોટીન પીણું ટાળો{p}.", nShakeP:" સગર્ભાવસ્થામાં",
+ nWhey:"સાદા અમૂલ વ્હેમાં ખાંડ કે ગળપણ નથી અને લેક્ટોઝ નથી. ઠંડા કે હૂંફાળા દૂધ, છાશ કે દહીંમાં ભેળવો, ઊકળતામાં નહીં.",
+ nGdm:"ડાયાબિટીસ / GDM: ફ્લેવર્ડ શેક અને મીઠા મેટરનિટી પાઉડર (પ્રોટીનેક્સ મામા, પ્રોહાન્સ મોમ) કાઢ્યા છે. સાદો વ્હે, હાઈ પ્રોટીન છાશ અને પનીર ચાલે.",
+ nLactose:"દૂધ કાઢ્યું છે. થોડું દહીં, છાશ કે હાઈ પ્રોટીન છાશ ઘણાને માફક આવે છે; પેટ બગડે તો બંધ કરો.",
+ nPeanuts:"મેવાની એલર્જી હોય તો સીંગદાણા ન લેવા.",
+ nKcalPreg:"ચોથા મહિનાથી સગર્ભાવસ્થામાં રોજ લગભગ 350 કિલોકેલરી વધુ જોઈએ (ICMR-NIN). પૂરતા ખોરાક વિના પ્રોટીન કામ નથી કરતું.",
+ nEnergy:"પ્રોટીન કામ કરે તે માટે પૂરતી કેલરી જોઈએ. પેટ ભરાય તે માટે શાક, ફળ, ભાત કે વધુ રોટલી અને થોડું ઘી-તેલ લો; તે અહીં ગણ્યાં નથી.",
+ waHead:"પ્રોટીન પ્લાન — મધુવન મેટરનિટી હોસ્પિટલ", waPreg:"સગર્ભા, {tri} ત્રિમાસિક", waLact:"સ્તનપાન", waGen:"પુખ્ત", waTarget:"લક્ષ્ય", waPlan:"પ્લાન", waDay:"દિવસ",
+ m_early:"વહેલી સવારે", m_bf:"નાસ્તો", m_mid:"સવારે 11 વાગ્યે", m_lunch:"બપોરનું જમણ", m_eve:"સાંજે", m_dinner:"રાતનું જમણ", m_bed:"સૂતા પહેલાં",
+ c_Dairy:"દૂધની વસ્તુઓ", "c_Dals & kathol":"દાળ અને કઠોળ", c_Soy:"સોયા", "c_Nuts & seeds":"મેવા અને બીજ", c_Cereals:"અનાજ", "c_Gujarati dishes":"ગુજરાતી વાનગીઓ", c_Eggs:"ઈંડાં", "c_Meat & fish":"માંસ અને માછલી", c_Supplements:"સપ્લિમેન્ટ",
+ printSub:"{who} · {wt} કિલો · રોજ લક્ષ્ય {t} ગ્રામ · {date}"
+},
+hi:{
+ clinic:"मधुवन मैटरनिटी एंड आई हॉस्पिटल, वडोदरा", appName:"प्रोटीन प्लानर",
+ tagline:"रोज़ का प्रोटीन पहले घर के खाने से। जितना कम पड़े उतना ही सस्ते सप्लीमेंट से।",
+ tabPlan:"मेरा प्लान", tabTally:"आज का हिसाब", tabFoods:"खाने की सूची", tabValue:"प्रोटीन का दाम",
+ who:"किसके लिए", preg:"गर्भवती", lact:"स्तनपान", gen:"अन्य",
+ weight:"वज़न (किलो)", height:"लंबाई (सेमी)", optional:"वैकल्पिक",
+ trimester:"तिमाही", t1:"पहली", t2:"दूसरी", t3:"तीसरी", w1:"0–13 हफ़्ते", w2:"14–27 हफ़्ते", w3:"28+ हफ़्ते",
+ babyAge:"बच्चे की उम्र", m06:"0–6 महीने", m612:"6–12 महीने",
+ how:"लक्ष्य कैसे तय करें", auto:"डॉक्टर का नियम", perkg:"प्रति किलो", fixed:"कुल ग्राम",
+ hintAuto:"1 ग्राम प्रति किलो, या इस अवस्था के लिए ICMR-NIN 2020 का आँकड़ा — जो ज़्यादा हो।",
+ hintPerkg:"ज़्यादातर स्वस्थ लोगों के लिए 0.8। सिर्फ़ अनाज वाले शाकाहारी भोजन के लिए 1.0, और सक्रिय लोगों या ठीक होने के लिए 1.2 तक।",
+ hintFixed:"डॉक्टर द्वारा बताया कुल ग्राम लिखें।",
+ habit:"खाने की आदत", veg:"शाकाहारी", nonveg:"मांसाहारी", eggs:"अंडे", noEggs:"अंडे नहीं", yesEggs:"अंडे खाते हैं",
+ supp:"सप्लीमेंट", sNone:"सिर्फ़ खाना", sBal:"पहले खाना", sEasy:"आसान मिश्रण",
+ hNone:"सिर्फ़ घर का खाना।", hBal:"पहले घर का खाना। कम पड़े तभी अमूल छाछ, पनीर या व्हे।", hEasy:"व्यस्त दिनों के लिए तैयार सप्लीमेंट जल्दी जोड़ता है। फिर भी लक्ष्य के एक-तिहाई से ज़्यादा नहीं।",
+ leaveOut:"जो नहीं खाना, उसे दबाएँ", conditions:"बीमारी", gdm:"डायबिटीज़ / GDM", kidney:"किडनी की बीमारी", lactose:"दूध से पेट खराब",
+ x_paneer:"पनीर", x_soya:"सोया", x_chana:"भुने चने", x_peanuts:"मूंगफली", x_nuts:"मेवे", x_kathol:"दालें-बीन्स", x_sprouts:"अंकुरित", x_chicken:"चिकन", x_fish:"मछली", x_whey:"व्हे पाउडर", x_shakes:"फ्लेवर्ड शेक",
+ target:"रोज़ का प्रोटीन लक्ष्य", perDay:"ग्राम / दिन",
+ legHome:"घर का खाना", legSupp:"सप्लीमेंट", legTarget:"लक्ष्य", legTotal:"प्लान का कुल",
+ short:"इस प्लान से {total} ग्राम मिलता है, लक्ष्य से {gap} ग्राम कम। और चीज़ें चालू रखें, या सप्लीमेंट में “पहले खाना” या “आसान मिश्रण” चुनें।",
+ yourDay:"आपका दिन", days:["सोम","मंगल","बुध","गुरु","शुक्र","शनि","रवि"],
+ dayNote:"हफ़्ते भर व्यंजन बदलते हैं। किसी भी चीज़ को दबाकर उसकी मात्रा बदलें, दूसरी चीज़ रखें, या हटाएँ।",
+ stProtein:"प्रोटीन", perKg:"ग्राम प्रति किलो", stKcal:"इन चीज़ों की कैलोरी", kcalSub:"किलोकैलोरी, सब्ज़ी, चावल और तेल के बिना",
+ stCost:"सप्लीमेंट का खर्च", perDayCost:"/दिन", monthly:"महीने में लगभग ₹{m}। उतने ही प्रोटीन के लिए विदेशी व्हे: ₹{w}/दिन", noSupp:"सप्लीमेंट की ज़रूरत नहीं",
+ buy:"कहाँ से लें", perG:"प्रति ग्राम प्रोटीन", keep:"ध्यान रखें",
+ copy:"WhatsApp के लिए कॉपी", copyWeek:"7 दिन का प्लान कॉपी", copied:"कॉपी हो गया। WhatsApp में पेस्ट करें।", copyFallback:"नीचे का टेक्स्ट चुनकर कॉपी करें।",
+ share:"शेयर", print:"प्रिंट", reset:"मेरे बदलाव हटाएँ", resetDone:"प्लान फिर से मूल जैसा हो गया।",
+ portion:"मात्रा", swap:"बदलें", remove:"हटाएँ", close:"हो गया", edited:"बदला हुआ", half:"½", one:"1×", oneHalf:"1½×", two:"2×",
+ tallyTitle:"आज क्या खाया?", tallySub:"हर कटोरी/गिलास के लिए + दबाएँ। हिसाब रोज़ नया शुरू होता है।",
+ todayTotal:"आज अब तक", gapLeft:"{t} ग्राम तक पहुँचने के लिए अभी {gap} ग्राम और", gapDone:"आज का लक्ष्य पूरा हुआ।", suggest:"कमी पूरी करने के लिए इनमें से कोई एक जोड़ें:", clear:"आज का हिसाब मिटाएँ",
+ foodsTitle:"रोज़ के खाने में प्रोटीन", foodsSub:"घर के माप के अनुसार। दाल और अनाज पकाने से पहले का सूखा वज़न।",
+ searchFoods:"खोजें: पनीर, मूंग, राजमा…", allCats:"सभी प्रकार", all:"सब", egg:"अंडा",
+ colFood:"खाना", colServe:"माप", colProt:"प्रोटीन", noMatch:"कुछ नहीं मिला। दूसरा शब्द लिखें।",
+ valueTitle:"1 ग्राम प्रोटीन का दाम", valueSub:"ऑनलाइन और दुकान के दाम के अनुसार प्रति ग्राम प्रोटीन के रुपये। 2 किलो के ₹15,000 वाला विदेशी व्हे लगभग ₹10 प्रति ग्राम पड़ता है।",
+ vKitchen:"रसोई का खाना", vAmul:"अमूल / मिल्की मिस्ट", vPowder:"पाउडर",
+ vNote:"प्रोटीनेक्स मामा और प्रोहांस मॉम में एक माप में लगभग 8 ग्राम प्रोटीन और चीनी होती है। ये मुख्य रूप से विटामिन, खनिज और DHA के लिए हैं, सस्ते प्रोटीन के लिए नहीं।",
+ footer:"प्रोटीन के आँकड़े: ICMR-NIN भारतीय खाद्य संरचना तालिका 2017, प्रोडक्ट लेबल और जहाँ IFCT में नहीं है वहाँ USDA। लक्ष्य: ICMR-NIN भारतीयों के लिए पोषक आवश्यकता 2020। दाम बार-बार बदलते हैं; आख़िरी बार अक्टूबर 2026 में जाँचे। यह प्लानर डॉक्टर की सलाह का सहारा है, विकल्प नहीं। कोई भी प्रोटीन पाउडर शुरू करने से पहले डॉक्टर से पूछें।",
+ docTitle:"डॉक्टर के लिए", docSub:"प्लान सेट करें, फिर मरीज़ को लिंक भेजें जो सब भरा हुआ खुले।",
+ patName:"मरीज़ का नाम", docNote:"डॉक्टर की टिप्पणी", copyLink:"मरीज़ के लिए लिंक कॉपी", linkCopied:"लिंक कॉपी हो गई।", waLink:"WhatsApp पर भेजें",
+ prices:"दाम (₹), बदलने पर सुधारें",
+ p_hpButtermilk:"हाई प्रोटीन छाछ, 200 मि.ली.", p_hpPaneer400:"हाई प्रोटीन पनीर, 400 ग्राम पैक", p_wheyBox:"अमूल व्हे, 30 पाउच का डिब्बा", p_blueberry:"ब्लूबेरी प्रोटीन शेक, 200 मि.ली.", p_importedWheyPerG:"विदेशी व्हे, ₹ प्रति ग्राम प्रोटीन",
+ banner:"यह प्लान मधुवन मैटरनिटी हॉस्पिटल में{name} बनाया गया है।", bannerFor:" {name} के लिए", bannerEdit:"बदलें",
+ docNoteHead:"डॉक्टर की टिप्पणी",
+ stopTitle:"पहले डॉक्टर से मिलें", stopBody:"किडनी की बीमारी में ज़्यादा प्रोटीन नुकसान कर सकता है। डॉक्टर किडनी की रिपोर्ट देखकर प्रोटीन की मात्रा तय करें, उसके बाद ही ज़्यादा प्रोटीन का प्लान या पाउडर शुरू करें।", stopSub:"गर्भावस्था में ऊँचे बीपी के साथ पेशाब में प्रोटीन हो तो भी यह लागू है।",
+ bmiNote:"BMI {bmi} है, इसलिए लक्ष्य {w} किलो की जगह {we} किलो के स्वस्थ वज़न पर गिना है।",
+ underNote:"BMI {bmi} है (कम वज़न)। कोई खाना कम न करें। इस प्रोटीन के साथ अतिरिक्त रोटी, चावल और घी लें।",
+ whyHigh:"{lab} के लिए ICMR-NIN 2020: 0.83 × {we} किलो + {add} ग्राम = {icmr} ग्राम। यह 1 ग्राम/किलो ({rule} ग्राम) से ज़्यादा है, इसलिए ज़्यादा आँकड़ा लिया।",
+ whyRule:"1 ग्राम प्रति किलो × {we} किलो = {rule} ग्राम। {lab} के लिए ICMR-NIN 2020 {icmr} ग्राम देता है, इसलिए 1 ग्राम/किलो ज़्यादा है।",
+ whyPerkg:"{pk} ग्राम प्रति किलो × {we} किलो।", whyFixed:"रोज़ कुल {t} ग्राम।", whyCap:" सुरक्षा के लिए {cap} ग्राम ({r} ग्राम/किलो) तक सीमित।",
+ labT:["","पहली तिमाही","दूसरी तिमाही","तीसरी तिमाही"], labL1:"स्तनपान, 0–6 महीने", labL2:"स्तनपान, 6–12 महीने",
+ nEggsPreg:"अंडे पूरे उबले हुए ही खाएँ। कच्ची ज़र्दी, हाफ़-फ्राई या शेक में कच्चा अंडा नहीं।", nEggs:"अंडे अच्छी तरह पकाएँ।",
+ nSprouts:"अंकुरित हमेशा उबालकर या भाप में पकाकर खाएँ। कच्चे अंकुरित में हानिकारक जीवाणु हो सकते हैं{p}।", nSproutsP:", जो गर्भावस्था में जोखिम भरा है",
+ nFishPreg:"कम पारे वाली मछली लें: रोहू, कतला, पॉम्फ्रेट, बांगड़ा, सार्डिन, झींगा। सुरमई, शार्क, स्वोर्डफ़िश से बचें, या सुरमई हफ़्ते में ज़्यादा से ज़्यादा 1 टुकड़ा।", nFish:"मछली और झींगा पूरी तरह पकाएँ।",
+ nChicken:"चिकन तब तक पकाएँ जब तक गुलाबी हिस्सा न रहे।",
+ nMilk:"पैकेट का (पाश्चुरीकृत) दूध लें, या खुला दूध उबालें। दही और पनीर उबले दूध से बनाएँ।",
+ nSoya:"सोया दिन में एक ही बार।",
+ nShake:"फ्लेवर्ड प्रोटीन शेक दिन में एक ही। इसमें मिठास होती है जिससे गैस हो सकती है। कॉफ़ी फ्लेवर का प्रोटीन पेय न लें{p}।", nShakeP:" गर्भावस्था में",
+ nWhey:"सादे अमूल व्हे में चीनी या मिठास नहीं और लैक्टोज़ नहीं। ठंडे या गुनगुने दूध, छाछ या दही में मिलाएँ, उबलते में नहीं।",
+ nGdm:"डायबिटीज़ / GDM: फ्लेवर्ड शेक और मीठे मैटरनिटी पाउडर (प्रोटीनेक्स मामा, प्रोहांस मॉम) हटा दिए हैं। सादा व्हे, हाई प्रोटीन छाछ और पनीर ठीक हैं।",
+ nLactose:"दूध हटा दिया है। थोड़ा दही, छाछ या हाई प्रोटीन छाछ अक्सर पच जाता है; पेट खराब हो तो बंद करें।",
+ nPeanuts:"मेवे की एलर्जी हो तो मूंगफली न लें।",
+ nKcalPreg:"चौथे महीने से गर्भावस्था में रोज़ लगभग 350 किलोकैलोरी ज़्यादा चाहिए (ICMR-NIN)। पर्याप्त खाने के बिना प्रोटीन काम नहीं करता।",
+ nEnergy:"प्रोटीन काम करे इसके लिए पर्याप्त कैलोरी चाहिए। पेट भरने के लिए सब्ज़ी, फल, चावल या ज़्यादा रोटी और थोड़ा घी-तेल लें; वे यहाँ नहीं गिने गए।",
+ waHead:"प्रोटीन प्लान — मधुवन मैटरनिटी हॉस्पिटल", waPreg:"गर्भवती, {tri} तिमाही", waLact:"स्तनपान", waGen:"वयस्क", waTarget:"लक्ष्य", waPlan:"प्लान", waDay:"दिन",
+ m_early:"सुबह जल्दी", m_bf:"नाश्ता", m_mid:"सुबह 11 बजे", m_lunch:"दोपहर का खाना", m_eve:"शाम", m_dinner:"रात का खाना", m_bed:"सोने से पहले",
+ c_Dairy:"दूध की चीज़ें", "c_Dals & kathol":"दाल और बीन्स", c_Soy:"सोया", "c_Nuts & seeds":"मेवे और बीज", c_Cereals:"अनाज", "c_Gujarati dishes":"गुजराती व्यंजन", c_Eggs:"अंडे", "c_Meat & fish":"मांस और मछली", c_Supplements:"सप्लीमेंट",
+ printSub:"{who} · {wt} किलो · रोज़ लक्ष्य {t} ग्राम · {date}"
+}};
+const LI={en:0,gu:1,hi:2};
+let lang="en";
+const t=(k,v)=>{ let s=(L[lang][k]??L.en[k]??k); if(typeof s==="string"&&v) for(const x in v) s=s.split("{"+x+"}").join(v[x]); return s; };
+
+/* ============ PRICES (editable in app) ============ */
+const PRICE_DEF = {hpButtermilk:30, hpPaneer400:165, wheyBox:2400, blueberry:55, importedWheyPerG:10};
+let PRICES={...PRICE_DEF};
+try{ Object.assign(PRICES, JSON.parse(localStorage.getItem("mpp-prices")||"{}")); }catch(e){}
+const price={ hpBm:()=>+PRICES.hpButtermilk, hpPan:()=>+PRICES.hpPaneer400/8, whey:()=>+PRICES.wheyBox/30, shake:()=>+PRICES.blueberry };
+
+/* ============ FOOD ITEMS FOR THE PLAN ============ */
+const MEALS=[["early","6–7 am"],["bf","8–9 am"],["mid","11 am"],["lunch","1 pm"],["eve","4–5 pm"],["dinner","8 pm"],["bed","10 pm"]];
+// n = name [en,gu,hi], q = serving [en,gu,hi], p = g protein, kcal
+const S = {
+ rotliL:{meal:"lunch",n:["2 rotli","2 રોટલી","2 रोटी"],q:["60 g atta","60 ગ્રામ લોટ","60 ग्राम आटा"],p:6.4,kcal:192},
+ dal:{meal:"lunch",n:["1 katori thick tuvar dal","1 વાટકી જાડી તુવેર દાળ","1 कटोरी गाढ़ी अरहर दाल"],q:["30 g dry dal","30 ગ્રામ સૂકી દાળ","30 ग्राम सूखी दाल"],p:6.5,kcal:99,grp:"dal"},
+ rotliD:{meal:"dinner",n:["2 rotli + sabzi","2 રોટલી + શાક","2 रोटी + सब्ज़ी"],q:["60 g atta","60 ગ્રામ લોટ","60 ग्राम आटा"],p:6.4,kcal:192},
+ milkBf:{meal:"bf",n:["1 glass milk","1 ગ્લાસ દૂધ","1 गिलास दूध"],q:["200 ml toned milk","200 મિલી ટોન્ડ દૂધ","200 मि.ली. टोन्ड दूध"],p:6.2,kcal:118,grp:"milk"},
+ milkLF:{meal:"bf",n:["1 glass soy milk","1 ગ્લાસ સોયા દૂધ","1 गिलास सोया दूध"],q:["200 ml, unsweetened","200 મિલી, ખાંડ વગર","200 मि.ली., बिना चीनी"],p:6,kcal:80,grp:"soya"},
+ eggs2:{meal:"bf",n:["2 hard-boiled eggs","2 બાફેલાં ઈંડાં","2 उबले अंडे"],q:["2 large eggs","2 મોટાં ઈંડાં","2 बड़े अंडे"],p:13.4,kcal:136,need:"egg",grp:"eggs"},
+ chilla:{meal:"bf",n:["2 moong dal chilla","2 મગની દાળના પૂડલા","2 मूंग दाल चीला"],q:["40 g moong dal","40 ગ્રામ મગની દાળ","40 ग्राम मूंग दाल"],p:9.6,kcal:175,grp:"bfdish"},
+ dahi:{meal:"lunch",n:["1 katori dahi","1 વાટકી દહીં","1 कटोरी दही"],q:["150 g","150 ગ્રામ","150 ग्राम"],p:5.3,kcal:93,grp:"milk"},
+ paneer:{meal:"dinner",n:["Paneer bhurji","પનીર ભુરજી","पनीर भुर्जी"],q:["50 g paneer","50 ગ્રામ પનીર","50 ग्राम पनीर"],p:9.4,kcal:153,grp:"paneer"},
+ chicken:{meal:"dinner",n:["Chicken curry","ચિકન કરી","चिकन करी"],q:["100 g boneless, raw weight","100 ગ્રામ બોનલેસ, કાચું વજન","100 ग्राम बोनलेस, कच्चा वज़न"],p:21.8,kcal:168,need:"nonveg",grp:"chicken",slot:"meat"},
+ fish:{meal:"dinner",n:["Fish curry (rohu / pomfret)","માછલીની કરી (રોહુ / પાપલેટ)","मछली करी (रोहू / पॉम्फ्रेट)"],q:["1 piece, 100 g","1 ટુકડો, 100 ગ્રામ","1 टुकड़ा, 100 ग्राम"],p:19.7,kcal:102,need:"nonveg",grp:"fish",slot:"meat"},
+ chana:{meal:"eve",n:["Roasted chana","દાળિયા","भुने चने"],q:["25 g (1 small handful)","25 ગ્રામ (1 નાની મુઠ્ઠી)","25 ग्राम (1 छोटी मुट्ठी)"],p:4.5,kcal:92,grp:"chana"},
+ sprouts:{meal:"mid",n:["Steamed moong sprouts","બાફેલા મગના ફણગા","उबले अंकुरित मूंग"],q:["1 katori, from 40 g dry moong","1 વાટકી, 40 ગ્રામ સૂકા મગમાંથી","1 कटोरी, 40 ग्राम सूखे मूंग से"],p:9,kcal:120,grp:"sprouts"},
+ milkBed:{meal:"bed",n:["1 glass milk","1 ગ્લાસ દૂધ","1 गिलास दूध"],q:["200 ml","200 મિલી","200 मि.ली."],p:6.2,kcal:118,grp:"milk"},
+ almonds:{meal:"early",n:["Soaked almonds","પલાળેલી બદામ","भीगे बादाम"],q:["15 almonds (20 g)","15 બદામ (20 ગ્રામ)","15 बादाम (20 ग्राम)"],p:3.7,kcal:122,grp:"nuts"},
+ chaas:{meal:"lunch",n:["1 glass chaas","1 ગ્લાસ છાશ","1 गिलास छाछ"],q:["250 ml","250 મિલી","250 मि.ली."],p:3,kcal:35,grp:"milk"},
+ soya:{meal:"dinner",n:["Soya chunk sabzi","સોયા ચંક્સનું શાક","सोया चंक्स की सब्ज़ी"],q:["25 g dry chunks (1 katori cooked)","25 ગ્રામ સૂકા ચંક્સ (1 વાટકી રાંધેલા)","25 ग्राम सूखे चंक्स (1 कटोरी पकी)"],p:13,kcal:86,grp:"soya"},
+ egg3:{meal:"eve",n:["1 hard-boiled egg","1 બાફેલું ઈંડું","1 उबला अंडा"],q:["1 large egg","1 મોટું ઈંડું","1 बड़ा अंडा"],p:6.7,kcal:68,need:"egg",grp:"eggs"},
+ kathol:{meal:"dinner",n:["1 katori rajma","1 વાટકી રાજમા","1 कटोरी राजमा"],q:["40 g dry","40 ગ્રામ સૂકા","40 ग्राम सूखे"],p:8,kcal:120,grp:"kathol"},
+ dahi2:{meal:"eve",n:["1 katori dahi with fruit","1 વાટકી દહીં ફળ સાથે","1 कटोरी दही फल के साथ"],q:["150 g","150 ગ્રામ","150 ग्राम"],p:5.3,kcal:93,grp:"milk"},
+ peanuts:{meal:"eve",n:["Roasted peanuts","શેકેલા સીંગદાણા","भुनी मूंगफली"],q:["30 g (1 handful)","30 ગ્રામ (1 મુઠ્ઠી)","30 ग्राम (1 मुट्ठी)"],p:7.1,kcal:156,grp:"peanuts"},
+ pumpkin:{meal:"early",n:["Pumpkin seeds","કોળાના બીજ","कद्दू के बीज"],q:["15 g (1 heaped tbsp)","15 ગ્રામ (1 મોટી ચમચી)","15 ग्राम (1 बड़ा चम्मच)"],p:4.5,kcal:84,grp:"nuts"},
+ khichdi:{meal:"dinner",n:["Moong dal khichdi","મગની દાળની ખીચડી","मूंग दाल खिचड़ी"],q:["1 bowl, 200 g","1 બાઉલ, 200 ગ્રામ","1 कटोरा, 200 ग्राम"],p:8,kcal:210,grp:"dal"},
+ kadhi:{meal:"lunch",n:["1 katori kadhi (thick, with besan)","1 વાટકી જાડી કઢી","1 कटोरी गाढ़ी कढ़ी"],q:["1 katori","1 વાટકી","1 कटोरी"],p:4,kcal:100,grp:"milk"},
+ chanaSalad:{meal:"lunch",n:["Kala chana salad","કાળા ચણાનું સલાડ","काले चने का सलाद"],q:["1 katori, 40 g dry","1 વાટકી, 40 ગ્રામ સૂકા","1 कटोरी, 40 ग्राम सूखे"],p:7.5,kcal:115,grp:"kathol"},
+ tofu:{meal:"dinner",n:["Tofu sabzi","ટોફુનું શાક","टोफू की सब्ज़ी"],q:["100 g firm tofu","100 ગ્રામ ટોફુ","100 ग्राम टोफू"],p:10,kcal:100,grp:"soya"},
+ skyr:{meal:"mid",n:["Milky Mist Skyr","મિલ્કી મિસ્ટ સ્કાયર","मिल्की मिस्ट स्कायर"],q:["100 g cup","100 ગ્રામ કપ","100 ग्राम कप"],p:11,kcal:70,grp:"milk"},
+ /* supplements */
+ hpBm:{meal:"mid",n:["Amul High Protein Buttermilk","અમૂલ હાઈ પ્રોટીન છાશ","अमूल हाई प्रोटीन छाछ"],q:["1 bottle, 200 ml","1 બોટલ, 200 મિલી","1 बोतल, 200 मि.ली."],p:15,kcal:90,supp:1,rtd:1,cost:price.hpBm,grp:"milk",bought:"shop.amul.com / Blinkit"},
+ hpPan:{meal:"lunch",n:["Amul High Protein Paneer","અમૂલ હાઈ પ્રોટીન પનીર","अमूल हाई प्रोटीन पनीर"],q:["50 g, in sabzi or grilled","50 ગ્રામ, શાકમાં કે શેકીને","50 ग्राम, सब्ज़ी में या ग्रिल"],p:12.5,kcal:85,supp:1,cost:price.hpPan,grp:"paneer",bought:"shop.amul.com, 400 g pack"},
+ whey:{meal:"bf",n:["Amul Whey (plain) in milk or chaas","અમૂલ વ્હે (સાદો) દૂધ કે છાશમાં","अमूल व्हे (सादा) दूध या छाछ में"],q:["1 sachet","1 પાઉચ","1 पाउच"],p:25,kcal:120,supp:1,cost:price.whey,grp:"whey",lf:1,bought:"shop.amul.com, 30 sachets"},
+ shake:{meal:"eve",n:["Amul Blueberry Protein Shake","અમૂલ બ્લુબેરી પ્રોટીન શેક","अमूल ब्लूबेरी प्रोटीन शेक"],q:["1 bottle, 200 ml","1 બોટલ, 200 મિલી","1 बोतल, 200 मि.ली."],p:20,kcal:138,supp:1,rtd:1,cost:price.shake,grp:"shakes",gdm:1,bought:"Blinkit / Zepto / shop.amul.com"}
+};
+/* weekly variants: dish changes by day, same slot */
+const VAR = {
+ dal:[ {n:["1 katori thick tuvar dal","1 વાટકી જાડી તુવેર દાળ","1 कटोरी गाढ़ी अरहर दाल"],p:6.5,kcal:99},
+       {n:["1 katori moong dal","1 વાટકી મગની દાળ","1 कटोरी मूंग दाल"],p:7.2,kcal:98},
+       {n:["1 katori masoor dal","1 વાટકી મસૂર દાળ","1 कटोरी मसूर दाल"],p:7.3,kcal:97},
+       {n:["1 katori chana dal","1 વાટકી ચણાની દાળ","1 कटोरी चना दाल"],p:6.5,kcal:99},
+       {n:["1 katori mixed dal","1 વાટકી મિક્સ દાળ","1 कटोरी मिक्स दाल"],p:7,kcal:98} ],
+ chilla:[ {n:["2 moong dal chilla","2 મગની દાળના પૂડલા","2 मूंग दाल चीला"],q:["40 g moong dal","40 ગ્રામ મગની દાળ","40 ग्राम मूंग दाल"],p:9.6,kcal:175},
+       {n:["2 besan chilla","2 ચણાના લોટના પૂડલા","2 बेसन चीला"],q:["40 g besan","40 ગ્રામ ચણાનો લોટ","40 ग्राम बेसन"],p:8.7,kcal:132},
+       {n:["Khaman dhokla","ખમણ ઢોકળાં","खमण ढोकला"],q:["4 pieces, 100 g","4 ટુકડા, 100 ગ્રામ","4 टुकड़े, 100 ग्राम"],p:6.5,kcal:160},
+       {n:["Moong dal + rice idli","મગની દાળ-ભાતની ઈડલી","मूंग दाल-चावल इडली"],q:["3 idli","3 ઈડલી","3 इडली"],p:7.5,kcal:180},
+       {n:["Handvo","હાંડવો","हांडवो"],q:["1 piece, 100 g","1 ટુકડો, 100 ગ્રામ","1 टुकड़ा, 100 ग्राम"],p:5.5,kcal:180} ],
+ paneer:[ {n:["Paneer bhurji","પનીર ભુરજી","पनीर भुर्जी"]}, {n:["Palak paneer","પાલક પનીર","पालक पनीर"]}, {n:["Grilled paneer tikka","શેકેલું પનીર ટિક્કા","ग्रिल्ड पनीर टिक्का"]}, {n:["Paneer sabzi","પનીરનું શાક","पनीर की सब्ज़ी"]} ],
+ kathol:[ {n:["1 katori rajma","1 વાટકી રાજમા","1 कटोरी राजमा"],p:8,kcal:120},
+       {n:["1 katori chole","1 વાટકી છોલે","1 कटोरी छोले"],p:7.6,kcal:145},
+       {n:["1 katori chola (lobia)","1 વાટકી ચોળા","1 कटोरी लोबिया"],p:8.1,kcal:128},
+       {n:["1 katori kala chana","1 વાટકી કાળા ચણા","1 कटोरी काले चने"],p:7.5,kcal:115},
+       {n:["1 katori matki usal","1 વાટકી મઠનું ઉસળ","1 कटोरी मटकी उसल"],p:7.9,kcal:120},
+       {n:["1 katori whole moong","1 વાટકી આખા મગ","1 कटोरी साबुत मूंग"],p:9,kcal:118},
+       {n:["1 katori vaal","1 વાટકી વાલ","1 कटोरी वाल"],p:8,kcal:112} ],
+ chicken:[ {n:["Chicken curry","ચિકન કરી","चिकन करी"]}, {n:["Grilled chicken tikka","શેકેલું ચિકન ટિક્કા","ग्रिल्ड चिकन टिक्का"]} ],
+ fish:[ {n:["Fish curry (rohu / pomfret)","માછલીની કરી (રોહુ / પાપલેટ)","मछली करी (रोहू / पॉम्फ्रेट)"]}, {n:["Shallow-fried fish","ઓછા તેલમાં તળેલી માછલી","कम तेल में तली मछली"]} ],
+ chana:[ {n:["Roasted chana","દાળિયા","भुने चने"]}, {n:["Chana jor garam","ચણા જોર ગરમ","चना जोर गरम"]}, {n:["Roasted chana + puffed rice","દાળિયા + મમરા","भुने चने + मुरमुरे"]} ]
+};
+const resolve=(k,d)=>{ const v=(VAR[k]||[]); return v.length? {...S[k],...v[d%v.length]} : S[k]; };
+const EXCL=["paneer","soya","chana","peanuts","nuts","kathol","sprouts","chicken","fish","whey","shakes"];
+
+/* ============ STATE ============ */
+const st={mode:"preg",tri:"3",lact:"1",method:"auto",perkg:1.0,fixed:70,diet:"veg",eggs:"no",supp:"balanced",wt:60,ht:"",excl:[],cond:[],day:0,mult:{},swap:{},removed:[],name:"",note:"",fromDoc:false};
+try{ Object.assign(st, JSON.parse(localStorage.getItem("mpp2-state")||"{}")); }catch(e){}
+const save=()=>{ try{ localStorage.setItem("mpp2-state",JSON.stringify(st)); }catch(e){} };
+const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
+const r1=x=>Math.round(x*10)/10;
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* link in from the doctor */
+(function(){
+  const m=location.hash.match(/#p=([A-Za-z0-9_-]+)/);
+  if(!m) return;
+  try{
+    const b=m[1].replace(/-/g,"+").replace(/_/g,"/");
+    const o=JSON.parse(decodeURIComponent(escape(atob(b))));
+    const keys=["mode","tri","lact","method","perkg","fixed","diet","eggs","supp","wt","ht","excl","cond","mult","swap","removed","name","note","lang"];
+    for(const k of keys) if(k in o) st[k]=o[k];
+    st.fromDoc=true; save();
+    history.replaceState(null,"",location.pathname+location.search);
+  }catch(e){}
+})();
+const nl=(navigator.language||"").toLowerCase();
+lang = st.lang || (nl.startsWith("gu")?"gu":nl.startsWith("hi")?"hi":"en");
+if(!L[lang]) lang="en";
+
+/* ============ TARGET ============ */
+function target(){
+  const w=Math.min(160,Math.max(30,+st.wt||60));
+  let we=w, bmiNote="";
+  const h=+st.ht;
+  if(h>=120&&h<=210){
+    const bmi=w/((h/100)**2);
+    if(bmi>=30){ we=r1(23*(h/100)**2); bmiNote=t("bmiNote",{bmi:r1(bmi),we,w}); }
+    else if(bmi<18.5){ bmiNote=t("underNote",{bmi:r1(bmi)}); }
+  }
+  const preg=st.mode!=="gen";
+  let T,why;
+  if(st.method==="auto"&&st.mode==="gen") st.method="perkg";
+  if(st.method==="auto"){
+    const add=st.mode==="preg"?{1:0,2:9.5,3:22}[st.tri]:{1:16.9,2:13.2}[st.lact];
+    const icmr=0.83*we+add, rule=1.0*we;
+    T=Math.max(icmr,rule);
+    const lab=st.mode==="preg"?t("labT")[st.tri]:(st.lact==="1"?t("labL1"):t("labL2"));
+    why=t(icmr>rule?"whyHigh":"whyRule",{lab,we,add,icmr:r1(icmr),rule:r1(rule)});
+  }else if(st.method==="perkg"){
+    T=st.perkg*we; why=t("whyPerkg",{pk:(+st.perkg).toFixed(2),we});
+  }else{
+    T=Math.max(20,+st.fixed||0); why=t("whyFixed",{t:Math.round(T)});
+    const r=preg?1.3:1.5, cap=r*we;
+    if(T>cap){ why+=t("whyCap",{cap:Math.round(cap),r}); T=cap; }
+  }
+  return {t:Math.round(T),we,bmiNote,why,preg};
+}
+
+/* ============ PLAN ============ */
+function allowed(s,ctx){
+  if(s.need==="egg"&&!ctx.eggs) return false;
+  if(s.need==="nonveg"&&!ctx.nv) return false;
+  if(s.grp&&ctx.ex.has(s.grp)) return false;
+  if(s.supp&&st.supp==="none") return false;
+  if(s.gdm&&ctx.gdm) return false;
+  if(ctx.lf&&s.grp==="milk"&&!s.supp) return false;
+  return true;
+}
+function build(T,d){
+  const ctx={eggs:st.eggs==="yes",nv:st.diet==="nonveg",gdm:st.cond.includes("gdm"),lf:st.cond.includes("lactose"),ex:new Set(st.excl)};
+  const plan=[]; let total=0,supp=0,rtd=0;
+  const unavailable=new Set([...st.removed,...Object.keys(st.swap)]);
+  const used=new Set(), slots=new Set();
+  const mult=k=>+(st.mult[k]||1);
+  const add=k=>{ const s=resolve(k,d), m=mult(k); const p=r1(s.p*m), kcal=Math.round(s.kcal*m);
+    plan.push({k,...s,p,kcal,m,cost:s.cost?()=>s.cost()*m:null}); total+=p; if(s.supp){supp+=p; if(s.rtd) rtd++;} used.add(k); if(s.slot) slots.add(s.slot); };
+  const can=k=>!used.has(k)&&!unavailable.has(k)&&allowed(S[k],ctx)&&!(S[k].slot&&slots.has(S[k].slot));
+  // foundation
+  for(const k of ["rotliL","dal","rotliD"]) if(can(k)) add(k);
+  if(!ctx.lf){ if(can("milkBf")) add("milkBf"); } else if(can("milkLF")) add("milkLF");
+  // forced by swaps
+  for(const k of Object.values(st.swap)) if(can(k)) add(k);
+  // priority queue
+  const Q=[];
+  if(ctx.eggs) Q.push("eggs2"); else Q.push("chilla");
+  Q.push("dahi");
+  if(st.supp==="easy") Q.push("hpBm","whey","hpPan","shake");
+  if(ctx.nv){ if(d%2) Q.push("fish","chicken"); else Q.push("chicken","fish"); }
+  Q.push("paneer","chana","sprouts","milkBed","almonds");
+  if(st.supp==="balanced") Q.push("hpBm","hpPan");
+  Q.push("chaas","soya"); if(ctx.eggs) Q.push("chilla");
+  if(st.supp==="balanced") Q.push("whey","shake");
+  Q.push("egg3","kathol","dahi2","peanuts","pumpkin","skyr","chanaSalad","khichdi","tofu","kadhi");
+  if(ctx.lf) Q.splice(Q.indexOf("chana")+1,0,"kathol");
+  const cand=()=>Q.filter((k,i)=>Q.indexOf(k)===i&&can(k)
+    &&!(S[k].supp&&(supp+S[k].p*mult(k)>T/3+0.5||(S[k].rtd&&rtd>=2)))
+    &&!((k==="soya"||k==="tofu")&&(used.has("milkLF")||used.has("soya")||used.has("tofu")))&&!(k==="khichdi"&&(used.has("rotliD")||used.has("dal")&&d%3)));
+  let guard=0;
+  while(T-total>1&&guard++<40){
+    const c=cand(); if(!c.length) break;
+    const gap=T-total; let k=c[0];
+    if(gap<8){ const fits=a=>a.filter(x=>resolve(x,d).p*mult(x)>=gap-0.5).sort((a,b)=>resolve(a,d).p-resolve(b,d).p)[0]; k=fits(c.filter(x=>!S[x].supp))||fits(c)||c[0]; }
+    add(k);
+  }
+  return {plan,total:r1(total),supp:r1(supp),ctx};
+}
+function altsFor(k,B,d){
+  const s=S[k]; return Object.keys(S).filter(x=>x!==k&&S[x].meal===s.meal&&!B.plan.some(p=>p.k===x)&&allowed(S[x],B.ctx)&&!(S[x].slot&&B.plan.some(p=>p.slot===S[x].slot&&p.k!==k)));
+}
+
+/* ============ NOTES ============ */
+function notes(B){
+  const N=[], preg=st.mode==="preg", lact=st.mode==="lact";
+  const ks=new Set(B.plan.map(p=>p.k));
+  if(ks.has("eggs2")||ks.has("egg3")) N.push(preg?t("nEggsPreg"):t("nEggs"));
+  if(ks.has("sprouts")) N.push(t("nSprouts",{p:preg?t("nSproutsP"):""}));
+  if(ks.has("fish")) N.push((preg||lact)?t("nFishPreg"):t("nFish"));
+  if(ks.has("chicken")) N.push(t("nChicken"));
+  if(["dahi","paneer","milkBf","milkBed","chaas","dahi2"].some(k=>ks.has(k))) N.push(t("nMilk"));
+  if(ks.has("soya")||ks.has("milkLF")) N.push(t("nSoya"));
+  if(ks.has("shake")) N.push(t("nShake",{p:preg?t("nShakeP"):""}));
+  if(ks.has("whey")) N.push(t("nWhey"));
+  if(st.cond.includes("gdm")) N.push(t("nGdm"));
+  if(st.cond.includes("lactose")) N.push(t("nLactose"));
+  if(ks.has("peanuts")) N.push(t("nPeanuts"));
+  if(preg&&st.tri!=="1") N.push(t("nKcalPreg"));
+  N.push(t("nEnergy"));
+  return N;
+}
+
+/* ============ RENDER PLAN ============ */
+let openEditor=null, lastText="", weekText="";
+const li=()=>LI[lang];
+const whoText=()=>st.mode==="preg"?t("waPreg",{tri:[ "",t("t1"),t("t2"),t("t3")][st.tri]}):st.mode==="lact"?t("waLact"):t("waGen");
+function planText(T,B,d,withDay){
+  const byMeal=MEALS.map(([k,tm])=>({k,tm,items:B.plan.filter(p=>p.meal===k)})).filter(m=>m.items.length);
+  return (withDay?`*${t("waDay")} ${d+1} — ${t("days")[d]}*\n`:"")+byMeal.map(m=>`*${t("m_"+m.k)}* (${m.tm})\n`+m.items.map(p=>`• ${p.n[li()]} — ${p.q[li()]}${p.m!==1?" ×"+p.m:""} (${p.p} g)`).join("\n")).join("\n\n");
+}
+function renderPlan(){
+  const R=$("#result");
+  if(st.cond.includes("kidney")){
+    R.innerHTML=`<div class="stop"><h2>${t("stopTitle")}</h2><p>${t("stopBody")}</p><p class="small muted">${t("stopSub")}</p></div>`;
+    lastText=""; return;
+  }
+  const T=target(), d=+st.day||0, B=build(T.t,d);
+  const food=r1(B.total-B.supp), max=Math.max(T.t,B.total)*1.08;
+  const short=T.t-B.total>2;
+  const cost=B.plan.filter(p=>p.supp).reduce((a,p)=>a+p.cost(),0);
+  const kcal=B.plan.reduce((a,p)=>a+p.kcal,0);
+  const byMeal=MEALS.map(([k,tm])=>({k,tm,items:B.plan.filter(p=>p.meal===k)})).filter(m=>m.items.length);
+  const wheyCost=Math.round(B.supp*PRICES.importedWheyPerG);
+  const N=notes(B);
+  const edited=Object.keys(st.mult).length||Object.keys(st.swap).length||st.removed.length;
+  const L_=li();
+
+  R.innerHTML=`
+  ${st.note?`<div class="alert" style="background:var(--mung-soft);border-color:var(--mung)"><b>${t("docNoteHead")}:</b> ${esc(st.note)}</div>`:""}
+  <div class="target">
+    <div><div class="lbl" style="margin-bottom:4px">${t("target")}</div><div class="big num">${T.t}<small>${t("perDay")}</small></div></div>
+    <div class="why"><span>${T.why}</span>${T.bmiNote?`<span class="muted">${T.bmiNote}</span>`:""}</div>
+  </div>
+  <div style="display:flex;flex-direction:column;gap:8px">
+    <div class="bar" role="img" aria-label="${B.total} g of ${T.t} g">
+      <span class="f" style="width:${food/max*100}%"></span><span class="s" style="width:${B.supp/max*100}%;${B.supp?"":"display:none"}"></span><span class="mark" style="left:${T.t/max*100}%"></span>
+    </div>
+    <div class="legend num"><span><i style="background:var(--mung)"></i>${t("legHome")} ${food} g</span><span><i style="background:var(--saffron)"></i>${t("legSupp")} ${B.supp} g</span><span><i style="background:var(--fg);width:2px"></i>${t("legTarget")} ${T.t} g</span><span><b style="color:var(--fg)">${t("legTotal")} ${B.total} g</b></span></div>
+  </div>
+  ${short?`<div class="alert">${t("short",{total:B.total,gap:r1(T.t-B.total)})}</div>`:""}
+  <div class="panel" style="gap:10px">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap"><h2>${t("yourDay")}</h2>${edited?`<button type="button" class="mini warn" id="reset">${t("reset")}</button>`:""}</div>
+    <div class="days" role="tablist">${t("days").map((n,i)=>`<button type="button" role="tab" data-d="${i}" aria-pressed="${i===d}">${n}</button>`).join("")}</div>
+    <p class="hint dayNote">${t("dayNote")}</p>
+    <div class="meals">${byMeal.map(m=>`
+      <div class="meal"><div class="when">${t("m_"+m.k)}<span class="t">${m.tm}</span></div>
+      <div class="items">${m.items.map(p=>{
+        const ed=st.mult[p.k]||Object.values(st.swap).includes(p.k);
+        return `<div class="item" data-k="${p.k}">
+          <button type="button" class="line" aria-expanded="${openEditor===p.k}"><div class="nm"><b>${p.n[L_]}</b>${p.supp?`<span class="tag">${t("legSupp")}</span>`:""}${ed?`<span class="tag ed">${t("edited")}</span>`:""}<span class="gu">${p.q[L_]}${p.m!==1?` × ${p.m}`:""}${L_?` · ${p.n[0]}`:` · ${p.n[1]}`}</span></div><span class="pg num ${p.supp?"supp":""}">${p.p} g</span></button>
+          ${openEditor===p.k?editorHTML(p,B,d):""}</div>`}).join("")}</div></div>`).join("")}
+    </div>
+  </div>
+  <div class="stats">
+    <div class="stat"><div class="lbl">${t("stProtein")}</div><div class="v num">${B.total} g</div><div class="small muted">${r1(B.total/T.we)} ${t("perKg")}</div></div>
+    <div class="stat"><div class="lbl">${t("stKcal")}</div><div class="v num">${Math.round(kcal/10)*10}</div><div class="small muted">${t("kcalSub")}</div></div>
+    <div class="stat"><div class="lbl">${t("stCost")}</div><div class="v num">₹${Math.round(cost)}${t("perDayCost")}</div><div class="small muted">${cost?t("monthly",{m:Math.round(cost*30).toLocaleString("en-IN"),w:wheyCost}):t("noSupp")}</div></div>
+  </div>
+  ${B.plan.some(p=>p.supp)?`<div class="panel" style="gap:8px"><h3>${t("buy")}</h3><ul class="notes">${B.plan.filter(p=>p.supp).map(p=>`<li><b>${p.n[L_]}</b>: ${p.bought}. ₹${r1(p.cost()/p.p)} ${t("perG")}.</li>`).join("")}</ul></div>`:""}
+  <div class="panel" style="gap:8px"><h3>${t("keep")}</h3><ul class="notes">${N.map(n=>`<li>${n}</li>`).join("")}</ul></div>
+  <div class="actions">
+    <button class="btn" id="copy" type="button">${t("copy")}</button>
+    <button class="btn ghost" id="copyWeek" type="button">${t("copyWeek")}</button>
+    ${navigator.share?`<button class="btn ghost" id="shareBtn" type="button">${t("share")}</button>`:""}
+    <button class="btn ghost" id="printBtn" type="button">${t("print")}</button>
+    <span class="msg" id="copyMsg"></span></div>
+  <div id="copyFb" hidden><textarea class="copyfb" id="copyText" readonly aria-label="Plan text"></textarea></div>`;
+
+  const head=`*${t("waHead")}*\n${st.name?esc(st.name)+" · ":""}${whoText()}, ${+st.wt} kg · ${t("waTarget")} ${T.t} g/${t("waDay").toLowerCase()} · ${t("waPlan")} ${B.total} g\n`;
+  lastText=head+"\n"+planText(T,B,d,false)+"\n\n"+N.slice(0,-1).map(n=>"– "+n).join("\n")+(st.note?`\n\n*${t("docNoteHead")}:* ${st.note}`:"");
+  weekText=head+"\n"+[0,1,2,3,4,5,6].map(i=>planText(T,build(T.t,i),i,true)).join("\n\n")+"\n\n"+N.slice(0,-1).map(n=>"– "+n).join("\n");
+  $("#phTitle").textContent=t("clinic")+" — "+t("appName");
+  $("#phSub").textContent=(st.name?st.name+" · ":"")+t("printSub",{who:whoText(),wt:+st.wt,t:T.t,date:new Date().toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"})});
+
+  const copy=(txt)=>{ const done=()=>{$("#copyMsg").textContent=t("copied");};
+    const fb=()=>{ $("#copyFb").hidden=false; const a=$("#copyText"); a.value=txt; a.focus(); a.select(); $("#copyMsg").textContent=t("copyFallback"); };
+    try{ navigator.clipboard.writeText(txt).then(done,fb); }catch(e){ fb(); } };
+  $("#copy").onclick=()=>copy(lastText);
+  $("#copyWeek").onclick=()=>copy(weekText);
+  if($("#shareBtn")) $("#shareBtn").onclick=()=>navigator.share({text:lastText}).catch(()=>{});
+  $("#printBtn").onclick=()=>window.print();
+  if($("#reset")) $("#reset").onclick=()=>{ st.mult={}; st.swap={}; st.removed=[]; openEditor=null; save(); renderPlan(); $("#copyMsg").textContent=t("resetDone"); };
+  $$(".days button").forEach(b=>b.onclick=()=>{ st.day=+b.dataset.d; save(); renderPlan(); });
+  $$(".item .line").forEach(b=>b.onclick=()=>{ const k=b.parentElement.dataset.k; openEditor=openEditor===k?null:k; renderPlan(); });
+  $$(".editor [data-m]").forEach(b=>b.onclick=()=>{ const k=b.closest(".item").dataset.k; const m=+b.dataset.m; if(m===1) delete st.mult[k]; else st.mult[k]=m; save(); renderPlan(); });
+  $$(".editor [data-swap]").forEach(b=>b.onclick=()=>{ const k=b.closest(".item").dataset.k; const to=b.dataset.swap;
+    const orig=Object.keys(st.swap).find(o=>st.swap[o]===k)||k; delete st.swap[k]; st.swap[orig]=to; delete st.mult[k]; openEditor=to; save(); renderPlan(); });
+  $$(".editor [data-remove]").forEach(b=>b.onclick=()=>{ const k=b.closest(".item").dataset.k; const orig=Object.keys(st.swap).find(o=>st.swap[o]===k); if(orig){ delete st.swap[orig]; if(!st.removed.includes(orig)) st.removed.push(orig); } if(!st.removed.includes(k)) st.removed.push(k); delete st.mult[k]; openEditor=null; save(); renderPlan(); });
+  $$(".editor [data-close]").forEach(b=>b.onclick=()=>{ openEditor=null; renderPlan(); });
+}
+function editorHTML(p,B,d){
+  const alts=altsFor(p.k,B,d);
+  const m=p.m;
+  return `<div class="editor">
+    <div class="row"><span class="lbl">${t("portion")}</span>${[[0.5,"half"],[1,"one"],[1.5,"oneHalf"],[2,"two"]].map(([v,k])=>`<button type="button" class="mini" data-m="${v}" aria-pressed="${m===v}">${t(k)}</button>`).join("")}</div>
+    ${alts.length?`<div class="row"><span class="lbl">${t("swap")}</span>${alts.map(k=>{const s=resolve(k,d);return `<button type="button" class="mini" data-swap="${k}">${s.n[li()]} <span class="muted">${s.p} g</span></button>`}).join("")}</div>`:""}
+    <div class="row"><button type="button" class="mini warn" data-remove>${t("remove")}</button><button type="button" class="mini" data-close>${t("close")}</button></div></div>`;
+}
+
+/* ============ CONTROLS ============ */
+function seg(id,key){ $$("#"+id+" button").forEach(b=>{ b.setAttribute("aria-pressed",String(b.dataset.v===String(st[key]))); b.onclick=()=>{ st[key]=b.dataset.v; save(); sync(); }; }); }
+function chips(id,key){ $$("#"+id+" button").forEach(b=>{ b.setAttribute("aria-pressed",String(st[key].includes(b.dataset.v))); b.onclick=()=>{ const a=st[key]; const i=a.indexOf(b.dataset.v); i<0?a.push(b.dataset.v):a.splice(i,1); save(); sync(); }; }); }
+function applyText(){
+  document.documentElement.lang=lang;
+  $$("[data-t]").forEach(e=>{ e.textContent=t(e.dataset.t); });
+  $$("[data-ph]").forEach(e=>{ e.placeholder=t(e.dataset.ph); });
+  $("#excl").innerHTML=EXCL.map(v=>`<button type="button" class="chip" data-v="${v}">${t("x_"+v)}</button>`).join("");
+  $("#lang").value=lang;
+  document.title=t("appName")+" · Madhuvan";
+  $("#priceGrid").innerHTML=Object.keys(PRICE_DEF).map(k=>`<label for="pr_${k}">${t("p_"+k)}</label><input id="pr_${k}" type="number" min="0" step="0.5" value="${PRICES[k]}">`).join("");
+  Object.keys(PRICE_DEF).forEach(k=>{ $("#pr_"+k).oninput=e=>{ PRICES[k]=+e.target.value||PRICE_DEF[k]; try{localStorage.setItem("mpp-prices",JSON.stringify(PRICES));}catch(x){} renderPlan(); renderValue(); }; });
+  renderValue();
+}
+function sync(){
+  if(st.mode==="gen"&&st.method==="auto") st.method="perkg";
+  $("#triBox").hidden=st.mode!=="preg"; $("#lactBox").hidden=st.mode!=="lact";
+  $('#method [data-v="auto"]').hidden=st.mode==="gen";
+  $("#perkgBox").hidden=st.method!=="perkg"; $("#fixedBox").hidden=st.method!=="fixed";
+  $("#perkgOut").textContent=(+st.perkg).toFixed(2)+" g/kg";
+  $("#methodHint").textContent=t(st.method==="auto"?"hintAuto":st.method==="perkg"?"hintPerkg":"hintFixed");
+  $("#suppHint").textContent=t({none:"hNone",balanced:"hBal",easy:"hEasy"}[st.supp]);
+  ["mode","tri","lact","method","diet","eggs","supp"].forEach(k=>seg(k,k));
+  chips("excl","excl"); chips("cond","cond");
+  $("#wt").value=st.wt; $("#ht").value=st.ht; $("#perkg").value=st.perkg; $("#fixed").value=st.fixed; $("#pname").value=st.name; $("#pnote").value=st.note;
+  $("#banner").hidden=!st.fromDoc;
+  $("#bannerText").innerHTML=t("banner",{name:st.name?t("bannerFor",{name:esc(st.name)}):""});
+  $("#form").hidden=st.fromDoc;
+  renderPlan(); renderTally();
+}
+$("#wt").oninput=e=>{st.wt=e.target.value;save();renderPlan();renderTally();};
+$("#ht").oninput=e=>{st.ht=e.target.value;save();renderPlan();};
+$("#perkg").oninput=e=>{st.perkg=e.target.value;$("#perkgOut").textContent=(+st.perkg).toFixed(2)+" g/kg";save();renderPlan();renderTally();};
+$("#fixed").oninput=e=>{st.fixed=e.target.value;save();renderPlan();renderTally();};
+$("#pname").oninput=e=>{st.name=e.target.value;save();renderPlan();};
+$("#pnote").oninput=e=>{st.note=e.target.value;save();renderPlan();};
+$("#lang").onchange=e=>{ lang=e.target.value; st.lang=lang; save(); applyText(); sync(); renderFoods(); };
+$("#bannerEdit").onclick=()=>{ st.fromDoc=false; save(); sync(); };
+
+/* doctor link */
+function makeLink(){
+  const o={}; for(const k of ["mode","tri","lact","method","perkg","fixed","diet","eggs","supp","wt","ht","excl","cond","mult","swap","removed","name","note"]) o[k]=st[k]; o.lang=lang;
+  const b=btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
+  return location.origin+location.pathname+"#p="+b;
+}
+$("#copyLink").onclick=()=>{ const u=makeLink(); const ok=()=>{$("#linkMsg").textContent=t("linkCopied");}; const fb=()=>{$("#linkMsg").textContent=u;}; try{navigator.clipboard.writeText(u).then(ok,fb);}catch(e){fb();} };
+$("#waLink").onclick=()=>{ const T=target(); const msg=`${t("waHead")}\n${st.name?st.name+"\n":""}${t("waTarget")}: ${T.t} g/${t("waDay").toLowerCase()}\n${makeLink()}`; window.open("https://wa.me/?text="+encodeURIComponent(msg),"_blank"); };
+
+/* ============ FOOD LIBRARY ============ */
+const FOODS=[
+ ["Dairy","veg","Cow milk","ગાયનું દૂધ / गाय का दूध","1 glass, 200 ml",6.5,146,"Packet or boiled only"],
+ ["Dairy","veg","Buffalo milk","ભેંસનું દૂધ / भैंस का दूध","1 glass, 200 ml",7.4,214,"Packet or boiled only"],
+ ["Dairy","veg","Toned milk","ટોન્ડ દૂધ / टोन्ड दूध","1 glass, 200 ml",6.2,118,""],
+ ["Dairy","veg","Double-toned milk","ડબલ ટોન્ડ દૂધ","1 glass, 200 ml",6.2,90,""],
+ ["Dairy","veg","Dahi / curd","દહીં / दही","1 katori, 150 g",5.3,93,""],
+ ["Dairy","veg","Hung curd (chakka)","ચક્કો / चक्का दही","½ katori, 100 g",7.5,100,""],
+ ["Dairy","veg","Greek yogurt, plain","ગ્રીક દહીં","1 cup, 100 g",8,90,""],
+ ["Dairy","veg","Chaas","છાશ / छाछ","1 glass, 250 ml",3,35,""],
+ ["Dairy","veg","Paneer, full fat","પનીર / पनीर","50 g (5–6 cubes)",9.4,153,"From boiled or packet milk"],
+ ["Dairy","veg","High-protein paneer (Amul / Milky Mist)","હાઈ પ્રોટીન પનીર","50 g",12.5,85,""],
+ ["Dairy","veg","Cheese slice","ચીઝ / चीज़","1 slice, 20 g",4,60,"Pasteurised cheese only"],
+ ["Dals & kathol","veg","Moong dal","મગની દાળ / मूंग दाल","1 katori cooked, 30 g dry",7.2,98,""],
+ ["Dals & kathol","veg","Whole moong","આખા મગ / साबुत मूंग","1 katori cooked, 40 g dry",9,118,""],
+ ["Dals & kathol","veg","Moong sprouts, steamed","ફણગાવેલા મગ / अंकुरित मूंग","1 katori, 40 g dry",9,120,"Steam or boil; never raw in pregnancy"],
+ ["Dals & kathol","veg","Masoor dal","મસૂર દાળ / मसूर दाल","1 katori cooked, 30 g dry",7.3,97,""],
+ ["Dals & kathol","veg","Tuvar dal, thick","તુવેર દાળ / अरहर दाल","1 katori, 30 g dry",6.5,99,"Thin Gujarati dal gives about 4 g"],
+ ["Dals & kathol","veg","Chana dal","ચણાની દાળ / चना दाल","1 katori cooked, 30 g dry",6.5,99,""],
+ ["Dals & kathol","veg","Besan","ચણાનો લોટ / बेसन","30 g (2 chilla)",6.5,99,""],
+ ["Dals & kathol","veg","Kala chana","કાળા ચણા / काले चने","1 katori cooked, 40 g dry",7.5,115,""],
+ ["Dals & kathol","veg","Kabuli chana","કાબુલી ચણા / छोले","1 katori cooked, 40 g dry",7.6,145,""],
+ ["Dals & kathol","veg","Rajma","રાજમા / राजमा","1 katori cooked, 40 g dry",8,120,"Boil fully"],
+ ["Dals & kathol","veg","Chola / lobia","ચોળા / लोबिया","1 katori cooked, 40 g dry",8.1,128,""],
+ ["Dals & kathol","veg","Matki / moth","મઠ / मटकी","1 katori usal, 40 g dry",7.9,120,""],
+ ["Dals & kathol","veg","Vaal","વાલ / वाल","1 katori, 40 g dry",8,112,"Cook well"],
+ ["Dals & kathol","veg","Urad dal","અડદની દાળ / उड़द दाल","1 katori cooked, 30 g dry",6.9,97,""],
+ ["Dals & kathol","veg","Roasted chana","દાળિયા / भुने चने","1 handful, 30 g",5.4,110,""],
+ ["Dals & kathol","veg","Peanuts","સીંગદાણા / मूंगफली","1 handful, 30 g",7.1,156,"Skip if allergic"],
+ ["Soy","veg","Soya chunks","સોયા ચંક્સ / सोया बड़ी","1 katori cooked, 25 g dry",13,86,"1 soya item a day"],
+ ["Soy","veg","Soybean","સોયાબીન","1 katori cooked, 30 g dry",11.3,113,"1 soya item a day"],
+ ["Soy","veg","Tofu, firm","ટોફુ","100 g",10,100,""],
+ ["Soy","veg","Soy milk, unsweetened","સોયા દૂધ","1 glass, 200 ml",6,80,""],
+ ["Nuts & seeds","veg","Almonds","બદામ / बादाम","15 almonds, 20 g",3.7,122,""],
+ ["Nuts & seeds","veg","Cashews","કાજુ / काजू","12 nuts, 20 g",3.8,117,""],
+ ["Nuts & seeds","veg","Walnuts","અખરોટ / अखरोट","10 halves, 20 g",3,131,""],
+ ["Nuts & seeds","veg","Pistachios","પિસ્તા / पिस्ता","25 nuts, 20 g",4,112,""],
+ ["Nuts & seeds","veg","Pumpkin seeds","કોળાના બીજ / कद्दू के बीज","1 heaped tbsp, 15 g",4.5,84,""],
+ ["Nuts & seeds","veg","Sunflower seeds","સૂર્યમુખીના બીજ","1 tbsp, 15 g",3.1,88,""],
+ ["Nuts & seeds","veg","Flaxseed","અળસી / अलसी","1 tbsp, 10 g",1.8,53,""],
+ ["Nuts & seeds","veg","Chia seeds","ચિયા","1 tbsp, 10 g",1.7,49,"Soak before eating"],
+ ["Nuts & seeds","veg","Sesame","તલ / तिल","1 tbsp, 10 g",1.8,57,""],
+ ["Nuts & seeds","veg","Makhana, roasted","મખાના / मखाना","1 cup, 20 g",1.9,69,""],
+ ["Cereals","veg","Wheat rotli","રોટલી / रोटी","1 rotli, 30 g atta",3.2,96,""],
+ ["Cereals","veg","Rice","ભાત / चावल","1 katori cooked, 40 g raw",3.2,142,""],
+ ["Cereals","veg","Bajra rotlo","બાજરીનો રોટલો / बाजरे की रोटी","1 rotlo, 40 g flour",4.4,139,""],
+ ["Cereals","veg","Jowar bhakri","જુવારની ભાખરી / ज्वार की रोटी","1 bhakri, 40 g flour",4,134,""],
+ ["Cereals","veg","Ragi / nagli","નાગલી / रागी","30 g flour",2.1,96,""],
+ ["Cereals","veg","Oats","ઓટ્સ","1 bowl, 40 g dry",5.3,152,""],
+ ["Cereals","veg","Poha","પૌંઆ / पोहा","1 plate, 40 g dry",2.6,140,""],
+ ["Cereals","veg","Quinoa","કિનોઆ","1 katori, 40 g dry",5.2,131,""],
+ ["Gujarati dishes","veg","Khaman dhokla","ખમણ ઢોકળાં","4 pieces, 100 g",6.5,160,""],
+ ["Gujarati dishes","veg","Handvo","હાંડવો","1 piece, 100 g",5.5,180,""],
+ ["Gujarati dishes","veg","Moong dal khichdi","મગની દાળની ખીચડી / खिचड़ी","1 bowl, 200 g",8,210,""],
+ ["Gujarati dishes","veg","Methi thepla","મેથીના થેપલા","1 thepla",3.5,120,""],
+ ["Gujarati dishes","veg","Mag / matki usal","ઉસળ","1 katori",8,180,""],
+ ["Gujarati dishes","veg","Gujarati kadhi","કઢી / कढ़ी","1 katori",3,90,""],
+ ["Gujarati dishes","veg","Moong dal chilla","મગની દાળના પૂડલા / चीला","2 chilla, 40 g dal",9.6,175,""],
+ ["Eggs","egg","Whole egg","ઈંડું / अंडा","1 large egg",6.7,68,"Fully cooked only in pregnancy"],
+ ["Eggs","egg","Egg white","ઈંડાનો સફેદ ભાગ / अंडे की सफ़ेदी","1 white",3.6,17,"Fully cooked"],
+ ["Meat & fish","nonveg","Chicken breast","ચિકન / चिकन","100 g boneless, raw",21.8,168,"No pink meat"],
+ ["Meat & fish","nonveg","Chicken curry cut","ચિકન કરી કટ","150 g with bone",19,210,""],
+ ["Meat & fish","nonveg","Mutton","મટન / मटन","100 g boneless, raw",20.3,188,"Cook well; limit red meat"],
+ ["Meat & fish","nonveg","Rohu","રોહુ / रोहू","1 piece, 100 g",19.7,102,"Low mercury, good choice"],
+ ["Meat & fish","nonveg","Pomfret","પાપલેટ / पॉम्फ्रेट","1 piece, 100 g",19,100,"Low mercury, good choice"],
+ ["Meat & fish","nonveg","Salmon / rawas","રાવસ","1 piece, 100 g",20,200,"Low mercury, rich in omega-3"],
+ ["Meat & fish","nonveg","Surmai / seer","સુરમઈ / सुरमई","1 piece, 100 g",20,110,"Pregnancy: avoid, or 1 piece a week at most"],
+ ["Meat & fish","nonveg","Prawns","ઝીંગા / झींगा","100 g cleaned",20,85,"Fully cooked; never raw"],
+ ["Supplements","veg","Amul High Protein Buttermilk","હાઈ પ્રોટીન છાશ","200 ml bottle",15,90,"₹2.0 per g protein"],
+ ["Supplements","veg","Amul High Protein Lassi (plain / rose)","હાઈ પ્રોટીન લસ્સી","200 ml bottle",15,null,"Check sugar on label"],
+ ["Supplements","veg","Amul Blueberry Protein Shake","બ્લુબેરી શેક","200 ml bottle",20,138,"1 a day max; has sweeteners"],
+ ["Supplements","veg","Amul High Protein Milk","હાઈ પ્રોટીન દૂધ","250 ml",35,225,"Lactose-free"],
+ ["Supplements","veg","Amul Kool Protein Shake","કૂલ પ્રોટીન","180 ml",10,133,"Avoid coffee flavour in pregnancy"],
+ ["Supplements","veg","Amul Whey, plain","વ્હે પ્રોટીન","1 sachet",25,120,"No sugar, lactose-free"],
+ ["Supplements","veg","Milky Mist Skyr","સ્કાયર","100 g cup",11,70,""],
+ ["Supplements","veg","Protinex Mama","પ્રોટીનેક્સ મામા","25 g serving",8,null,"Has sugar; not for GDM"],
+ ["Supplements","veg","Prohance Mom","પ્રોહાન્સ મોમ","1 serving",8,null,"Has sugar; not for GDM"]
+];
+const CATS=[...new Set(FOODS.map(f=>f[0]))];
+const catOpts=()=>`<option value="">${t("allCats")}</option>`+CATS.map(c=>`<option value="${c}">${t("c_"+c)}</option>`).join("");
+const fst={tag:"all"};
+$$("#ftag button").forEach(b=>b.onclick=()=>{fst.tag=b.dataset.v;$$("#ftag button").forEach(x=>x.setAttribute("aria-pressed",String(x===b)));renderFoods();});
+$("#fq").oninput=renderFoods; $("#fcat").onchange=renderFoods;
+function renderFoods(){
+  const sel=$("#fcat"); const cur=sel.value; sel.innerHTML=catOpts(); sel.value=cur;
+  const q=$("#fq").value.trim().toLowerCase(), c=sel.value;
+  const rows=FOODS.filter(f=>(!c||f[0]===c)&&(fst.tag==="all"||f[1]===fst.tag)&&(!q||(f[2]+" "+f[3]).toLowerCase().includes(q)));
+  $("#flist").innerHTML=`<div class="frow head"><span>${t("colFood")}</span><span class="srv">${t("colServe")}</span><span class="p" style="color:inherit">${t("colProt")}</span><span class="k">kcal</span></div>`+
+   (rows.length?rows.map(f=>`<div class="frow"><span><span class="dot ${f[1]}"></span><b>${f[2]}</b><span class="gu muted small" style="display:block">${f[3]}</span></span><span class="srv small">${f[4]}</span><span class="p num">${f[5]} g</span><span class="k num">${f[6]??"–"}</span>${f[7]?`<span class="fnote">${f[7]}</span>`:""}</div>`).join("")
+   :`<p class="muted">${t("noMatch")}</p>`);
+}
+
+/* ============ TODAY'S TALLY ============ */
+let tally={date:"",counts:{}};
+try{ tally=JSON.parse(localStorage.getItem("mpp2-tally")||"{}")||tally; }catch(e){}
+const today=()=>new Date().toISOString().slice(0,10);
+if(tally.date!==today()){ tally={date:today(),counts:{}}; }
+const saveT=()=>{ try{localStorage.setItem("mpp2-tally",JSON.stringify(tally));}catch(e){} };
+$("#tq").oninput=renderTally; $("#tcat").onchange=renderTally;
+$("#tclear").onclick=()=>{ tally={date:today(),counts:{}}; saveT(); renderTally(); };
+function renderTally(){
+  if(tally.date!==today()){ tally={date:today(),counts:{}}; saveT(); }
+  const T=target();
+  const total=r1(Object.entries(tally.counts).reduce((a,[i,n])=>a+FOODS[i][5]*n,0));
+  const gap=r1(T.t-total), max=Math.max(T.t,total)*1.08;
+  const nv=st.diet==="nonveg", eg=st.eggs==="yes", gdm=st.cond.includes("gdm");
+  let sug=[];
+  if(gap>0){
+    const cands=FOODS.map((f,i)=>({f,i})).filter(({f})=>f[5]>=3&&(f[1]==="veg"||(f[1]==="egg"&&eg)||(f[1]==="nonveg"&&nv))&&!(f[0]==="Supplements"&&st.supp==="none")&&!(gdm&&/sugar|sweetener/i.test(f[7]))&&!(st.cond.includes("lactose")&&/milk/i.test(f[2])));
+    const fits=cands.filter(c=>c.f[5]>=gap).sort((a,b)=>a.f[5]-b.f[5]).slice(0,3);
+    sug=fits.length?fits:cands.sort((a,b)=>b.f[5]-a.f[5]).slice(0,3);
+  }
+  $("#tallyTop").innerHTML=`
+    <div class="target" style="padding:14px 18px"><div><div class="lbl">${t("todayTotal")}</div><div class="big num" style="font-size:2.6rem">${total}<small>g</small></div></div>
+    <div class="why"><b>${gap>0?t("gapLeft",{gap,t:T.t}):t("gapDone")}</b>
+    ${sug.length?`<span class="small muted">${t("suggest")}</span><div class="sugg">${sug.map(c=>`<button type="button" class="mini" data-add="${c.i}">+ ${c.f[2]} <span class="muted">${c.f[5]} g</span></button>`).join("")}</div>`:""}</div></div>
+    <div class="bar" role="img" aria-label="${total} g of ${T.t} g"><span class="f" style="width:${Math.min(100,total/max*100)}%"></span><span class="mark" style="left:${T.t/max*100}%"></span></div>`;
+  const sel=$("#tcat"); const cur=sel.value; sel.innerHTML=catOpts(); sel.value=cur;
+  const q=$("#tq").value.trim().toLowerCase(), c=sel.value;
+  const rows=FOODS.map((f,i)=>({f,i})).filter(({f,i})=>(tally.counts[i]||!c||f[0]===c)&&(tally.counts[i]||!q||(f[2]+" "+f[3]).toLowerCase().includes(q)));
+  rows.sort((a,b)=>(tally.counts[b.i]?1:0)-(tally.counts[a.i]?1:0));
+  $("#tlist").innerHTML=rows.map(({f,i})=>{const n=tally.counts[i]||0;return `<div class="trow ${n?"has":""}"><div><span class="dot ${f[1]}"></span><b>${f[2]}</b> <span class="muted small">${f[4]} · ${f[5]} g</span><span class="gu muted small" style="display:block">${f[3]}</span></div>
+    <div class="ctr"><button type="button" data-dec="${i}" aria-label="−">−</button><output class="num">${n||""}</output><button type="button" data-inc="${i}" aria-label="+">+</button></div></div>`;}).join("");
+  const bump=(i,dx)=>{ const n=Math.max(0,(tally.counts[i]||0)+dx); if(n) tally.counts[i]=n; else delete tally.counts[i]; tally.date=today(); saveT(); renderTally(); };
+  $$("[data-inc]").forEach(b=>b.onclick=()=>bump(+b.dataset.inc,1));
+  $$("[data-dec]").forEach(b=>b.onclick=()=>bump(+b.dataset.dec,-1));
+  $$("[data-add]").forEach(b=>b.onclick=()=>bump(+b.dataset.add,1));
+}
+
+/* ============ VALUE ============ */
+function renderValue(){
+  const VAL=[
+   ["Soya chunks (Nutrela)",0.27,"f"],["Dal (any)",0.5,"f"],["Peanuts",0.65,"f"],["Roasted chana",1.1,"f"],["Toned milk",1.6,"f"],["Paneer (home / packet)",2.4,"f"],
+   ["Amul High Protein Paneer",r1(price.hpPan()/12.5),"s"],["Amul High Protein Buttermilk",r1(price.hpBm()/15),"s"],["Amul Blueberry Shake",r1(price.shake()/20),"s"],
+   ["Amul Whey, plain sachet",r1(price.whey()/25),"s"],["Amul High Protein Milk",3.14,"s"],["Milky Mist Skyr",3.5,"s"],["Amul Kool Protein Shake",4.0,"s"],
+   ["Protinex Mama",4.1,"x"],["Prohance Mom",5.3,"x"],["Milky Mist Greek Yogurt",6.6,"s"],["Imported whey (₹15,000 / 2 kg)",+PRICES.importedWheyPerG,"x"]
+  ].sort((a,b)=>a[1]-b[1]);
+  const mx=Math.max(...VAL.map(v=>v[1]))*1.05;
+  $("#vbars").innerHTML=VAL.map(([n,v,k])=>`<div class="vrow"><span>${n}</span><div class="track"><span class="${k}" style="width:${v/mx*100}%"></span></div><span class="val num">₹${v.toFixed(2)}</span></div>`).join("");
+}
+
+/* ============ TABS ============ */
+$$("nav.tabs button").forEach(b=>b.onclick=()=>{
+  $$("nav.tabs button").forEach(x=>x.setAttribute("aria-selected",String(x===b)));
+  ["plan","tally","foods","value"].forEach(v=>$("#view-"+v).hidden=v!==b.dataset.view);
+  if(b.dataset.view==="tally") renderTally();
+  try{history.replaceState(null,"","#"+b.dataset.view);}catch(e){}
+});
+applyText(); sync(); renderFoods();
+const h0=(location.hash||"").slice(1); if(["tally","foods","value"].includes(h0)) $(`[data-view="${h0}"]`).click();
+
+/* offline */
+if("serviceWorker" in navigator && (location.protocol==="https:"||location.hostname==="localhost")) navigator.serviceWorker.register("sw.js").catch(()=>{});
+</script>
+</body>
+</html>
