@@ -4,10 +4,10 @@ Single-file, offline-capable nutrition tools from Madhuvan Maternity & Eye Hospi
 
 | Tool | Path | For |
 |---|---|---|
-| Nutrition Workstation 3.0 | `index.html` | Clinic desk: patient records, BMI and pregnancy weight gain, ICMR targets, Indian diet builder, trilingual patient sheet |
+| Nutrition Workstation 3.1 | `index.html` | Clinic desk: patient records, BMI and pregnancy weight gain, ICMR targets, Indian diet builder, trilingual patient sheet |
 | Protein Planner 2.0 | `protein/index.html` | Patients: daily protein from Indian home food, with low-cost supplements only to fill the gap |
 
-## Nutrition Workstation 3.0
+## Nutrition Workstation 3.1
 
 - Patient list with search; each patient keeps assessment, targets, 7-day plan and visit history. Data stays in the browser (export/import JSON backups from Settings).
 - Assessment: BMI with Indian and WHO cut-offs, waist, anaemia grading from Hb (trimester-specific in pregnancy), gestational weight gain against ICMR-NIN 2024 categories (IOM 2009 for comparison) with a weight chart, 5-10% weight-management goal for non-pregnant adults.
