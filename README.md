@@ -1,55 +1,82 @@
-# Madhuvan Nutrition
+# Nutrition Workstation & Protein Planner for Indian clinics
 
-Single-file, offline-capable nutrition tools from Madhuvan Maternity & Eye Hospital, Vadodara.
+Free, open-source (MIT) nutrition tools for Indian clinical practice. Built on **ICMR–NIN IFCT 2017** food composition, **ICMR–NIN 2020** reference intakes and the **2024 Dietary Guidelines for Indians**, with patient output in **English, Gujarati and Hindi**.
+
+No server, no login, no subscription. Each tool is a single HTML file that runs in the browser, works offline once opened, installs on a phone or desktop like an app, and keeps patient data only in that browser.
 
 | Tool | Path | For |
 |---|---|---|
-| Nutrition Workstation 3.4 | `index.html` | Clinic desk: patient records, BMI and pregnancy weight gain, ICMR targets, Indian diet builder, trilingual patient sheet |
-| Protein Planner 2.0 | `protein/index.html` | Patients: daily protein from Indian home food, with low-cost supplements only to fill the gap |
+| **Nutrition Workstation 3.5** | `index.html` | The clinic desk: assessment, targets, diet plan, recall, labs, glucose diary, patient sheets |
+| **Protein Planner 2.1** | `protein/index.html` | The patient's phone: daily protein from home food, with low-cost supplements only to fill the gap |
 
-## Nutrition Workstation 3.4
+Live copies: https://coolboss.github.io/madhuvan-nutrition/ and https://coolboss.github.io/madhuvan-nutrition/protein/
 
-- Patient list with search; each patient keeps assessment, targets, 7-day plan and visit history. Data stays in the browser (export/import JSON backups from Settings).
-- Assessment: BMI with Indian and WHO cut-offs, waist, anaemia grading from Hb (trimester-specific in pregnancy), gestational weight gain against ICMR-NIN 2024 categories (IOM 2009 for comparison) with a weight chart, 5-10% weight-management goal for non-pregnant adults.
-- Targets: Mifflin-St Jeor x PAL or the ICMR reference table, ICMR pregnancy/lactation additions, 1 g/kg or ICMR 0.83 g/kg protein rule, GDM carbohydrate split, full ICMR-NIN 2020 EAR/RDA table (editable).
-- Diet builder: 542 IFCT 2017 foods (with Gujarati and Hindi names) plus label foods and 167 Gujarati/Indian dishes computed from raw ingredients; household measures; live bars for energy, protein, carbohydrate, fat, fibre, calcium, iron, folate, vitamin C, zinc, with thiamine, riboflavin, niacin, B6, magnesium, vitamin A (RAE), potassium, sodium, saturated fat, cholesterol and phytate under "More nutrients"; 15 templates (Gujarati veg, Jain, eggetarian, non-veg, GDM, protein focus, pregnancy six-small-meals, first-trimester nausea, lactation, anaemia, PMOS low-GI, weight loss, South Indian, North Indian, hypertension) scaled to the energy target; a meal-size guard flags any meal over its share of the day (pregnancy: mains ≤ 30%, snacks ≤ 15%; GDM: carbohydrate per meal) with one-tap fixes — swap for a lighter dish, reduce the cereal portion, or move an item to the next snack; custom foods and dishes.
-- Protein Planner hand-off: a tab that opens (and embeds) the standalone Protein Planner pre-filled with the patient's stage, weight, height, diet, conditions, name, doctor's note and the Workstation's protein target; copy the patient link or send it on WhatsApp.
-- The screen moulds to the patient category: pregnancy fields, weight-gain chart and trimester labs only in pregnancy; the weight-goal panel only for adults; the Glucose diary tab only when GDM or diabetes is ticked; lab fields on the visit form change with the category.
-- Hard exclusions (milk, egg, tree nuts, peanut, soya, gluten, fish, shellfish, sesame) remove foods from search, templates, swaps and the patient sheet.
-- Visits record labs by category — Hb, BP, urine protein, fasting / post-meal glucose, HbA1c, ferritin, vitamin D, B12, TSH, lipids — with flags (pre-eclampsia range, GDM targets, deficiencies), trend arrows and a BP chart; flags appear on Assessment and as tips on the patient sheet.
-- Glucose diary (GDM / diabetes): home readings by slot, targets, % in range, chart, and hints that point back to the carbohydrate-by-meal table.
-- Diet cost in rupees per day and month from an editable Vadodara price list, with cheaper swaps; weekly shopping list with purchase quantities and cost, printable in Gujarati / Hindi.
-- Portion guide (generic drawings of katori, glass, cup, rotli, spoons, handful, paneer cube) on Guidance and optionally on the patient sheet.
-- Fasting patterns: Farali (Ekadashi / vrat) and Ramzan (sehri + iftar) templates with farali dishes.
-- Staff screen language: English, Gujarati or Hindi for tabs, patient form, meals and buttons.
-- Two-way patient link: from her link the patient ticks what she ate, enters sugar readings and weight, and sends a short code on WhatsApp to the clinic number; pasting the code into the Workstation adds the readings, a recall and a weight visit.
-- 24-hour dietary recall: enter yesterday's intake meal by meal, score it against the same targets, print an audit sheet, or copy it into the plan.
-- Patient sheet in English, Gujarati or Hindi: one day or the week, targets, tips tailored to pregnancy/lactation/GDM/supplements; print or save as PDF, copy as WhatsApp text (or open WhatsApp directly when a phone number is recorded), or copy a patient link that opens the sheet on the patient's phone with a language toggle (needs the app hosted online).
-- Works offline once opened; installable on phone or desktop.
+Made at Madhuvan Maternity & Eye Hospital, Vadodara, by Dr Rajesh Parikh (obstetrician) with Claude. Used daily; shared in the hope it is useful to other small clinics and nursing homes.
 
-The 2.1 workstation is kept at `legacy/workstation-2.1.html`.
+---
 
-## Protein Planner 2.0
+## Nutrition Workstation
 
-- Pregnancy (by trimester), breastfeeding (by baby's age) and other adults. Target = 1 g/kg or the ICMR-NIN 2020 figure, whichever is higher; per-kg slider or doctor's fixed grams also available.
-- English, Gujarati and Hindi interface.
-- Seven-day rotation so the plan changes through the week.
-- Tap any item to change its portion, swap it for another, or leave it out.
-- "Today's count": tap + for each serving eaten and see what is still needed.
-- Doctor's link: set the plan, add the patient's name and a note, then copy a link or send it on WhatsApp. It opens on the patient's phone with everything filled in.
-- Supplements tagged by where they are sold: "Shops near me" (Amul parlour, dairy, kirana: high-protein buttermilk and lassi, Kool, sattu) or "Shops + online" (adds Amul whey, high-protein milk and paneer, Milky Mist Skyr, Indian unflavoured whey such as Nakpro / AS-IT-IS / Avvatar, blueberry shake). The doctor can add anything a local shop stocks, with its protein and price.
-- Copy for WhatsApp (one day or the whole week), print handout, and a cost-per-gram-of-protein comparison with editable prices.
-- Works offline once opened (service worker) and can be added to the phone's home screen.
+**Patient categories:** pregnancy, lactation, adult (general / weight management), preconception / PMOS. The screen moulds to the category: pregnancy fields, ICMR weight-gain chart and trimester labs appear only in pregnancy; the weight-goal panel only for adults; the Glucose diary tab only when GDM or diabetes is ticked.
 
-Veg / non-veg, eggs yes or no, GDM, kidney-disease stop screen and lactose intolerance are all handled. Values are from ICMR-NIN IFCT 2017 and product labels; prices last checked October 2026.
+**Assessment.** BMI with Indian and WHO cut-offs, waist, anaemia grading from Hb (trimester-specific in pregnancy), gestational weight gain against ICMR–NIN 2024 categories (IOM 2009 for comparison) with a weight chart, 5–10 % weight-management goal with a capped deficit for non-pregnant adults, condition flags (GDM, diabetes, hypertension, PMOS, hypothyroid, lactose, renal), hard exclusions for allergies (milk, egg, nuts, peanut, soya, gluten, fish, shellfish, sesame).
 
-## Hosting
-All tools are static pages. Connect the repository to Netlify or turn on GitHub Pages; the workstation is at `/` and the planner at `/protein/`.
+**Targets.** Mifflin–St Jeor × PAL or the ICMR reference table; ICMR pregnancy and lactation additions; protein by 1 g/kg or ICMR 0.83 g/kg with the ICMR additions, BMI-adjusted weight above BMI 30; GDM carbohydrate split; full ICMR–NIN 2020 EAR/RDA table for calcium, iron, zinc, magnesium, folate, vitamins A, C, B1, B2, B3, B6, sodium, potassium — all editable in Settings.
+
+**Diet plan.** 542 IFCT 2017 foods (with Gujarati and Hindi names) plus label foods and 173 Indian dishes computed from raw ingredients; household measures; 21 nutrients with live bars; 17 templates (Gujarati veg, Jain, eggetarian, non-veg, GDM, protein, pregnancy six small meals, first-trimester nausea, lactation, anaemia, PMOS low-GI, weight loss, South Indian, North Indian, hypertension, Farali/Ekadashi, Ramzan) scaled to the energy target; a meal-size guard that flags any meal over its share of the day with one-tap fixes (swap, reduce, move); diet cost in rupees with cheaper swaps; weekly shopping list; custom foods and dishes.
+
+**24-hour recall.** Enter yesterday's intake, score it against targets, print an audit, or turn a good day into the plan.
+
+**Visits and labs.** Weight, weeks, Hb, BP, urine protein, glucose, HbA1c, ferritin, vitamin D, B12, TSH, lipids — shown only where they apply — with flags, trend arrows, BP chart and weight/gain chart.
+
+**Glucose diary** (GDM/diabetes). Home readings by slot, targets, % in range, chart, and hints tied to the carbohydrate-by-meal table.
+
+**Patient sheet.** One day or the week, targets, tailored tips, exclusions, portion guide drawings, shopping list — in English, Gujarati or Hindi. Print or save as PDF, copy as WhatsApp text, open WhatsApp directly with the patient's number, or copy a patient link.
+
+**Patient link.** Opens the sheet on the patient's phone with a language toggle. From it she ticks what she ate, enters sugar readings and weight, and sends a short code to the clinic's WhatsApp; pasting the code into the Workstation adds the readings, a recall and a weight visit. No server involved.
+
+**Protein Planner hand-off.** A tab that opens (and embeds) the Protein Planner pre-filled with the patient's stage, weight, diet, conditions, name, doctor's note and the Workstation's protein target.
+
+**Staff screen language.** English, Gujarati or Hindi.
+
+## Protein Planner
+
+Pregnancy (by trimester), breastfeeding (by baby's age) and other adults. Target = 1 g/kg or the ICMR-NIN 2020 figure, whichever is higher; per-kg slider or a doctor's fixed figure. Seven-day rotation, tap-to-swap, daily tally, supplements tagged by where they are sold (local shop vs online) with cost per gram of protein, doctor's link, WhatsApp copy, print. English, Gujarati, Hindi. Handles veg / non-veg, eggs, GDM, kidney disease and lactose intolerance.
+
+---
+
+## Setting up for your clinic
+
+1. Open the Workstation. The first-run screen asks for clinic name, doctor, WhatsApp number and languages. That's all.
+2. Optional: edit `clinic-config.js` (same folder as `index.html`, and again in `protein/`) to pre-fill those values and the site address, so every device in the clinic starts configured. Leave it blank for a neutral copy.
+3. Settings → check the ICMR reference values and the food price list against your own sources; both are editable.
+4. Take a backup (Settings → Download backup) at the end of each clinic day. Data lives in the browser; clearing the browser erases it.
+
+### Hosting
+Both tools are static pages. Fork this repository and turn on GitHub Pages (Settings → Pages → branch `main`, folder `/`), or drop the folder on Netlify. The Workstation is then at `/` and the Planner at `/protein/`. The site address goes in Settings so patient links work.
+
+### Limits, stated plainly
+- One browser, one device: no sync, no multi-user, no cloud. Backup/restore JSON moves data between devices.
+- WhatsApp sending opens the message for you to press send; there is no silent automated sending (that needs the WhatsApp Business API and a server).
+- No appointments, billing or reminders.
+- Dish nutrition is computed from raw ingredients and is an estimate, not a laboratory analysis.
+
+## Sources
+- Longvah T et al. *Indian Food Composition Tables 2017*, ICMR–NIN, Hyderabad (data via the `@ifct2017` npm packages).
+- ICMR–NIN. *Nutrient Requirements for Indians, RDA and EAR, 2020* (2024 revised summary).
+- ICMR–NIN. *Dietary Guidelines for Indians, 2024*.
+- Institute of Medicine 2009 gestational weight gain ranges (comparison only).
+- Mifflin MD et al. 1990 resting energy equation.
+- Label foods: manufacturer packs (marked "Label", verify); USDA FoodData Central; NIN Nutritive Value of Indian Foods.
+
+## Disclaimer
+These tools are clinical decision aids for qualified clinicians. Values are estimates, reference intakes are defaults you are expected to verify, and every target or flag is a starting point for clinical judgement. The treating doctor remains responsible for every prescription. See `LICENSE`.
 
 ## Changelog
-- **3.4 (3 Nov 2026)** — category-moulded screens; hard exclusions; labs with flags, trends and BP chart; glucose diary; diet cost and shopping list; portion guide; farali and Ramzan templates; staff UI in Gujarati/Hindi; two-way patient report code.
-- **3.3 (3 Nov 2026)** — Meal-size guard with one-tap fixes (swap / reduce / move); nine more templates; templates drop items the patient's diet excludes.
-- **3.2 (3 Nov 2026)** — Protein Planner tab: hand-off link/embed pre-filled from the patient record; site address setting so patient links work even when the Workstation is opened from a file.
-- **3.1.1 (3 Nov 2026)** — QA pass on both apps. Fixed: IFCT data package lists all oils and ghee at 0 kcal (now 9 kcal/g, so every dish with oil was under-counted by ~45 kcal per teaspoon); chicken leg energy error in the package corrected to its macronutrient value; lactation protein additions corrected to ICMR 2020 RDA (+16.9 g / +13.2 g); protein reference weight for BMI ≥ 30 now uses the weight at BMI 23, the same rule as the Protein Planner. Automated browser QA script covers both apps (edge inputs, all modes, languages, templates, visits, custom foods, backup, links, print CSS, mobile overflow).
+- **3.5 (4 Nov 2026)** — Public release: neutral branding with first-run clinic setup and optional `clinic-config.js`; MIT licence; Protein Planner takes the clinic name from the link or config instead of hard-coding it.
+- **3.4 (3 Nov 2026)** — Category-moulded screens; hard exclusions; labs with flags, trends and BP chart; glucose diary; diet cost and shopping list; portion guide; farali and Ramzan templates; staff UI in Gujarati/Hindi; two-way patient report code.
+- **3.3** — Meal-size guard with one-tap fixes; nine more templates.
+- **3.2** — Protein Planner hand-off tab.
+- **3.1.1** — QA pass: oil/ghee energy (IFCT package lists oils at 0 kcal), chicken-leg energy, lactation protein RDA, BMI-30 protein weight.
 - **3.1** — 24-h recall, WhatsApp copy/send, patient link, 167 dishes, B vitamins/SFA/cholesterol/phytate, vitamin A as RAE.
-- **3.0** — rebuilt on IFCT 2017 and ICMR–NIN 2020/2024 with patient records and trilingual patient sheet.
+- **3.0** — Rebuilt on IFCT 2017 and ICMR–NIN 2020/2024 with patient records and trilingual patient sheet. The earlier 2.1 workstation is kept at `legacy/workstation-2.1.html`.

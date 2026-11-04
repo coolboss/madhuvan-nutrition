@@ -3,9 +3,10 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Madhuvan Protein Planner</title>
+<title>Protein Planner</title>
 <meta name="description" content="Daily protein plan from Indian home food, with low-cost supplements only to fill the gap. Pregnancy, breastfeeding and adults.">
 <meta name="theme-color" content="#2E6A4B">
+<script src="clinic-config.js"></script>
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon-192.png">
@@ -206,7 +207,7 @@ footer{font-size:.8rem;color:var(--muted);line-height:1.5;max-width:75ch}
 
   <header class="top">
     <div>
-      <div class="clinic" data-t="clinic"></div>
+      <div class="clinic" id="clinicLine"></div>
       <h1 data-t="appName"></h1>
       <p class="muted small" data-t="tagline" style="margin-top:4px"></p>
     </div>
@@ -341,7 +342,7 @@ footer{font-size:.8rem;color:var(--muted);line-height:1.5;max-width:75ch}
 /* ============ TEXT (English, Gujarati, Hindi) ============ */
 const L = {
 en:{
- clinic:"Madhuvan Maternity & Eye Hospital, Vadodara", appName:"Protein Planner",
+ clinic:"", appName:"Protein Planner",
  tagline:"Daily protein from home food first. Low-cost supplements only to fill the gap.",
  tabPlan:"My plan", tabTally:"Today's count", tabFoods:"Food list", tabValue:"Cost of protein",
  who:"Who is this for", preg:"Pregnant", lact:"Breastfeeding", gen:"Others",
@@ -385,7 +386,7 @@ en:{
  patName:"Patient name", docNote:"Doctor's note to patient", copyLink:"Copy link for patient", linkCopied:"Link copied.", waLink:"Send on WhatsApp",
  prices:"Prices (₹), edit when they change",
  p_hpButtermilk:"Amul High Protein Buttermilk, 200 ml", p_hpLassi:"Amul High Protein Lassi, 200 ml", p_hpPaneer400:"Amul High Protein Paneer, 400 g", p_hpMilk:"Amul High Protein Milk, 250 ml", p_kool:"Amul Kool Protein Shake, 180 ml", p_wheyBox:"Amul Whey, box of 30 sachets", p_indWheyKg:"Indian unflavoured whey, 1 kg", p_blueberry:"Amul Blueberry Protein Shake, 200 ml", p_skyr:"Milky Mist Skyr, 100 g", p_sattuKg:"Sattu (roasted chana flour), 1 kg", p_importedWheyPerG:"Imported whey, ₹ per g protein",
- banner:"This plan was prepared at Madhuvan Maternity Hospital{name}.", bannerFor:" for {name}", bannerEdit:"Edit",
+ banner:"This plan was prepared by your doctor{name}.", bannerFor:" for {name}", bannerEdit:"Edit",
  docNoteHead:"Doctor's note",
  stopTitle:"Please see your doctor first", stopBody:"With kidney disease, extra protein can do harm. A high-protein plan or protein powder should only be started after your doctor checks your kidney tests and sets your protein amount.", stopSub:"This also applies to high blood pressure in pregnancy with protein in the urine.",
  bmiNote:"BMI is {bmi}, so the target uses a healthy weight of {we} kg instead of {w} kg.",
@@ -409,13 +410,13 @@ en:{
  nPeanuts:"Skip peanuts if there is any nut allergy.",
  nKcalPreg:"From the 4th month, pregnancy needs about 350 kcal a day more than before (ICMR-NIN). Protein works only with enough food.",
  nEnergy:"Protein needs enough calories to work. Eat vegetables, fruit, rice or more rotli and a little ghee or oil to feel full; these are not counted here.",
- waHead:"Protein plan — Madhuvan Maternity Hospital", waPreg:"Pregnant, {tri} trimester", waLact:"Breastfeeding", waGen:"Adult", waTarget:"Target", waPlan:"Plan", waDay:"Day",
+ waHead:"Protein plan", waPreg:"Pregnant, {tri} trimester", waLact:"Breastfeeding", waGen:"Adult", waTarget:"Target", waPlan:"Plan", waDay:"Day",
  m_early:"Early morning", m_bf:"Breakfast", m_mid:"Mid-morning", m_lunch:"Lunch", m_eve:"Evening", m_dinner:"Dinner", m_bed:"Bedtime",
  c_Dairy:"Dairy", "c_Dals & kathol":"Dals & kathol", c_Soy:"Soy", "c_Nuts & seeds":"Nuts & seeds", c_Cereals:"Cereals", "c_Gujarati dishes":"Gujarati dishes", c_Eggs:"Eggs", "c_Meat & fish":"Meat & fish", c_Supplements:"Supplements",
  printSub:"{who} · {wt} kg · Target {t} g a day · {date}"
 },
 gu:{
- clinic:"મધુવન મેટરનિટી એન્ડ આઈ હોસ્પિટલ, વડોદરા", appName:"પ્રોટીન પ્લાનર",
+ clinic:"", appName:"પ્રોટીન પ્લાનર",
  tagline:"રોજનું પ્રોટીન પહેલાં ઘરના ખોરાકમાંથી. ખૂટે તેટલું જ સસ્તા સપ્લિમેન્ટથી.",
  tabPlan:"મારો પ્લાન", tabTally:"આજનો હિસાબ", tabFoods:"ખોરાકની યાદી", tabValue:"પ્રોટીનનો ભાવ",
  who:"કોના માટે", preg:"સગર્ભા", lact:"સ્તનપાન", gen:"અન્ય",
@@ -459,7 +460,7 @@ gu:{
  patName:"દર્દીનું નામ", docNote:"ડૉક્ટરની નોંધ", copyLink:"દર્દી માટે લિંક કૉપી", linkCopied:"લિંક કૉપી થઈ.", waLink:"WhatsApp પર મોકલો",
  prices:"ભાવ (₹), બદલાય ત્યારે સુધારો",
  p_hpButtermilk:"અમૂલ હાઈ પ્રોટીન છાશ, 200 મિલી", p_hpLassi:"અમૂલ હાઈ પ્રોટીન લસ્સી, 200 મિલી", p_hpPaneer400:"અમૂલ હાઈ પ્રોટીન પનીર, 400 ગ્રામ", p_hpMilk:"અમૂલ હાઈ પ્રોટીન દૂધ, 250 મિલી", p_kool:"અમૂલ કૂલ પ્રોટીન શેક, 180 મિલી", p_wheyBox:"અમૂલ વ્હે, 30 પાઉચનું બોક્સ", p_indWheyKg:"ભારતીય સાદો વ્હે, 1 કિલો", p_blueberry:"અમૂલ બ્લુબેરી પ્રોટીન શેક, 200 મિલી", p_skyr:"મિલ્કી મિસ્ટ સ્કાયર, 100 ગ્રામ", p_sattuKg:"સત્તુ (દાળિયાનો લોટ), 1 કિલો", p_importedWheyPerG:"વિદેશી વ્હે, ₹ પ્રતિ ગ્રામ પ્રોટીન",
- banner:"આ પ્લાન મધુવન મેટરનિટી હોસ્પિટલમાં{name} બનાવ્યો છે.", bannerFor:" {name} માટે", bannerEdit:"બદલો",
+ banner:"આ પ્લાન તમારા ડૉક્ટરે{name} બનાવ્યો છે.", bannerFor:" {name} માટે", bannerEdit:"બદલો",
  docNoteHead:"ડૉક્ટરની નોંધ",
  stopTitle:"પહેલાં ડૉક્ટરને મળો", stopBody:"કિડનીની બીમારીમાં વધારાનું પ્રોટીન નુકસાન કરી શકે. ડૉક્ટર કિડનીના રિપોર્ટ તપાસીને પ્રોટીનનું પ્રમાણ નક્કી કરે પછી જ વધુ પ્રોટીનનો પ્લાન કે પાઉડર શરૂ કરવો.", stopSub:"સગર્ભાવસ્થામાં ઊંચા બીપી સાથે પેશાબમાં પ્રોટીન હોય તો પણ આ લાગુ પડે છે.",
  bmiNote:"BMI {bmi} છે, તેથી લક્ષ્ય {w} કિલોને બદલે {we} કિલોના તંદુરસ્ત વજન પર ગણ્યું છે.",
@@ -483,13 +484,13 @@ gu:{
  nPeanuts:"મેવાની એલર્જી હોય તો સીંગદાણા ન લેવા.",
  nKcalPreg:"ચોથા મહિનાથી સગર્ભાવસ્થામાં રોજ લગભગ 350 કિલોકેલરી વધુ જોઈએ (ICMR-NIN). પૂરતા ખોરાક વિના પ્રોટીન કામ નથી કરતું.",
  nEnergy:"પ્રોટીન કામ કરે તે માટે પૂરતી કેલરી જોઈએ. પેટ ભરાય તે માટે શાક, ફળ, ભાત કે વધુ રોટલી અને થોડું ઘી-તેલ લો; તે અહીં ગણ્યાં નથી.",
- waHead:"પ્રોટીન પ્લાન — મધુવન મેટરનિટી હોસ્પિટલ", waPreg:"સગર્ભા, {tri} ત્રિમાસિક", waLact:"સ્તનપાન", waGen:"પુખ્ત", waTarget:"લક્ષ્ય", waPlan:"પ્લાન", waDay:"દિવસ",
+ waHead:"પ્રોટીન પ્લાન", waPreg:"સગર્ભા, {tri} ત્રિમાસિક", waLact:"સ્તનપાન", waGen:"પુખ્ત", waTarget:"લક્ષ્ય", waPlan:"પ્લાન", waDay:"દિવસ",
  m_early:"વહેલી સવારે", m_bf:"નાસ્તો", m_mid:"સવારે 11 વાગ્યે", m_lunch:"બપોરનું જમણ", m_eve:"સાંજે", m_dinner:"રાતનું જમણ", m_bed:"સૂતા પહેલાં",
  c_Dairy:"દૂધની વસ્તુઓ", "c_Dals & kathol":"દાળ અને કઠોળ", c_Soy:"સોયા", "c_Nuts & seeds":"મેવા અને બીજ", c_Cereals:"અનાજ", "c_Gujarati dishes":"ગુજરાતી વાનગીઓ", c_Eggs:"ઈંડાં", "c_Meat & fish":"માંસ અને માછલી", c_Supplements:"સપ્લિમેન્ટ",
  printSub:"{who} · {wt} કિલો · રોજ લક્ષ્ય {t} ગ્રામ · {date}"
 },
 hi:{
- clinic:"मधुवन मैटरनिटी एंड आई हॉस्पिटल, वडोदरा", appName:"प्रोटीन प्लानर",
+ clinic:"", appName:"प्रोटीन प्लानर",
  tagline:"रोज़ का प्रोटीन पहले घर के खाने से। जितना कम पड़े उतना ही सस्ते सप्लीमेंट से।",
  tabPlan:"मेरा प्लान", tabTally:"आज का हिसाब", tabFoods:"खाने की सूची", tabValue:"प्रोटीन का दाम",
  who:"किसके लिए", preg:"गर्भवती", lact:"स्तनपान", gen:"अन्य",
@@ -533,7 +534,7 @@ hi:{
  patName:"मरीज़ का नाम", docNote:"डॉक्टर की टिप्पणी", copyLink:"मरीज़ के लिए लिंक कॉपी", linkCopied:"लिंक कॉपी हो गई।", waLink:"WhatsApp पर भेजें",
  prices:"दाम (₹), बदलने पर सुधारें",
  p_hpButtermilk:"अमूल हाई प्रोटीन छाछ, 200 मि.ली.", p_hpLassi:"अमूल हाई प्रोटीन लस्सी, 200 मि.ली.", p_hpPaneer400:"अमूल हाई प्रोटीन पनीर, 400 ग्राम", p_hpMilk:"अमूल हाई प्रोटीन दूध, 250 मि.ली.", p_kool:"अमूल कूल प्रोटीन शेक, 180 मि.ली.", p_wheyBox:"अमूल व्हे, 30 पाउच का डिब्बा", p_indWheyKg:"भारतीय सादा व्हे, 1 किलो", p_blueberry:"अमूल ब्लूबेरी प्रोटीन शेक, 200 मि.ली.", p_skyr:"मिल्की मिस्ट स्कायर, 100 ग्राम", p_sattuKg:"सत्तू (भुने चने का आटा), 1 किलो", p_importedWheyPerG:"विदेशी व्हे, ₹ प्रति ग्राम प्रोटीन",
- banner:"यह प्लान मधुवन मैटरनिटी हॉस्पिटल में{name} बनाया गया है।", bannerFor:" {name} के लिए", bannerEdit:"बदलें",
+ banner:"यह प्लान आपके डॉक्टर ने{name} बनाया है।", bannerFor:" {name} के लिए", bannerEdit:"बदलें",
  docNoteHead:"डॉक्टर की टिप्पणी",
  stopTitle:"पहले डॉक्टर से मिलें", stopBody:"किडनी की बीमारी में ज़्यादा प्रोटीन नुकसान कर सकता है। डॉक्टर किडनी की रिपोर्ट देखकर प्रोटीन की मात्रा तय करें, उसके बाद ही ज़्यादा प्रोटीन का प्लान या पाउडर शुरू करें।", stopSub:"गर्भावस्था में ऊँचे बीपी के साथ पेशाब में प्रोटीन हो तो भी यह लागू है।",
  bmiNote:"BMI {bmi} है, इसलिए लक्ष्य {w} किलो की जगह {we} किलो के स्वस्थ वज़न पर गिना है।",
@@ -557,7 +558,7 @@ hi:{
  nPeanuts:"मेवे की एलर्जी हो तो मूंगफली न लें।",
  nKcalPreg:"चौथे महीने से गर्भावस्था में रोज़ लगभग 350 किलोकैलोरी ज़्यादा चाहिए (ICMR-NIN)। पर्याप्त खाने के बिना प्रोटीन काम नहीं करता।",
  nEnergy:"प्रोटीन काम करे इसके लिए पर्याप्त कैलोरी चाहिए। पेट भरने के लिए सब्ज़ी, फल, चावल या ज़्यादा रोटी और थोड़ा घी-तेल लें; वे यहाँ नहीं गिने गए।",
- waHead:"प्रोटीन प्लान — मधुवन मैटरनिटी हॉस्पिटल", waPreg:"गर्भवती, {tri} तिमाही", waLact:"स्तनपान", waGen:"वयस्क", waTarget:"लक्ष्य", waPlan:"प्लान", waDay:"दिन",
+ waHead:"प्रोटीन प्लान", waPreg:"गर्भवती, {tri} तिमाही", waLact:"स्तनपान", waGen:"वयस्क", waTarget:"लक्ष्य", waPlan:"प्लान", waDay:"दिन",
  m_early:"सुबह जल्दी", m_bf:"नाश्ता", m_mid:"सुबह 11 बजे", m_lunch:"दोपहर का खाना", m_eve:"शाम", m_dinner:"रात का खाना", m_bed:"सोने से पहले",
  c_Dairy:"दूध की चीज़ें", "c_Dals & kathol":"दाल और बीन्स", c_Soy:"सोया", "c_Nuts & seeds":"मेवे और बीज", c_Cereals:"अनाज", "c_Gujarati dishes":"गुजराती व्यंजन", c_Eggs:"अंडे", "c_Meat & fish":"मांस और मछली", c_Supplements:"सप्लीमेंट",
  printSub:"{who} · {wt} किलो · रोज़ लक्ष्य {t} ग्राम · {date}"
@@ -653,6 +654,7 @@ try{ Object.assign(st, JSON.parse(localStorage.getItem("mpp2-state")||"{}")); }c
 const save=()=>{ try{ localStorage.setItem("mpp2-state",JSON.stringify(st)); }catch(e){} };
 const $=s=>document.querySelector(s), $$=s=>[...document.querySelectorAll(s)];
 const r1=x=>Math.round(x*10)/10;
+const clinicName=()=>st.clinic||(window.CLINIC_CONFIG&&window.CLINIC_CONFIG.clinic)||t("clinic")||"";
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
 
 /* link in from the doctor */
@@ -662,7 +664,7 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",
   try{
     const b=m[1].replace(/-/g,"+").replace(/_/g,"/");
     const o=JSON.parse(decodeURIComponent(escape(atob(b))));
-    const keys=["mode","tri","lact","method","perkg","fixed","diet","eggs","supp","wt","ht","excl","cond","shop","custom","mult","swap","removed","name","note","lang"];
+    const keys=["mode","tri","lact","method","perkg","fixed","diet","eggs","supp","wt","ht","excl","cond","shop","custom","mult","swap","removed","name","note","lang","clinic"];
     for(const k of keys) if(k in o) st[k]=o[k];
     st.fromDoc=true; save();
     history.replaceState(null,"",location.pathname+location.search);
@@ -847,7 +849,7 @@ function renderPlan(){
   const head=`*${t("waHead")}*\n${st.name?esc(st.name)+" · ":""}${whoText()}, ${+st.wt} kg · ${t("waTarget")} ${T.t} g/${t("waDay").toLowerCase()} · ${t("waPlan")} ${B.total} g\n`;
   lastText=head+"\n"+planText(T,B,d,false)+"\n\n"+N.slice(0,-1).map(n=>"– "+n).join("\n")+(st.note?`\n\n*${t("docNoteHead")}:* ${st.note}`:"");
   weekText=head+"\n"+[0,1,2,3,4,5,6].map(i=>planText(T,build(T.t,i),i,true)).join("\n\n")+"\n\n"+N.slice(0,-1).map(n=>"– "+n).join("\n");
-  $("#phTitle").textContent=t("clinic")+" — "+t("appName");
+  $("#phTitle").textContent=(clinicName()?clinicName()+" — ":"")+t("appName");
   $("#phSub").textContent=(st.name?st.name+" · ":"")+t("printSub",{who:whoText(),wt:+st.wt,t:T.t,date:new Date().toLocaleDateString("en-GB",{day:"numeric",month:"short",year:"numeric"})});
 
   const copy=(txt)=>{ const done=()=>{$("#copyMsg").textContent=t("copied");};
@@ -880,11 +882,12 @@ function seg(id,key){ $$("#"+id+" button").forEach(b=>{ b.setAttribute("aria-pre
 function chips(id,key){ $$("#"+id+" button").forEach(b=>{ b.setAttribute("aria-pressed",String(st[key].includes(b.dataset.v))); b.onclick=()=>{ const a=st[key]; const i=a.indexOf(b.dataset.v); i<0?a.push(b.dataset.v):a.splice(i,1); save(); sync(); }; }); }
 function applyText(){
   document.documentElement.lang=lang;
+  const cl=document.getElementById("clinicLine");if(cl)cl.textContent=clinicName();
   $$("[data-t]").forEach(e=>{ e.textContent=t(e.dataset.t); });
   $$("[data-ph]").forEach(e=>{ e.placeholder=t(e.dataset.ph); });
   $("#excl").innerHTML=EXCL.map(v=>`<button type="button" class="chip" data-v="${v}">${t("x_"+v)}</button>`).join("");
   $("#lang").value=lang;
-  document.title=t("appName")+" · Madhuvan";
+  document.title=(clinicName()?clinicName()+" · ":"")+t("appName");
   $("#priceGrid").innerHTML=Object.keys(PRICE_DEF).map(k=>`<label for="pr_${k}">${t("p_"+k)}</label><input id="pr_${k}" type="number" min="0" step="0.5" value="${PRICES[k]}">`).join("");
   Object.keys(PRICE_DEF).forEach(k=>{ $("#pr_"+k).oninput=e=>{ PRICES[k]=+e.target.value||PRICE_DEF[k]; try{localStorage.setItem("mpp-prices",JSON.stringify(PRICES));}catch(x){} renderPlan(); renderValue(); }; });
   renderValue();

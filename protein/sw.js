@@ -1,6 +1,6 @@
-/* Madhuvan Protein Planner: offline cache. Bump VERSION when files change. */
-const VERSION = "mpp-v2.1";
-const FILES = ["./", "./index.html", "./manifest.webmanifest", "./icon.svg", "./icon-192.png", "./icon-512.png"];
+/* Protein Planner: offline cache. Bump VERSION when files change. */
+const VERSION="protein-planner-v2.1";
+const FILES = ["./", "./index.html","./clinic-config.js", "./manifest.webmanifest", "./icon.svg", "./icon-192.png", "./icon-512.png"];
 self.addEventListener("install", e => {
   e.waitUntil(caches.open(VERSION).then(c => c.addAll(FILES)).then(() => self.skipWaiting()));
 });

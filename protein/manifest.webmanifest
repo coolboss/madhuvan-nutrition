@@ -1,5 +1,5 @@
 {
-  "name": "Madhuvan Protein Planner",
+  "name":"Protein Planner",
   "short_name": "Protein Planner",
   "description": "Daily protein plan from Indian home food, for pregnancy, breastfeeding and adults.",
   "start_url": "./index.html",
