@@ -8,8 +8,9 @@ No server, no login, no subscription. Each tool is a single HTML file that runs 
 |---|---|---|
 | **Nutrition Workstation 3.5** | `index.html` | The clinic desk: assessment, targets, diet plan, recall, labs, glucose diary, patient sheets |
 | **Protein Planner 2.1** | `protein/index.html` | The patient's phone: daily protein from home food, with low-cost supplements only to fill the gap |
+| **Aahar 1.0** | `me/index.html` | Anyone's phone: BMI, daily targets, ICMR "My Plate", tap what you ate, the basic rules — self-care, no doctor needed |
 
-Live copies: https://coolboss.github.io/madhuvan-nutrition/ and https://coolboss.github.io/madhuvan-nutrition/protein/
+Live copies: https://coolboss.github.io/madhuvan-nutrition/ · https://coolboss.github.io/madhuvan-nutrition/protein/ · https://coolboss.github.io/madhuvan-nutrition/me/
 
 Built by Dr Rajesh Parikh, obstetrician, Vadodara, with Claude, for his own practice; shared in the hope it is useful to other small clinics and nursing homes.
 
@@ -38,6 +39,16 @@ Built by Dr Rajesh Parikh, obstetrician, Vadodara, with Claude, for his own prac
 **Protein Planner hand-off.** A tab that opens (and embeds) the Protein Planner pre-filled with the patient's stage, weight, diet, conditions, name, doctor's note and the Workstation's protein target.
 
 **Staff screen language.** English, Gujarati or Hindi.
+
+## Aahar — my food, my day
+
+For an individual, not a clinic. Fully in English, Gujarati or Hindi (auto-detected from the phone). Four screens:
+- **Me** — age, sex, height, weight (pre-pregnancy weight in pregnancy), stage (adult / planning a baby / pregnant / breastfeeding), activity, diet (veg, Jain, eggs, non-veg), conditions. BMI in plain words with Indian cut-offs; energy and protein targets (Mifflin–St Jeor, ICMR additions); ICMR–NIN 2024 "My Plate for the day" scaled to those calories, in household measures.
+- **Today** — tap the dishes you ate; the plate fills up by food group against ICMR shares; one-line verdict ("Add: vegetables, dal"; "Go easy on: sugar"); water glasses; a 0–100 plate score.
+- **Learn** — 15 cards: half the plate vegetables, a pulse with every cereal, milk 300 ml, oil by the spoon, sugar under 25 g, vitamin C with iron, salt, small regular meals, water, packaged foods, reading a label, pregnancy, movement; plus the portion drawings.
+- **Progress** — 7-day plate scores, weight log with chart, share a summary.
+
+Same IFCT 2017 food data and 173 dishes as the Workstation. Not medical advice; says so on every screen.
 
 ## Protein Planner
 
@@ -73,6 +84,7 @@ Both tools are static pages. Fork this repository and turn on GitHub Pages (Sett
 These tools are clinical decision aids for qualified clinicians. Values are estimates, reference intakes are defaults you are expected to verify, and every target or flag is a starting point for clinical judgement. The treating doctor remains responsible for every prescription. See `LICENSE`.
 
 ## Changelog
+- **Aahar 1.0 (4 Nov 2026)** — new self-service app at `/me/`.
 - **3.5 (4 Nov 2026)** — Public release: neutral branding with first-run clinic setup and optional `clinic-config.js`; MIT licence; Protein Planner takes the clinic name from the link or config instead of hard-coding it.
 - **3.4 (3 Nov 2026)** — Category-moulded screens; hard exclusions; labs with flags, trends and BP chart; glucose diary; diet cost and shopping list; portion guide; farali and Ramzan templates; staff UI in Gujarati/Hindi; two-way patient report code.
 - **3.3** — Meal-size guard with one-tap fixes; nine more templates.
