@@ -11,7 +11,7 @@ No server, no login, no subscription. Each tool is a single HTML file that runs 
 
 Live copies: https://coolboss.github.io/madhuvan-nutrition/ and https://coolboss.github.io/madhuvan-nutrition/protein/
 
-Made at Madhuvan Maternity & Eye Hospital, Vadodara, by Dr Rajesh Parikh (obstetrician) with Claude. Used daily; shared in the hope it is useful to other small clinics and nursing homes.
+Built by Dr Rajesh Parikh, obstetrician, Vadodara, with Claude, for his own practice; shared in the hope it is useful to other small clinics and nursing homes.
 
 ---
 
