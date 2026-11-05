@@ -1,0 +1,806 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lifestyle Rx</title>
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Outfit:wght@500;600;700&family=Source+Sans+3:ital,wght@0,400;0,600;1,400&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* Layout: a clinic worksheet. Left: profile form in short sections. Right (or below on phone): the prescription, led by safety, then diet, cardio, strength, yoga, rehab, habits. */
+:root{
+  --bg:#f6f7f5; --paper:#ffffff; --fg:#1d2420; --muted:#5c6660; --line:#d9ded9;
+  --accent:#0f6b63; --accent-ink:#ffffff; --soft:#e4f0ed;
+  --ok:#1f7a3f; --ok-bg:#e3f2e7; --warn:#9a6200; --warn-bg:#fbf0d6; --bad:#b3261e; --bad-bg:#fbe4e1;
+  --display:"Outfit",system-ui,sans-serif; --body:"Source Sans 3",system-ui,sans-serif; --mono:"JetBrains Mono",ui-monospace,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#121715; --paper:#1a211e; --fg:#e8ebe8; --muted:#9aa49e; --line:#2d3733;
+  --accent:#4fb3a8; --accent-ink:#0b1513; --soft:#17302c;
+  --ok:#6fcf8a; --ok-bg:#15301d; --warn:#f0b24a; --warn-bg:#3a2b0d; --bad:#f28b82; --bad-bg:#3f1b18; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#121715; --paper:#1a211e; --fg:#e8ebe8; --muted:#9aa49e; --line:#2d3733;
+  --accent:#4fb3a8; --accent-ink:#0b1513; --soft:#17302c;
+  --ok:#6fcf8a; --ok-bg:#15301d; --warn:#f0b24a; --warn-bg:#3a2b0d; --bad:#f28b82; --bad-bg:#3f1b18; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.5;margin:0;
+  padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 48px}
+h1,h2,h3,h4{font-family:var(--display);text-wrap:balance;margin:0;line-height:1.2}
+h1{font-size:1.9rem;font-weight:700}
+h2{font-size:1.25rem;font-weight:600}
+h3{font-size:1.05rem;font-weight:600}
+p{margin:0}
+.wrap{max-width:1180px;margin:0 auto}
+header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:12px 24px;padding-bottom:16px;border-bottom:2px solid var(--accent)}
+header.top p{color:var(--muted);max-width:62ch}
+.eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent)}
+.grid{display:grid;grid-template-columns:minmax(0,420px) minmax(0,1fr);gap:24px;margin-top:20px}
+@media (max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}}
+.panel{min-width:0}
+fieldset{border:1px solid var(--line);background:var(--paper);border-radius:6px;padding:12px 14px 14px;margin:0 0 12px;min-width:0}
+legend{font-family:var(--display);font-weight:600;padding:0 6px;font-size:.95rem}
+.row{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:8px 10px}
+label.f{display:flex;flex-direction:column;gap:3px;font-size:.85rem;color:var(--muted);min-width:0}
+label.f span.l{font-weight:600;color:var(--fg)}
+input[type=number],select{font:inherit;font-size:.95rem;padding:7px 8px;border:1px solid var(--line);border-radius:4px;background:var(--bg);color:var(--fg);width:100%;min-width:0}
+input:focus,select:focus,button:focus-visible{outline:2px solid var(--accent);outline-offset:1px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.chips label{display:inline-flex;align-items:center;gap:5px;border:1px solid var(--line);border-radius:999px;padding:4px 10px;font-size:.85rem;background:var(--bg);cursor:pointer;user-select:none}
+.chips label:has(input:checked){background:var(--soft);border-color:var(--accent);color:var(--fg)}
+.chips input{margin:0;accent-color:var(--accent)}
+.sub{font-size:.8rem;color:var(--muted);margin-top:4px}
+.btns{display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 16px}
+button{font:inherit;font-family:var(--display);font-weight:600;padding:9px 16px;border-radius:5px;border:1px solid var(--accent);background:var(--accent);color:var(--accent-ink);cursor:pointer}
+button.ghost{background:transparent;color:var(--accent)}
+button:hover{filter:brightness(1.05)}
+/* output */
+.rx{display:flex;flex-direction:column;gap:14px}
+.card{background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:14px 16px;min-width:0}
+.card h2{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.card h2 .eyebrow{font-weight:500}
+.banner{border-left:5px solid var(--bad);background:var(--bad-bg);border-radius:4px;padding:10px 12px;margin-bottom:8px}
+.banner.warn{border-left-color:var(--warn);background:var(--warn-bg)}
+.banner.ok{border-left-color:var(--ok);background:var(--ok-bg)}
+.banner h3{margin-bottom:4px}
+.banner ul{margin:4px 0 0;padding-left:18px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin:8px 0 10px}
+.stat{border:1px solid var(--line);border-radius:5px;padding:8px 10px;background:var(--bg)}
+.stat .k{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.stat .v{font-family:var(--mono);font-size:1.25rem;font-variant-numeric:tabular-nums}
+.stat .n{font-size:.8rem;color:var(--muted)}
+.pill{display:inline-block;font-family:var(--mono);font-size:.7rem;padding:2px 7px;border-radius:999px;border:1px solid currentColor;line-height:1.4;vertical-align:middle}
+.pill.R{color:var(--ok)} .pill.A{color:var(--accent)} .pill.C{color:var(--warn)} .pill.X{color:var(--bad)}
+.pill.ev-strong{color:var(--ok)} .pill.ev-mod{color:var(--warn)} .pill.ev-weak{color:var(--muted)}
+ul.tight,ol.tight{margin:4px 0 0;padding-left:20px}
+ul.tight li,ol.tight li{margin:3px 0}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px 18px}
+.two>div{min-width:0}
+.tbl{overflow-x:auto;margin-top:6px}
+table{border-collapse:collapse;width:100%;font-size:.88rem;min-width:420px}
+th,td{text-align:left;padding:6px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-family:var(--display);font-weight:600;font-size:.8rem;letter-spacing:.03em;color:var(--muted)}
+td.num,th.num{font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+details{border-top:1px dashed var(--line);margin-top:8px;padding-top:6px}
+summary{cursor:pointer;font-family:var(--display);font-weight:600;font-size:.95rem}
+.rank li{margin:5px 0}
+.rank b{font-weight:600}
+.small{font-size:.85rem;color:var(--muted)}
+.note{background:var(--soft);border-radius:4px;padding:8px 10px;font-size:.9rem;margin-top:6px}
+footer{margin-top:28px;color:var(--muted);font-size:.85rem;max-width:80ch}
+footer ul{padding-left:18px;margin:6px 0}
+.hidden{display:none}
+.proto{background:var(--bg);border:1px solid var(--line);border-radius:4px;padding:8px 10px;margin-top:8px;font-size:.9rem}
+.proto b{font-family:var(--display)}
+.toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--accent);color:var(--accent-ink);padding:8px 14px;border-radius:5px;font-size:.9rem;opacity:0;transition:opacity .2s;pointer-events:none}
+.toast.show{opacity:1}
+@media (prefers-reduced-motion:reduce){.toast{transition:none}}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+<header class="top">
+  <div>
+    <div class="eyebrow">Personalised diet · cardio · strength · yoga · rehab</div>
+    <h1>Lifestyle Rx</h1>
+    <p>Fill in the profile. The plan updates as you go. Safety rules run first; pregnancy, GLP-1 drugs, insulin, heart disease, eye conditions and injuries change what is allowed. Indian BMI and waist cut-offs are used.</p>
+  </div>
+  <div class="btns" style="margin:0">
+    <button id="btnSample" class="ghost" type="button">Load example</button>
+    <button id="btnReset" class="ghost" type="button">Clear</button>
+    <button id="btnCopy" type="button">Copy plan</button>
+  </div>
+</header>
+
+<div class="grid">
+<form id="profile" class="panel" autocomplete="off">
+  <fieldset>
+    <legend>Body</legend>
+    <div class="row">
+      <label class="f"><span class="l">Sex</span><select id="sex"><option value="F">Female</option><option value="M">Male</option></select></label>
+      <label class="f"><span class="l">Age (years)</span><input type="number" id="age" min="18" max="100" value="45"></label>
+      <label class="f"><span class="l">Height (cm)</span><input type="number" id="ht" min="120" max="220" value="160"></label>
+      <label class="f"><span class="l">Weight (kg)</span><input type="number" id="wt" min="30" max="250" step="0.5" value="78"></label>
+      <label class="f"><span class="l">Waist (cm)</span><input type="number" id="waist" min="50" max="200" value="94"></label>
+      <label class="f"><span class="l">Loss target (kg)</span><input type="number" id="target" min="0" max="80" value="15"></label>
+    </div>
+    <p class="sub">Waist is measured at the navel after breathing out. It decides the obesity stage even at a normal BMI.</p>
+  </fieldset>
+
+  <fieldset>
+    <legend>Activity and training history</legend>
+    <div class="row">
+      <label class="f"><span class="l">Current activity</span>
+        <select id="act"><option value="sed">Sedentary (desk, little walking)</option><option value="light">Lightly active</option><option value="lapsed">Trained before, lapsed</option><option value="train">Currently training</option></select></label>
+      <label class="f"><span class="l">Time available per week</span>
+        <select id="time"><option value="90">Under 2 hours</option><option value="180" selected>2–4 hours</option><option value="300">4–6 hours</option><option value="420">6+ hours</option></select></label>
+    </div>
+    <span class="l" style="font-size:.85rem;font-weight:600">Equipment</span>
+    <div class="chips" id="equip">
+      <label><input type="checkbox" value="bands">Resistance bands</label>
+      <label><input type="checkbox" value="db">Dumbbells</label>
+      <label><input type="checkbox" value="gym">Gym</label>
+      <label><input type="checkbox" value="pool">Pool</label>
+      <label><input type="checkbox" value="bike">Stationary bike</label>
+      <label><input type="checkbox" value="tread">Treadmill</label>
+    </div>
+    <p class="sub">Nothing ticked means bodyweight only.</p>
+  </fieldset>
+
+  <fieldset>
+    <legend>Injuries and joints</legend>
+    <span class="l" style="font-size:.85rem;font-weight:600">Current pain or injury</span>
+    <div class="chips" id="injCur">
+      <label><input type="checkbox" value="knee">Knee</label>
+      <label><input type="checkbox" value="hip">Hip</label>
+      <label><input type="checkbox" value="back">Low back / disc</label>
+      <label><input type="checkbox" value="ankle">Ankle / foot / plantar fascia</label>
+      <label><input type="checkbox" value="shoulder">Shoulder</label>
+      <label><input type="checkbox" value="neck">Neck</label>
+      <label><input type="checkbox" value="wrist">Wrist</label>
+    </div>
+    <span class="l" style="font-size:.85rem;font-weight:600;display:block;margin-top:8px">Old injury or at-risk joint (early arthritis, old ligament tear, past disc problem), pain-free now</span>
+    <div class="chips" id="injOld">
+      <label><input type="checkbox" value="knee">Knee</label>
+      <label><input type="checkbox" value="hip">Hip</label>
+      <label><input type="checkbox" value="back">Back</label>
+      <label><input type="checkbox" value="ankle">Ankle</label>
+      <label><input type="checkbox" value="shoulder">Shoulder</label>
+      <label><input type="checkbox" value="neck">Neck</label>
+      <label><input type="checkbox" value="wrist">Wrist</label>
+    </div>
+  </fieldset>
+
+  <fieldset id="fsWomen">
+    <legend>Reproductive status</legend>
+    <div class="row">
+      <label class="f"><span class="l">Pregnancy / postpartum</span>
+        <select id="preg">
+          <option value="none">Not pregnant</option>
+          <option value="ttc">Trying to conceive</option>
+          <option value="t1">Pregnant, 1st trimester</option>
+          <option value="t2">Pregnant, 2nd trimester</option>
+          <option value="t3">Pregnant, 3rd trimester</option>
+          <option value="pp0">Postpartum 0–6 weeks</option>
+          <option value="pp6">Postpartum 6 weeks – 6 months</option>
+        </select></label>
+      <label class="f"><span class="l">Pre-pregnancy BMI (if pregnant)</span><input type="number" id="prebmi" min="14" max="60" step="0.1" placeholder="optional"></label>
+    </div>
+    <div class="chips" id="wom">
+      <label><input type="checkbox" value="bf">Breastfeeding</label>
+      <label><input type="checkbox" value="cs">Caesarean under 12 weeks ago</label>
+      <label><input type="checkbox" value="pcos">PCOS</label>
+      <label><input type="checkbox" value="meno">Menopause / perimenopause</label>
+      <label><input type="checkbox" value="dr">Diastasis recti / tummy doming</label>
+      <label><input type="checkbox" value="pf">Leakage or pelvic heaviness</label>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Medical conditions</legend>
+    <div class="chips" id="cond">
+      <label><input type="checkbox" value="t2d">Type 2 diabetes</label>
+      <label><input type="checkbox" value="pre">Prediabetes</label>
+      <label><input type="checkbox" value="htn">Hypertension</label>
+      <label><input type="checkbox" value="lipid">High cholesterol / triglycerides</label>
+      <label><input type="checkbox" value="fld">Fatty liver (MASLD)</label>
+      <label><input type="checkbox" value="thy">Hypothyroidism</label>
+      <label><input type="checkbox" value="chd">Heart disease / heart failure</label>
+      <label><input type="checkbox" value="asthma">Asthma</label>
+      <label><input type="checkbox" value="op">Osteoporosis / osteopenia</label>
+      <label><input type="checkbox" value="sarco">Low muscle / frailty</label>
+      <label><input type="checkbox" value="ckd">Kidney disease (eGFR under 60)</label>
+      <label><input type="checkbox" value="retino">Diabetic retinopathy</label>
+      <label><input type="checkbox" value="eye">Glaucoma / recent eye surgery</label>
+      <label><input type="checkbox" value="neuro">Foot neuropathy / ulcer</label>
+    </div>
+    <div class="row" style="margin-top:8px">
+      <label class="f"><span class="l">Latest BP, upper (mmHg)</span><input type="number" id="sbp" min="70" max="260" placeholder="optional"></label>
+      <label class="f"><span class="l">Latest BP, lower</span><input type="number" id="dbp" min="40" max="160" placeholder="optional"></label>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Medicines</legend>
+    <div class="chips" id="meds">
+      <label><input type="checkbox" value="glp1">GLP-1 (semaglutide, liraglutide, dulaglutide)</label>
+      <label><input type="checkbox" value="tirz">Tirzepatide</label>
+      <label><input type="checkbox" value="ins">Insulin</label>
+      <label><input type="checkbox" value="su">Sulfonylurea (glimepiride, gliclazide)</label>
+      <label><input type="checkbox" value="sglt2">SGLT2 inhibitor (dapagliflozin, empagliflozin)</label>
+      <label><input type="checkbox" value="met">Metformin</label>
+      <label><input type="checkbox" value="bb">Beta-blocker</label>
+      <label><input type="checkbox" value="statin">Statin</label>
+      <label><input type="checkbox" value="levo">Levothyroxine</label>
+    </div>
+    <div class="row" style="margin-top:8px">
+      <label class="f"><span class="l">GLP-1 phase</span>
+        <select id="glpPhase"><option value="na">Not applicable</option><option value="start">Started or dose raised in last 4 weeks</option><option value="stable">Stable dose</option><option value="stopped">Stopped in last 12 months</option></select></label>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Food</legend>
+    <div class="row">
+      <label class="f"><span class="l">Diet type</span>
+        <select id="diet"><option value="veg">Vegetarian</option><option value="jain">Jain</option><option value="vegan">Vegan</option><option value="egg">Eggetarian</option><option value="nonveg">Non-vegetarian</option></select></label>
+      <label class="f"><span class="l">Cuisine</span>
+        <select id="cuisine"><option value="guj">Gujarati</option><option value="ind">Other Indian</option><option value="intl">International</option></select></label>
+      <label class="f"><span class="l">Fasting days</span>
+        <select id="fast"><option value="none">None</option><option value="farali">Ekadashi / Navratri (farali)</option><option value="jain">Jain upvas / Paryushan</option><option value="ramadan">Ramadan</option></select></label>
+    </div>
+  </fieldset>
+
+  <fieldset>
+    <legend>Symptoms right now</legend>
+    <div class="chips" id="sym">
+      <label><input type="checkbox" value="chest">Chest pain with effort</label>
+      <label><input type="checkbox" value="faint">Fainting or dizziness</label>
+      <label><input type="checkbox" value="breath">Unusual breathlessness</label>
+      <label><input type="checkbox" value="calf">Calf pain or swelling</label>
+      <label><input type="checkbox" value="backred">Numbness in saddle area, new bladder or bowel change, leg weakness</label>
+      <label><input type="checkbox" value="vision">Sudden vision loss or new floaters</label>
+      <label><input type="checkbox" value="ed">History of eating disorder</label>
+    </div>
+  </fieldset>
+</form>
+
+<div id="out" class="panel rx"></div>
+</div>
+
+<footer>
+  <b>Evidence base.</b> ICMR-NIN Dietary Guidelines 2024 and RDA 2020; Misra 2023 Indian obesity consensus; ACSM 2009 position stand; WHO 2020 activity guidelines; ADA Standards of Care 2025–26; ESC 2024 hypertension guideline; ACOG Committee Opinion 804 (2020); 2025 joint advisory on nutrition and exercise with GLP-1 drugs (ACLM, ASN, OMA, TOS); STEP 1 extension and SURMOUNT-4 (weight regain); Lundgren 2021 NEJM (exercise + liraglutide); GLA:D; Cochrane 2020 (pelvic floor) and 2022 (yoga for back pain); PROT-AGE; IOM 2009 pregnancy weight gain.
+  <ul>
+    <li>Strong evidence: calorie deficit and rate of loss; salt and blood pressure; ADA activity targets; ACOG pregnancy rules; GLP-1 effect and regain; resistance training to keep muscle.</li>
+    <li>Moderate: protein 1.2–1.6 g/kg; joint-load ranking of cardio (knee-implant data); Indian waist cut-offs; GLA:D.</li>
+    <li>Weak or expert opinion: fasting-day rules; postpartum running timeline; diastasis cut-offs; yoga for weight loss and PCOS.</li>
+  </ul>
+  This tool gives general guidance. It does not replace assessment by a doctor, obstetrician, ophthalmologist, dietitian or physiotherapist, and only the treating doctor changes medicine doses.
+</footer>
+</div>
+<div id="toast" class="toast" role="status"></div>
+
+<script>
+(function(){
+'use strict';
+const $=id=>document.getElementById(id);
+const checked=id=>[...document.querySelectorAll('#'+id+' input:checked')].map(i=>i.value);
+
+/* ---------- DATA ---------- */
+const CARDIO={
+ walk:{n:'Brisk walking',met:4.8,knee:'2.2–2.8× body weight',why:'Lowest injury risk, no equipment, the most common activity among people who keep weight off.'},
+ incline:{n:'Incline / hill walking',met:6.5,knee:'uphill moderate, downhill high',why:'Near-jogging calorie burn with lower knee load than fast flat walking. Walk down slowly or use the treadmill.'},
+ sbike:{n:'Stationary cycling',met:6.5,knee:'~1× body weight',why:'Lowest knee load of any machine. Safe in any weather. Easy to add intervals later.'},
+ ellip:{n:'Elliptical',met:6,knee:'~1–2× (no impact)',why:'No impact and a good burn. Hold the handles lightly.'},
+ aqua:{n:'Water aerobics / water walking',met:5.5,knee:'minimal',why:'Kindest to joints. Good for beginners and painful joints.'},
+ swim:{n:'Swimming',met:7,knee:'minimal',why:'No joint load. Needs skill. Eat a planned snack after, as appetite can rise.'},
+ obike:{n:'Outdoor cycling',met:8,knee:'~1× body weight',why:'Doubles as transport. Watch traffic, helmet on.'},
+ dance:{n:'Dance / Garba / low-impact aerobics',met:6,knee:'moderate (twisting)',why:'Fun and social, which keeps people going. Keep feet flat and turns slow if knees are sore.'},
+ row:{n:'Rowing machine',met:7.5,knee:'low; back load 4× BW',why:'Whole body, easy on knees, but needs good form. Keep sessions under 30 minutes if your back is sensitive.'},
+ stair:{n:'Stair climber',met:9,knee:'~2× (machine); stairs down 3.1–3.5×',why:'High burn, builds legs. Hard at first; use the machine rather than real stairs down.'},
+ hike:{n:'Hiking',met:6.5,knee:'downhill high',why:'Outdoors and enjoyable. Use poles on the way down.'},
+ surya:{n:'Surya Namaskar (fast rounds)',met:5,knee:'low; wrist load',why:'Counts as cardio once you can do 12+ rounds. Use fists if wrists hurt.'},
+ hiitLo:{n:'Low-impact intervals (bike / elliptical)',met:7.5,knee:'low',why:'Saves time. No extra fat loss versus steady cardio at equal calories. Use 1–2 times a week at most.'},
+ run:{n:'Running / jogging',met:9.3,knee:'~3.6× body weight',why:'Best burn per hour but injury risk is high above BMI 30. Build with walk-run intervals after 12 pain-free weeks.'},
+ rope:{n:'Jump rope',met:11,knee:'high impact',why:'High burn but repeated landings. Few people sustain it.'},
+ hiitHi:{n:'High-impact HIIT / burpees / jumping',met:10,knee:'high impact',why:'No more fat loss than steady cardio at equal calories, high joint stress, poor long-term adherence.'}
+};
+/* suitability: R recommended, A allowed with changes, C caution (pain-free / cleared only), X avoid */
+const SUIT={
+ /*         knee hip back ankle shoulder wrist T1 T2 T3 pp0 pp6 cs 75+ htnHeart glp1 bmi32 neuro op */
+ walk:   ['A','R','R','A','R','R','R','R','R','R','R','R','R','R','R','R','A','R'],
+ incline:['C','A','A','C','R','R','R','A','A','X','A','A','A','A','A','A','C','A'],
+ run:    ['X','C','C','X','A','R','A','A','C','X','X','X','X','C','C','X','X','C'],
+ sbike:  ['R','R','A','R','R','A','R','R','R','A','R','A','R','R','R','R','R','R'],
+ obike:  ['A','A','A','R','A','A','A','C','X','X','A','A','C','A','C','A','A','C'],
+ swim:   ['R','A','R','R','C','A','R','R','R','X','R','C','R','R','R','R','R','R'],
+ aqua:   ['R','R','R','R','A','A','R','R','R','X','R','C','R','R','R','R','R','R'],
+ row:    ['C','C','C','R','C','C','A','C','X','X','A','X','A','A','A','A','A','C'],
+ ellip:  ['R','A','A','A','A','R','R','R','A','X','R','A','A','R','R','R','A','R'],
+ stair:  ['C','A','A','C','R','R','A','A','C','X','A','A','C','A','C','C','C','A'],
+ rope:   ['X','C','C','X','A','A','C','X','X','X','X','X','X','C','X','X','X','X'],
+ hiitHi: ['X','C','C','X','C','C','C','X','X','X','X','X','X','X','X','X','X','X'],
+ hiitLo: ['A','A','A','A','A','A','A','A','C','X','A','A','C','C','C','A','A','A'],
+ dance:  ['C','A','A','C','A','R','R','A','C','X','A','A','C','A','A','A','C','A'],
+ hike:   ['C','A','A','C','A','R','A','A','C','X','A','A','C','A','C','C','C','A'],
+ surya:  ['A','A','C','R','C','C','A','C','X','X','A','X','C','C','A','C','A','C']
+};
+const SUITCOLS=['knee','hip','back','ankle','shoulder','wrist','t1','t2','t3','pp0','pp6','cs','old','htn','glp1','bmi32','neuro','op'];
+const RANKBASE={
+ none:['walk','sbike','aqua','swim','ellip','dance','incline','obike','row','stair','hike','surya','hiitLo','run','rope','hiitHi'],
+ knee:['sbike','aqua','swim','ellip','walk','obike','row','dance','incline','surya','hiitLo','stair','hike','run','rope','hiitHi'],
+ hip:['sbike','aqua','walk','ellip','swim','obike','dance','incline','hike','surya','hiitLo','stair','row','run','rope','hiitHi'],
+ back:['walk','swim','aqua','sbike','ellip','incline','dance','obike','hike','hiitLo','stair','surya','row','run','rope','hiitHi'],
+ ankle:['sbike','swim','aqua','row','ellip','obike','walk','hiitLo','incline','surya','dance','stair','hike','run','rope','hiitHi'],
+ shoulder:['walk','sbike','ellip','incline','aqua','obike','dance','hike','stair','hiitLo','run','swim','row','surya','rope','hiitHi'],
+ preg:['walk','swim','aqua','sbike','ellip','incline','surya','dance','obike','hiitLo','row','stair','hike','run','rope','hiitHi'],
+ pp0:['walk','sbike','ellip','aqua','swim','incline','dance','surya','obike','hiitLo','row','stair','hike','run','rope','hiitHi'],
+ bmi32:['sbike','aqua','walk','ellip','swim','incline','obike','dance','row','hiitLo','surya','stair','hike','run','rope','hiitHi'],
+ old:['walk','sbike','aqua','ellip','swim','incline','dance','obike','surya','row','hiitLo','stair','hike','run','rope','hiitHi'],
+ train:['walk','sbike','incline','run','obike','row','swim','ellip','hiitLo','stair','hike','dance','surya','aqua','rope','hiitHi']
+};
+
+const PROT={
+ veg:[['Cooked dal','1 katori','100','6–7'],['Chana / rajma','1 katori','150','7–9'],['Sprouted moong','1 katori','100','7'],['Paneer','50 g','130','9'],['Hung curd','100 g','90','8–10'],['Toned milk','200 ml','120','6–7'],['Soya chunks (dry)','25 g','85','13'],['Besan chilla','30 g besan','130','6–7'],['Roasted chana','30 g','110','6'],['Peanuts','20 g','115','5']],
+ jain:[['Cooked dal','1 katori','100','6–7'],['Chana / rajma','1 katori','150','7–9'],['Paneer','50 g','130','9'],['Hung curd (fresh)','100 g','90','8–10'],['Toned milk','200 ml','120','6–7'],['Soya chunks (dry)','25 g','85','13'],['Besan chilla (no onion)','30 g besan','130','6–7'],['Roasted chana','30 g','110','6'],['Peanuts','20 g','115','5']],
+ vegan:[['Cooked dal','1 katori','100','6–7'],['Chana / rajma','1 katori','150','7–9'],['Sprouted moong','1 katori','100','7'],['Firm tofu','100 g','120','10–14'],['Soya chunks (dry)','25 g','85','13'],['Soy milk','200 ml','90','6–7'],['Besan chilla','30 g besan','130','6–7'],['Roasted chana','30 g','110','6'],['Peanuts','20 g','115','5']],
+ egg:[['Egg','1','70','6'],['Cooked dal','1 katori','100','6–7'],['Paneer','50 g','130','9'],['Hung curd','100 g','90','8–10'],['Chana / rajma','1 katori','150','7–9'],['Toned milk','200 ml','120','6–7'],['Soya chunks (dry)','25 g','85','13'],['Roasted chana','30 g','110','6']],
+ nonveg:[['Chicken / fish, cooked','100 g','150–170','22–30'],['Egg','1','70','6'],['Cooked dal','1 katori','100','6–7'],['Paneer','50 g','130','9'],['Hung curd','100 g','90','8–10'],['Chana / rajma','1 katori','150','7–9'],['Toned milk','200 ml','120','6–7']]
+};
+const DAY1200={
+ veg:['Unsweetened tea with toned milk + 5 almonds','2 moong chilla + 100 g hung curd','1 fruit','1 rotli + dal (no sugar) + sabzi + salad + chaas','Sprouts chaat','1 bajra rotla + 50 g paneer bhurji + sabzi'],
+ jain:['Unsweetened tea with toned milk + 5 almonds','Besan chilla (no onion) + 100 g curd','1 fruit','1 rotli + dal (no sugar) + non-root sabzi (dudhi, turia, cabbage) + chaas','30 g roasted chana','1 bajra rotla + 50 g paneer + sabzi, before sunset'],
+ vegan:['Soy-milk tea + 5 almonds','2 moong chilla + 100 g tofu bhurji','1 fruit','1 rotli + dal + sabzi + ½ katori soya curry + salad','Sprouts chaat','100 g tofu + sabzi + 1 bajra rotla'],
+ egg:['Unsweetened tea with toned milk + 5 almonds','2-egg omelette + 1 rotli','1 fruit','1 rotli + dal (no sugar) + sabzi + salad + chaas','Boiled egg + sprouts','1 bajra rotla + 50 g paneer + sabzi'],
+ nonveg:['Unsweetened tea with toned milk + 5 almonds','2-egg omelette + 1 rotli','1 fruit','1 rotli + 100 g chicken or fish + sabzi + salad','Boiled egg + sprouts','100 g fish or chicken + sabzi + 1 rotla']
+};
+const MEALNAMES=['Early morning','Breakfast','Mid-morning','Lunch','Evening snack','Dinner'];
+const SCALE={1200:{rot:0,dal:'—',milk:0,pro:'—',nuts:'—',oil:'3 tsp',prot:'65–75 g'},1500:{rot:'+1',dal:'+½ katori',milk:'+1 serving',pro:'—',nuts:'+10 g',oil:'4 tsp',prot:'75–85 g'},1800:{rot:'+2',dal:'+1 katori',milk:'+2 servings',pro:'+50 g paneer/tofu, +1 egg or +50 g meat',nuts:'+15 g',oil:'5 tsp',prot:'90–100 g'},2100:{rot:'+3',dal:'+1 katori',milk:'+2 servings',pro:'+100 g paneer/tofu, +2 eggs or +100 g meat',nuts:'+20 g',oil:'5–6 tsp',prot:'105–120 g'}};
+const SWAPS_GUJ=[['Dal or kadhi with 2 tsp sugar/jaggery','No sugar; kokum, lemon or tomato for sourness','30–40 kcal per katori'],['Fafda / gathiya 50 g','2 steamed khaman or dhokla, or roasted chana','~150 kcal'],['4 rotli with ghee','2 plain rotli + extra sabzi + curd or dal','~200 kcal, more protein'],['2 katori white rice','1 katori rice + 1 katori dal or sprouts, or a millet rotla','~150 kcal'],['4 sweet chai','½ tsp sugar or none, toned milk','~120 kcal'],['3 thepla breakfast','1 thepla + curd + sprouts, or moong/besan chilla','+12–15 g protein'],['Fried muthiya / bhajia','Steamed or air-fried','~150 kcal'],['Shrikhand / basundi','Hung curd with fruit','~150 kcal'],['Sev usal','Sprout usal without sev','~150 kcal'],['Cold drinks / juice','Chaas, lemon water without sugar','100–150 kcal'],['Papad + achar at every meal','One or neither; both are mostly salt','Salt']];
+const SWAPS_IND=[['White rice 2 katori','1 katori rice + 1 katori dal; brown rice or millet','~150 kcal'],['Puri / paratha with oil','Phulka or roti without ghee','~100–150 kcal each'],['Samosa / pakora / vada','Roasted chana, dhokla, idli, sprouts','~150–200 kcal'],['Sweet tea or coffee ×4','No or ½ tsp sugar, toned milk','~120 kcal'],['Sweets after meals','Fruit or 20 g dark chocolate','~150 kcal'],['Juice / cold drinks','Buttermilk, nimbu pani without sugar','100–150 kcal'],['Pickle and papad daily','Twice a week at most','Salt'],['Cream-based gravies','Tomato, onion or curd-based gravies','~100 kcal']];
+const SWAPS_INTL=[['Sugary drinks, juice','Water, sparkling water, unsweetened tea','100–150 kcal'],['White bread, pastries','Whole-grain bread, oats','~100 kcal'],['Fried foods, chips','Baked, grilled, air-fried','~150–200 kcal'],['Cream sauces, cheese-heavy meals','Tomato or yoghurt-based; cheese as a topping only','~150 kcal'],['Large portions of pasta or rice','Half the grain, double the vegetables, add lean protein','~150 kcal'],['Alcohol most evenings','2 nights a week at most; 1–2 drinks','~150 kcal per drink'],['Dessert daily','Fruit; dessert twice a week','~250 kcal'],['Processed meats','Eggs, fish, chicken, legumes','Salt and saturated fat']];
+
+const RT_PROG={
+ body:[['Squat','Sit-to-stand → box squat → bodyweight squat → split squat'],['Hinge','Glute bridge → single-leg bridge'],['Push','Wall push-up → counter → knee → full push-up'],['Pull','Table row or towel row'],['Step / lunge','Low step-up → reverse lunge'],['Core','Dead bug, bird dog, side plank'],['Calf','Two-leg calf raise → single-leg']],
+ bands:[['Squat','Band squat (band under feet, over shoulders)'],['Hinge','Band pull-through'],['Push','Band chest press'],['Pull','Band row'],['Overhead','Band press (if shoulder is fine)'],['Vertical pull','Band pulldown'],['Step / lunge','Band step-up'],['Core','Pallof press'],['Calf','Band or bodyweight calf raise']],
+ db:[['Squat','Goblet squat'],['Hinge','Dumbbell Romanian deadlift'],['Push','Dumbbell floor or bench press'],['Pull','One-arm dumbbell row'],['Overhead','Seated dumbbell press'],['Step / lunge','Dumbbell step-up'],['Core','Suitcase carry, dead bug'],['Calf','Dumbbell calf raise']],
+ gym:[['Squat','Leg press or back squat'],['Hinge','Trap-bar deadlift or hip thrust'],['Push','Chest press machine or bench press'],['Pull','Seated cable row'],['Overhead','Machine shoulder press'],['Vertical pull','Lat pulldown or assisted pull-up'],['Step / lunge','Walking lunge or step-up'],['Core','Cable Pallof press, farmer carry'],['Calf','Machine calf raise']]
+};
+const RT_LEVEL={
+ beg:{n:'Beginner (weeks 1–8)',freq:'2 days a week, not back to back',sets:'1–2 sets × 10–15 reps',effort:'Stop 3–4 reps short of failure',rest:'60–90 s'},
+ int:{n:'Intermediate (weeks 9–24)',freq:'2–3 days a week',sets:'2–3 sets × 8–12 reps',effort:'Stop 2–3 reps short of failure',rest:'90 s'},
+ adv:{n:'Advanced (6 months +)',freq:'3–4 days a week, upper/lower split',sets:'3–4 sets × 6–12 reps',effort:'Stop 1–2 reps short of failure',rest:'2–3 min'},
+ older:{n:'Older adult',freq:'2–3 days a week, plus balance work on 3 days',sets:'1–3 sets × 8–12 reps; add power (fast up, 3 s down) once steady',effort:'Stop 2–4 reps short of failure',rest:'90–120 s'},
+ htn:{n:'Blood-pressure safe',freq:'2–3 days a week',sets:'2–3 sets × 10–15 reps light to moderate, or isometric wall sit / handgrip 4 × 1–2 min',effort:'Stop 3+ reps short of failure, breathe out on effort, never hold breath',rest:'1–2 min'}
+};
+const RT_MODS={
+ knee:['Avoid loaded deep squats, jumps and painful lunges.','Use high box squats (knee bend 60–90°), sit-to-stand, low step-ups, straight-leg raises, hip abduction and bridges.','Pain up to 3/10 that settles within 24 h is acceptable.'],
+ hip:['Avoid deep hip bending with rotation.','Use bridges, side-lying leg raises, sit-to-stand and standing hip extension.'],
+ back:['Avoid sit-ups, rounded-back lifting and twisting under load.','Use the McGill big three daily, hip-hinge drill with a stick on the back, goblet box squat and walking.'],
+ shoulder:['Avoid overhead press, upright row and dips while painful.','Use rows, band external rotation, raises to shoulder height only, wall slides.'],
+ neck:['Avoid heavy shrugs and painful overhead work.','Use chin tucks, rows and shoulder-blade squeezes.'],
+ wrist:['Avoid flat-palm push-ups and planks.','Use fists or handles, forearm planks and machines.'],
+ ankle:['Avoid jumping and long standing.','Progress calf raises seated → standing → single-leg; add single-leg balance.'],
+ op:['Avoid rounded-back lifting with twisting; avoid high impact if there has been a fracture.','Use back extensions, neutral-spine squats and hinges, balance work. Supervised heavier lifting is reasonable (LIFTMOR trial).'],
+ htn:['No breath-holding or 1–5 rep maximum lifts. Breathe out on the hard part.'],
+ eye:['No heavy lifting, breath-holding or head-below-heart positions until the eye doctor clears you. Light machines, walking and cycling are fine.'],
+ retino:['Avoid vigorous exercise, heavy lifting and head-down positions until cleared by the eye doctor.'],
+ hypo:['Insulin or sulfonylurea: check glucose before. Below 100 mg/dL take 15–20 g carbs first. Carry glucose. Recheck after and at bedtime; lows can come hours later.'],
+ sglt2:['Drink 500 ml before sessions. Stop and see a doctor if nausea, vomiting or belly pain. No low-carb diets with hard training.'],
+ statin:['Report unexplained muscle pain or dark urine.'],
+ bb:['Use effort (RPE 11–14, can talk in short sentences), not heart rate, to set intensity.'],
+ preg:['Moderate resistance 2–3 days a week is safe.','After the 1st trimester avoid lying flat on your back for long; use incline, side-lying or standing versions.','No breath-holding, maximal lifts, crunches after 20 weeks, or anything with a fall risk.','Regress any exercise that makes the belly dome.'],
+ pp0:['Walking, breathing, pelvic floor and deep core only. Lift nothing heavier than the baby.'],
+ pp6:['Start pelvic floor training daily; ask for a pelvic-health physiotherapy check at 6 weeks.','Build to strength work twice a week.','No running before 3 months, and only after passing: 30 min walk, single-leg balance 10 s, 10 single-leg squats, 1 min jog on the spot, 10 hops each leg, all without pain, heaviness or leaking.'],
+ cs:['No high impact, running or heavy lifting before 12 weeks.','No full sit-ups or twisting ab work for 6–8 weeks.','Swim only once the wound has fully healed.'],
+ dr:['Progress: breathing + lower-belly draw-in + pelvic floor → heel slides → dead bug → side plank → curl-ups only if there is no doming.','Refer for doming, a bulge or pain.'],
+ pf:['Pelvic floor first: 3 times a day, 8–12 slow squeezes held 6–8 s, then 10 quick squeezes. No running or jumping until symptom-free.'],
+ old75:['Start chair-based. Sit-to-stand, heel and toe raises, tandem stance, supported single-leg stance. Supervised if frail.'],
+ chd:['Cardiologist clearance first. Light to moderate loads, 10–15 reps, no breath-holding, 10-minute warm-up and cool-down.'],
+ neuro:['Check feet daily. Closed shoes, soft footwear indoors. Prefer cycling or swimming over long walks.']
+};
+
+const YOGA={
+ general:{n:'General / weight loss',seq:['Joint rotations 5 min','Surya Namaskar (see progression)','Tadasana, Vrikshasana, Virabhadrasana II, Trikonasana','Setu Bandhasana','Bhujangasana','Shavasana','Anulom-Vilom 5 min']},
+ metabolic:{n:'Metabolic (diabetes, PCOS, fatty liver)',seq:['Joint rotations 5 min','Surya Namaskar','Utkatasana, Virabhadrasana II, Trikonasana','Gentle Ardha Matsyendrasana','Dhanurasana (skip if back hurts)','Setu Bandhasana','Shavasana','Anulom-Vilom, Bhramari']},
+ gentle:{n:'Gentle (blood pressure, heart, eyes)',seq:['Slow standing poses: Tadasana, Vrikshasana at a wall, Virabhadrasana II','Short Setu Bandhasana','Cat–cow','Long Shavasana 10 min','Anulom-Vilom, Bhramari','No inversions, no Kapalbhati, no breath-holding']},
+ back:{n:'Back care',seq:['Cat–cow','Makarasana','Sphinx → Bhujangasana','Setu Bandhasana','Knee rocks','Bird dog','Shavasana']},
+ disc:{n:'Disc-safe (no forward bends)',seq:['Sphinx','Makarasana','Tadasana','Bird dog','Gentle standing back extension','Shavasana','No forward bends, no Halasana, no deep twists']},
+ chair:{n:'Chair yoga (knee pain, 75+)',seq:['Seated joint rotations','Seated cat–cow','Seated twist, gentle','Chair Surya Namaskar','Supported balance at a wall','Seated Anulom-Vilom','No Vajrasana, Padmasana or deep squats']},
+ restore:{n:'Restorative (stress, sleep, menopause)',seq:['Supta Baddha Konasana with support','Legs on a chair','Gentle cat–cow','Bhramari 10 rounds','Yoga Nidra 15–20 min']},
+ prenatal:{n:'Prenatal (2nd–3rd trimester)',seq:['Tadasana','Wide Virabhadrasana II','Trikonasana with a block','Cat–cow','Baddha Konasana','Side-lying rest (not flat on the back)','Gentle Anulom-Vilom','No deep or closed twists, deep backbends, belly-down poses, inversions, hot yoga or Kapalbhati']},
+ pp:{n:'Postpartum (after 6 weeks)',seq:['Pelvic floor breathing','Cat–cow','Bridges','Bird dog','Gentle standing poses','Shavasana','No deep backbends or strong core work until diastasis is checked']}
+};
+
+const REHAB={
+ knee:{t:'Knee: osteoarthritis / kneecap pain',p:['GLA:D model: 2 education sessions + 12 supervised neuromuscular sessions (2 a week for 6 weeks). Average pain fell about 30% at 12 months in national registries.','Hip strength: clams, side-lying leg raise, bridges, 2–3 sets of 12.','Quads: 45° wall sit 3 × 30 s, low step-ups 3 × 10.','Sit-to-stand 3 × 10 daily.','Reduce stairs and deep squats for now. Weight loss of 5–10% adds relief.'],red:'Hot, swollen or red joint; fever; locking; cannot bear weight; night pain with weight loss.'},
+ hip:{t:'Hip pain',p:['GLA:D model as for knee.','Bridges 3 × 12, side-lying abduction 3 × 12, standing hip extension 3 × 12, sit-to-stand 3 × 10.','Avoid deep hip bending with rotation.'],red:'Groin pain after a fall; cannot bear weight; fever.'},
+ back:{t:'Low back pain / disc',p:['Stay active. Bed rest makes it worse.','McGill big three daily: curl-up, side plank, bird dog. Hold 8–10 s; do 6, then 4, then 2 reps each side.','Walk 3 × 10 min a day, building up.','Learn the hip hinge: stick along the back, bend at the hips with a straight spine.','Disc problems: avoid bending forward under load; nerve glides only with a physiotherapist.'],red:'Numbness in the saddle area, new bladder or bowel change, progressive leg weakness, fever, cancer history, major injury, unexplained weight loss, constant night pain. See a doctor the same day.'},
+ ankle:{t:'Ankle / plantar fasciitis',p:['Plantar fascia: stretch the sole before the first steps of the day; calf stretch 3 × 30 s; slow heel raises 3 × 12, progressing to single-leg with a towel under the toes.','Sprain: early walking → range of motion → calf raises → single-leg balance (eyes closed, then on a cushion) over 6–12 weeks.','Supportive shoes, including indoors.'],red:'Cannot take 4 steps, or bone tenderness after an injury (needs an X-ray). Night pain, numbness, swelling.'},
+ shoulder:{t:'Shoulder impingement',p:['Band external rotation 3 × 15, rows 3 × 12, scaption (thumb up, raise to shoulder height) 3 × 12, shoulder-blade setting, for 6–12 weeks.','No painful overhead work.'],red:'Night pain with weakness (possible tear); pain with chest symptoms.'},
+ neck:{t:'Neck pain',p:['Chin tucks 10 × 5 s, several times a day.','Rows and shoulder-blade squeezes 3 × 12.','Posture break every 30 min.'],red:'Arm weakness or numbness, balance loss, severe headache, injury.'},
+ wrist:{t:'Wrist pain',p:['Isometric holds → light wrist curls 3 × 12.','Neutral grips; fists or handles for floor work.'],red:'Swelling after a fall (possible scaphoid fracture); night numbness (carpal tunnel, common in pregnancy).'},
+ pf:{t:'Pelvic floor',p:['3 times a day: 8–12 slow squeezes held 6–8 s, then 10 quick squeezes. Build to a 60 s gentle hold.','Antenatal pelvic floor training cut leakage in late pregnancy by 62% (Cochrane 2020).','No running or jumping until symptom-free and the return-to-run tests are passed.'],red:'Bulge, heaviness, leakage beyond 3 months postpartum, pain: pelvic-health physiotherapist.'},
+ dr:{t:'Diastasis recti',p:['Judge by function, not just the gap. A gap over 2 finger-widths is the usual research cut-off.','Progress: breathing + lower-belly draw-in + pelvic floor → heel slides → dead bug → side plank → curl-ups only without doming.'],red:'Hernia bulge, pain, no improvement by 6 months.'}
+};
+
+/* ---------- LOGIC ---------- */
+function read(){
+ const p={
+  sex:$('sex').value, age:+$('age').value||45, ht:+$('ht').value||160, wt:+$('wt').value||70, waist:+$('waist').value||0, target:+$('target').value||0,
+  act:$('act').value, time:+$('time').value, equip:checked('equip'), injCur:checked('injCur'), injOld:checked('injOld'),
+  preg:$('preg').value, prebmi:+$('prebmi').value||0, wom:checked('wom'), cond:checked('cond'), sbp:+$('sbp').value||0, dbp:+$('dbp').value||0,
+  meds:checked('meds'), glpPhase:$('glpPhase').value, diet:$('diet').value, cuisine:$('cuisine').value, fast:$('fast').value, sym:checked('sym')
+ };
+ if(p.sex==='M'){p.preg='none';p.wom=[];}
+ p.has=v=>p.cond.includes(v); p.med=v=>p.meds.includes(v); p.w=v=>p.wom.includes(v);
+ p.glp=p.med('glp1')||p.med('tirz');
+ p.pregnant=['t1','t2','t3'].includes(p.preg);
+ p.pp=['pp0','pp6'].includes(p.preg);
+ p.bf=p.w('bf');
+ p.bmi=p.wt/((p.ht/100)**2);
+ p.whtr=p.waist?p.waist/p.ht:0;
+ p.hiWaist=p.waist&&((p.sex==='F'&&p.waist>=80)||(p.sex==='M'&&p.waist>=90));
+ return p;
+}
+function bmiCat(b){return b<18.5?'Underweight':b<23?'Normal':b<25?'Overweight':b<32.5?'Obesity':b<37.5?'Obesity (severe)':'Obesity (very severe)';}
+function r10(x){return Math.round(x/10)*10;}
+
+function compute(p){
+ const o={stops:[],warns:[],refer:[]};
+ /* --- hard stops --- */
+ const S=o.stops;
+ if(p.sym.includes('chest')||p.sym.includes('faint')||p.sym.includes('breath')||p.sym.includes('calf')) S.push('Chest pain, fainting, unusual breathlessness or calf swelling: stop all exercise and see a doctor urgently before using any plan here.');
+ if(p.sym.includes('backred')) S.push('Saddle numbness, bladder or bowel change or leg weakness with back pain: see a doctor today. No exercise plan until checked.');
+ if(p.sym.includes('vision')) S.push('Sudden vision loss or new floaters: see an ophthalmologist urgently. If on semaglutide, mention it (NAION is a very rare side effect).');
+ if(p.sbp>=180||p.dbp>=110) S.push('Blood pressure 180/110 or higher: no exercise. See a doctor today.');
+ else if(p.sbp>=160||p.dbp>=100) o.warns.push('Blood pressure 160/100 or higher: light walking only until it is controlled. Book a review.');
+ if(p.bmi<18.5) S.push('BMI under 18.5: no calorie deficit. See a doctor or dietitian.');
+ if(p.sym.includes('ed')) S.push('History of an eating disorder: no calorie counting or deficit targets here. Work with a doctor and dietitian.');
+ if(p.has('chd')) o.warns.push('Heart disease: get cardiologist clearance and start in supervised cardiac rehab. Effort kept at "can talk in short sentences". No HIIT.');
+ if(p.has('ckd')) o.warns.push('Kidney disease: protein kept at 0.8 g/kg or less, no high-protein plan. Dietitian and nephrologist review.');
+ if(p.pregnant) o.warns.push('Pregnancy: no calorie deficit. Weight-gain targets and exercise follow ACOG 2020. Stop and call your obstetrician for bleeding, abdominal pain, regular painful contractions, fluid leakage, breathlessness before effort, dizziness, headache, chest pain, weakness affecting balance, or calf pain or swelling.');
+ if(p.preg==='pp0') o.warns.push('First 6 weeks after birth: walking, breathing, pelvic floor and deep core only. No calorie deficit.');
+ if(p.w('cs')) o.warns.push('Caesarean under 12 weeks: no high impact, running, heavy lifting, sit-ups or twisting ab work.');
+ if(p.bf) o.warns.push('Breastfeeding: extra calories are added, loss is capped at 0.5 kg a week, and intake never goes below 1,800 kcal. Feed or express before exercise.');
+ if(p.preg==='ttc'&&p.glp) o.warns.push('Trying to conceive on a GLP-1 drug: semaglutide should be stopped at least 2 months before conception. Tirzepatide can weaken oral contraceptives for 4 weeks after each dose change. Discuss with your obstetrician.');
+ if((p.pregnant||p.bf)&&p.glp) S.push('GLP-1 drugs are not recommended in pregnancy or breastfeeding. Speak to your doctor before anything else.');
+ if(p.med('ins')||p.med('su')) o.warns.push('Insulin or sulfonylurea: check glucose before exercise, carry glucose, no fasted vigorous sessions, no water-only fasts.');
+ if(p.med('sglt2')) o.warns.push('SGLT2 inhibitor: drink well, no keto or long fasts (ketoacidosis risk), stop for nausea, vomiting or belly pain.');
+ if(p.has('eye')||p.has('retino')) o.warns.push('Eye condition: no inversions, heavy lifting or breath-holding until the ophthalmologist clears you. Retinopathy needs eye checks when glucose falls fast.');
+ if(p.has('neuro')) o.warns.push('Foot neuropathy or ulcer: daily foot checks, closed shoes, prefer cycling or swimming over long walks.');
+ if(p.glp&&p.glpPhase==='start') o.warns.push('GLP-1 dose started or raised in the last 4 weeks: moderate intensity only, snack and fluids before sessions, expect nausea to peak after injection day.');
+
+ /* --- classification --- */
+ o.bmiCat=bmiCat(p.bmi);
+ o.stage=p.bmi<23?'Not overweight by Indian cut-offs':(p.hiWaist||p.cond.some(c=>['t2d','htn','fld','lipid','chd','pre'].includes(c))?'Stage 2 obesity (BMI over 23 plus high waist or related disease)':'Stage 1 obesity (BMI over 23, no abdominal obesity or disease yet)');
+ if(p.bmi<23&&p.hiWaist) o.stage='Normal BMI but high waist: abdominal obesity. Treat as Stage 2.';
+
+ /* --- diet --- */
+ const af={sed:1.2,light:1.375,lapsed:1.375,train:1.55}[p.act];
+ const bmr=p.sex==='M'?10*p.wt+6.25*p.ht-5*p.age+5:10*p.wt+6.25*p.ht-5*p.age-161;
+ let tdee=bmr*af;
+ let deficit=500, floor=p.sex==='M'?1500:1200, rate='0.5–1.0 kg a week', note=[];
+ const older=p.age>=60, old75=p.age>=75;
+ const noDeficit=p.pregnant||p.preg==='pp0'||p.bmi<18.5||p.sym.includes('ed')||p.has('ckd')&&false;
+ if(p.bmi>=32.5||p.target>=20){deficit=650;rate='up to 1 kg a week for the first 3–6 months';}
+ if(older&&!old75){deficit=Math.min(deficit,400);floor=p.sex==='M'?1500:1300;rate='0.25–0.5 kg a week';}
+ if(old75){deficit=p.bmi>=27?250:0;floor=1400;rate='0.25 kg a week at most';note.push('Over 75: a deficit is used only if BMI is 27 or more, and only with the doctor agreeing. Muscle and bone come first.');}
+ if(p.has('op')||p.has('sarco')||p.w('meno')) {deficit=Math.min(deficit,500);note.push('Bone or muscle risk: deficit capped at 500 kcal; rapid loss (over 14% of body weight) costs bone.');}
+ if(p.glp){deficit=0;note.push('On a GLP-1 drug: no fixed deficit. The drug cuts intake by 16–39% on its own. The job is to stay above the floor, hit protein and keep loss under 1.5 kg a week after month 2.');}
+ if(p.bf){tdee+=p.preg==='pp6'?600:520;floor=Math.max(floor,1800);deficit=Math.min(deficit,500);rate='0.5 kg a week at most';}
+ let kcal;
+ if(p.pregnant){kcal=p.preg==='t1'?tdee:tdee+350;deficit=0;rate='no loss; gain per IOM table';}
+ else if(noDeficit){kcal=tdee;deficit=0;rate='no deficit';}
+ else if(p.glp){kcal=Math.max(floor,tdee-500);}
+ else kcal=Math.max(floor,tdee-deficit);
+ kcal=r10(kcal); tdee=r10(tdee);
+ const idealWt=22*((p.ht/100)**2), adjWt=p.bmi>=30?idealWt+0.25*(p.wt-idealWt):p.wt;
+ let pk=1.2, pkWhy='active weight loss';
+ if(p.act==='train'){pk=1.6;pkWhy='training regularly';}
+ if(p.glp||older||p.has('sarco')||p.w('meno')){pk=Math.max(pk,1.4);pkWhy=p.glp?'GLP-1 drug: muscle protection':older?'age 60+':p.has('sarco')?'low muscle':'menopause';}
+ if(p.has('ckd')){pk=0.8;pkWhy='kidney disease: protein limited';}
+ if(p.pregnant){pk=1.1;pkWhy='pregnancy (RDA plus 8–18 g)';}
+ if(p.bf){pk=Math.max(pk,1.2);pkWhy='breastfeeding';}
+ let prot=Math.round(pk*adjWt);
+ if(p.pregnant) prot=Math.round(0.83*p.wt+(p.preg==='t3'?18:p.preg==='t2'?8:0));
+ if(p.bf) prot=Math.round(0.83*p.wt+(p.preg==='pp6'?13.6:10.6)+20);
+ const tmpl=[2100,1800,1500,1200].find(t=>t<=kcal)||1200;
+ o.diet={bmr:Math.round(bmr),tdee,kcal,deficit,floor,rate,prot,pk,pkWhy,adjWt:Math.round(adjWt),tmpl,note,
+  oil:kcal<=1500?'15–20 g (3–4 tsp)':'25–30 g (5–6 tsp)',protPerMeal:Math.round(prot/4)};
+ const dr=[];
+ if(p.has('t2d')) dr.push(['Type 2 diabetes','Carbs about 40–45% of calories from whole grains, millets and pulses. Pair every carb with protein and fibre. No juice or sweets. Walk 10–15 min after meals.','strong']);
+ if(p.has('pre')) dr.push(['Prediabetes','5–7% weight loss plus 150 min a week of activity cuts diabetes risk by about half (DPP).','strong']);
+ if(p.has('htn')||p.sbp>=140) dr.push(['Blood pressure','DASH-style eating. Salt under 5 g a day (Indians average 8–11 g). Cut papad, pickle, farsan, namkeen. Potassium-rich food (banana, coconut water, dal, spinach) unless kidney disease. Avoid alcohol.','strong']);
+ if(p.has('lipid')) dr.push(['Cholesterol / triglycerides','No vanaspati or trans fat; limit ghee and butter; rotate oils. 5–10 g soluble fibre (oats, isabgol). High triglycerides: cut sugar, maida and alcohol.','strong']);
+ if(p.has('fld')) dr.push(['Fatty liver','Aim for 7–10% weight loss. No sugary drinks or alcohol. Exercise helps the liver even before the weight moves.','strong']);
+ if(p.w('pcos')) dr.push(['PCOS','5–10% loss improves cycles and ovulation. Low-GI, high-fibre, high-protein pattern. No single best diet.','moderate']);
+ if(p.has('thy')||p.med('levo')) dr.push(['Hypothyroidism','Iodised salt. Levothyroxine on an empty stomach 30–60 min before breakfast, 4 hours away from calcium, iron and soy.','moderate']);
+ if(p.w('meno')||p.has('op')) dr.push(['Menopause / bone','Calcium 1,000–1,200 mg a day (milk, curd, ragi, sesame), vitamin D if low, protein 1.0–1.2 g/kg or more.','moderate']);
+ if(p.has('sarco')||older) dr.push(['Muscle after 60','25–30 g protein at each main meal, not all at dinner. Small deficit only. Strength training is compulsory.','moderate']);
+ if(p.has('chd')) dr.push(['Heart disease','Mediterranean or DASH pattern, salt under 5 g, fluid limit if the cardiologist has set one.','strong']);
+ if(p.has('ckd')) dr.push(['Kidney disease','Protein limited to 0.8 g/kg; potassium and salt as advised by the nephrologist. No potassium salt substitutes.','strong']);
+ o.dietRules=dr;
+ /* fasting */
+ const fastBlock=p.pregnant||p.bf||p.med('ins')||p.med('su')||p.med('sglt2')||p.glp||p.bmi<18.5||old75||p.sym.includes('ed');
+ if(p.fast==='farali') o.fast='Farali days: rajgira or sama with curd or paneer, peanuts and fruit. Sabudana 1 katori at most, nothing fried. The protein target still applies. Garba counts as moderate to vigorous exercise; eat a protein snack before it.'+(p.has('t2d')?' Check glucose on fasting days.':'');
+ if(p.fast==='jain') o.fast=fastBlock?'Water-only fasts are not safe for you (pregnancy, breastfeeding, diabetes medicines, GLP-1 drugs, age or weight). Ekasana or ayambil with dal, curd or milk is the safer form; discuss with your doctor.':'Break fasts with dal, curd or milk, not fried food. Keep one protein food in every eating window.';
+ if(p.fast==='ramadan') o.fast=(p.has('t2d')||p.med('ins')||p.med('su'))?'Diabetes and Ramadan: get a medicine review before the month starts (IDF-DAR guidance). Suhoor with protein and fibre; break the fast with water and dates, then a normal meal, not a feast.':'Suhoor with protein and fibre; iftar with water and dates, then a normal plate. Walk after iftar.';
+
+ /* --- pregnancy table --- */
+ if(p.pregnant){
+  const b=p.prebmi||p.bmi;
+  o.iom=b<18.5?['12.5–18 kg','0.44–0.58 kg/week']:b<25?['11.5–16 kg','0.35–0.50 kg/week']:b<30?['7–11.5 kg','0.23–0.33 kg/week']:['5–9 kg','0.17–0.27 kg/week'];
+ }
+
+ /* --- cardio --- */
+ const flags={};
+ const hasInj=j=>p.injCur.includes(j);
+ flags.knee=hasInj('knee');flags.hip=hasInj('hip');flags.back=hasInj('back');flags.ankle=hasInj('ankle');flags.shoulder=hasInj('shoulder');flags.wrist=hasInj('wrist');
+ flags.t1=p.preg==='t1';flags.t2=p.preg==='t2';flags.t3=p.preg==='t3';flags.pp0=p.preg==='pp0';flags.pp6=p.preg==='pp6';flags.cs=p.w('cs');
+ flags.old=old75;flags.htn=p.has('chd')||p.sbp>=160;flags.glp1=p.glp&&p.glpPhase==='start';flags.bmi32=p.bmi>=32.5;flags.neuro=p.has('neuro');flags.op=p.has('op');
+ const latent={};['knee','hip','back','ankle','shoulder','wrist'].forEach(j=>{if(!hasInj(j)&&p.injOld.includes(j)) latent[j]=true;});
+ const order={X:0,C:1,A:2,R:3};
+ let base=RANKBASE.none;
+ if(p.pregnant) base=RANKBASE.preg; else if(p.pp) base=RANKBASE.pp0;
+ else if(flags.knee) base=RANKBASE.knee; else if(flags.hip) base=RANKBASE.hip; else if(flags.back) base=RANKBASE.back; else if(flags.ankle) base=RANKBASE.ankle; else if(flags.shoulder) base=RANKBASE.shoulder;
+ else if(flags.bmi32) base=RANKBASE.bmi32; else if(old75) base=RANKBASE.old; else if(p.act==='train') base=RANKBASE.train;
+ const rows=base.map(k=>{
+  let worst='R', reasons=[];
+  SUITCOLS.forEach((c,i)=>{
+   let v=SUIT[k][i];
+   let on=flags[c];
+   if(!on&&latent[c]){on=true;if(v==='C')v='A';}
+   if(!on)return;
+   if(order[v]<order[worst])worst=v;
+   if(v==='C'||v==='X')reasons.push(c);
+  });
+  if(p.act==='sed'&&['run','rope','hiitHi'].includes(k)&&order[worst]>1){worst='C';reasons.push('untrained');}
+  if(p.bmi>=30&&k==='run'&&order[worst]>1){worst='C';reasons.push('BMI 30+');}
+  if(!p.equip.includes('pool')&&['swim','aqua'].includes(k)) reasons.push('needs pool');
+  return {k,worst,reasons};
+ });
+ rows.sort((a,b)=>order[b.worst]-order[a.worst]||base.indexOf(a.k)-base.indexOf(b.k));
+ o.cardio=rows;
+ /* volume */
+ let startWk={sed:1,light:3,lapsed:3,train:7}[p.act];
+ let slow=old75||p.bmi>=32.5||p.has('chd')||p.pregnant||p.pp;
+ let weeklyGoal=p.pregnant||p.preg==='pp0'?150:p.act==='train'?300:250;
+ if(p.time<150) weeklyGoal=Math.min(weeklyGoal,p.time-60);
+ o.vol={startWk,slow,weeklyGoal,maint:'200–300 min a week',perMin:k=>Math.round(CARDIO[k].met*p.wt*3.5/200)};
+ o.build=[[1,2,5,'10–15',50,75,'3–4 can sing'],[3,4,5,'20',100,100,'4'],[5,6,5,'25–30',125,150,'4–5 talk in sentences'],[7,8,'5–6','30–35',150,200,'5 + two 1-min faster bits'],[9,10,'5–6','35–40',200,240,'5–6, four 2-min intervals'],[11,12,'5–6','40–50',250,300,'5–6, one 60-min session']];
+
+ /* --- resistance --- */
+ let eq='body';
+ if(p.equip.includes('gym'))eq='gym';else if(p.equip.includes('db'))eq='db';else if(p.equip.includes('bands'))eq='bands';
+ let lvl=p.act==='train'?'int':'beg';
+ if(p.act==='train'&&p.injCur.length===0&&!p.pregnant&&!p.pp&&p.age<60)lvl='adv';
+ if(older)lvl='older';
+ if(p.has('htn')||p.sbp>=140||p.has('chd'))lvl='htn';
+ if(p.preg==='pp0')lvl=null;
+ const mods=[];
+ ['knee','hip','back','shoulder','neck','wrist','ankle'].forEach(j=>{if(hasInj(j))mods.push([j,RT_MODS[j]]);});
+ Object.keys(latent).forEach(j=>{if(RT_MODS[j])mods.push([j+' (old injury)',['Pain-free for 3 months: full programme, but progress load slowly and keep the rehab exercises as a warm-up.']]);});
+ if(p.has('op'))mods.push(['osteoporosis',RT_MODS.op]);
+ if(p.has('htn')||p.sbp>=140)mods.push(['blood pressure',RT_MODS.htn]);
+ if(p.has('eye'))mods.push(['eye',RT_MODS.eye]);
+ if(p.has('retino'))mods.push(['retinopathy',RT_MODS.retino]);
+ if(p.med('ins')||p.med('su'))mods.push(['insulin / sulfonylurea',RT_MODS.hypo]);
+ if(p.med('sglt2'))mods.push(['SGLT2',RT_MODS.sglt2]);
+ if(p.med('statin'))mods.push(['statin',RT_MODS.statin]);
+ if(p.med('bb'))mods.push(['beta-blocker',RT_MODS.bb]);
+ if(p.pregnant)mods.push(['pregnancy',RT_MODS.preg]);
+ if(p.preg==='pp0')mods.push(['postpartum 0–6 weeks',RT_MODS.pp0]);
+ if(p.preg==='pp6')mods.push(['postpartum',RT_MODS.pp6]);
+ if(p.w('cs'))mods.push(['caesarean',RT_MODS.cs]);
+ if(p.w('dr'))mods.push(['diastasis',RT_MODS.dr]);
+ if(p.w('pf'))mods.push(['pelvic floor',RT_MODS.pf]);
+ if(old75)mods.push(['age 75+',RT_MODS.old75]);
+ if(p.has('chd'))mods.push(['heart',RT_MODS.chd]);
+ if(p.has('neuro'))mods.push(['feet',RT_MODS.neuro]);
+ o.rt={eq,lvl,mods,glp:p.glp};
+
+ /* --- yoga --- */
+ let y='general';
+ if(p.has('t2d')||p.w('pcos')||p.has('fld')||p.has('pre'))y='metabolic';
+ if(hasInj('back')||p.injOld.includes('back'))y='back';
+ if(hasInj('back')&&p.sym.includes('backred'))y='disc';
+ if(p.w('meno')&&!hasInj('back'))y='restore';
+ if(p.has('htn')||p.has('chd')||p.has('eye')||p.has('retino')||p.sbp>=140)y='gentle';
+ if(hasInj('knee')||old75)y='chair';
+ if(p.preg==='t1')y='gentle';
+ if(p.preg==='t2'||p.preg==='t3')y='prenatal';
+ if(p.pp)y='pp';
+ o.yoga=y;
+ const yav=[];
+ if(p.has('htn')||p.has('chd')||p.has('eye')||p.has('retino')||p.sbp>=140)yav.push('no inversions (headstand, shoulder stand, plough, long downward dog), no Kapalbhati, Bhastrika or breath-holding');
+ if(p.pregnant)yav.push('no lying flat on the back after the 1st trimester, no deep or closed twists, deep backbends, belly-down poses, inversions, hot yoga or Kapalbhati');
+ if(p.pp)yav.push('no Kapalbhati for the first 3 months; no boat pose, deep backbends or twists until 12 weeks after a caesarean');
+ if(hasInj('back')||p.has('op'))yav.push('no deep forward bends, loaded twists, plough or shoulder stand');
+ if(hasInj('neck'))yav.push('no headstand, shoulder stand or plough');
+ if(hasInj('knee')||old75)yav.push('no Vajrasana, Padmasana or deep squats');
+ if(hasInj('wrist'))yav.push('use fists or blocks under the hands');
+ o.yogaAvoid=yav;
+
+ /* --- rehab --- */
+ const rh=[];
+ ['knee','hip','back','ankle','shoulder','neck','wrist'].forEach(j=>{if(hasInj(j))rh.push(REHAB[j]);});
+ if(p.w('pf')||p.pp)rh.push(REHAB.pf);
+ if(p.w('dr'))rh.push(REHAB.dr);
+ o.rehab=rh;
+
+ /* --- special modules --- */
+ o.glpModule=p.glp;
+ o.glpStopped=p.glpPhase==='stopped';
+ o.t2d=p.has('t2d')||p.has('pre')||p.med('ins')||p.med('su');
+
+ /* --- timeline --- */
+ const wk=p.target>0&&deficit>0?Math.round(p.target/(deficit>=600?0.75:older?0.4:0.5)):null;
+ o.timeline=wk;
+
+ /* --- referrals --- */
+ const R=o.refer;
+ if(p.injCur.length)R.push('Physiotherapist if pain is above 5/10, a joint swells or gives way, or there is no progress in 6 weeks.');
+ if(p.w('pf')||p.w('dr')||p.w('cs'))R.push('Pelvic-health physiotherapist for leakage, heaviness, doming or post-caesarean pain.');
+ R.push('Dietitian or doctor if loss is faster than 1.5 kg a week after month 2, or intake stays below the calorie floor for a week.');
+ if(p.glp)R.push('Doctor urgently for vomiting over 24 hours, severe belly pain or fainting on a GLP-1 drug.');
+ if(p.has('t2d')||p.med('ins')||p.med('su'))R.push('Doctor for glucose under 70 mg/dL more than once, or over 300.');
+ if(old75||p.has('sarco'))R.push('Physiotherapy falls programme if you cannot do 8 chair stands in 30 seconds, or have fallen.');
+ if(p.glpPhase==='stopped')R.push('Doctor or dietitian if regain passes 5% of body weight after stopping the GLP-1 drug.');
+ return o;
+}
+
+/* ---------- RENDER ---------- */
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const li=a=>a.map(x=>'<li>'+esc(x)+'</li>').join('');
+const ev=s=>'<span class="pill ev-'+(s==='strong'?'strong':s==='moderate'?'mod':'weak')+'">'+s+' evidence</span>';
+const pillTxt={R:'Recommended',A:'Allowed',C:'Caution',X:'Avoid'};
+const flagName={knee:'knee',hip:'hip',back:'back',ankle:'ankle',shoulder:'shoulder',wrist:'wrist',t1:'1st trimester',t2:'2nd trimester',t3:'3rd trimester',pp0:'first 6 weeks postpartum',pp6:'postpartum',cs:'caesarean',old:'age 75+',htn:'heart / BP',glp1:'new GLP-1 dose',bmi32:'BMI 32.5+',neuro:'feet',op:'bones',untrained:'untrained',needs_pool:'needs pool','BMI 30+':'BMI 30+','needs pool':'needs pool'};
+
+function render(){
+ const p=read(), o=compute(p);
+ const blocked=o.stops.length>0;
+ let h='';
+ /* safety */
+ h+='<section class="card"><h2><span class="eyebrow">01</span>Safety first</h2>';
+ if(blocked) h+='<div class="banner"><h3>Stop. Get checked before using this plan.</h3><ul>'+li(o.stops)+'</ul></div>';
+ if(o.warns.length) h+='<div class="banner warn"><h3>Rules that change your plan</h3><ul>'+li(o.warns)+'</ul></div>';
+ if(!blocked&&!o.warns.length) h+='<div class="banner ok"><h3>No hard stops.</h3><p>Answer the PAR-Q+ honestly with your doctor if anything changes. Stop any session for chest pain, dizziness, unusual breathlessness or sharp joint pain.</p></div>';
+ h+='<div class="stats"><div class="stat"><div class="k">BMI (Indian)</div><div class="v">'+p.bmi.toFixed(1)+'</div><div class="n">'+esc(o.bmiCat)+'</div></div>';
+ h+='<div class="stat"><div class="k">Waist</div><div class="v">'+(p.waist||'—')+' cm</div><div class="n">'+(p.waist?(p.hiWaist?'high (limit '+(p.sex==='F'?80:90)+')':'within limit'):'not entered')+'</div></div>';
+ h+='<div class="stat"><div class="k">Waist / height</div><div class="v">'+(p.whtr?p.whtr.toFixed(2):'—')+'</div><div class="n">'+(p.whtr>0.5?'above 0.5':'keep under 0.5')+'</div></div></div>';
+ h+='<p><b>'+esc(o.stage)+'</b></p>';
+ if(blocked){h+='<p class="small" style="margin-top:8px">The rest of the plan is shown for reference only.</p>';}
+ h+='</section>';
+
+ /* diet */
+ const d=o.diet;
+ h+='<section class="card"><h2><span class="eyebrow">02</span>Food</h2>';
+ h+='<div class="stats">';
+ h+='<div class="stat"><div class="k">Maintenance</div><div class="v">'+d.tdee+'</div><div class="n">kcal/day (Mifflin-St Jeor)</div></div>';
+ h+='<div class="stat"><div class="k">Daily target</div><div class="v">'+d.kcal+'</div><div class="n">'+(d.deficit?'deficit '+d.deficit+'; floor '+d.floor:p.pregnant?'no deficit':p.glpModule||o.glpModule?'floor '+d.floor+', no fixed deficit':'no deficit')+'</div></div>';
+ h+='<div class="stat"><div class="k">Protein</div><div class="v">'+d.prot+' g</div><div class="n">'+d.pk+' g/kg, '+esc(d.pkWhy)+(d.adjWt!==Math.round(p.wt)?' (adjusted weight '+d.adjWt+' kg)':'')+'</div></div>';
+ h+='<div class="stat"><div class="k">Rate of loss</div><div class="v" style="font-size:1rem">'+esc(d.rate)+'</div><div class="n">'+(o.timeline?'about '+o.timeline+' weeks for '+p.target+' kg':'')+'</div></div></div>';
+ h+='<div class="two"><div><h3>Daily rules</h3><ul class="tight">';
+ h+='<li>Protein '+d.protPerMeal+'–'+(d.protPerMeal+8)+' g at each of 3 main meals, plus 1–2 protein snacks. Not all at dinner.</li>';
+ h+='<li>Half the plate vegetables, a quarter protein, a quarter whole grain or millet (bajra, jowar, ragi).</li>';
+ h+='<li>Oil '+d.oil+' a day. Salt under 5 g. Added sugar under 25 g.</li>';
+ h+='<li>Fibre 25–35 g. Fluids 2–2.5 litres.</li>';
+ h+='<li>Portions: 1 rotli = palm-size, 1 katori = 150 ml, protein = palm, fruit = fist, nuts = small cupped palm, oil = 1 tsp.</li>';
+ h+='<li>Weigh weekly. Recheck the target every 4 weeks against real loss.</li>';
+ h+='</ul>';
+ if(d.note.length)h+='<div class="note">'+esc(d.note.join(' '))+'</div>';
+ h+='</div><div>';
+ if(o.dietRules.length){h+='<h3>For your conditions</h3><ul class="tight">'+o.dietRules.map(r=>'<li><b>'+esc(r[0])+':</b> '+esc(r[1])+' '+ev(r[2])+'</li>').join('')+'</ul>';}
+ if(o.fast)h+='<h3 style="margin-top:8px">Fasting days</h3><p class="small">'+esc(o.fast)+'</p>';
+ h+='</div></div>';
+ if(o.iom){h+='<div class="note"><b>Pregnancy weight gain (IOM 2009, from pre-pregnancy BMI '+(p.prebmi||p.bmi).toFixed(1)+'):</b> total '+o.iom[0]+'; '+o.iom[1]+' in the 2nd and 3rd trimesters; 0.5–2 kg in the 1st. Extra 350 kcal/day from the 2nd trimester. Folic acid before conception and through the 1st trimester; iron-folic acid and calcium from the 2nd. Avoid alcohol, unpasteurised milk or paneer, raw egg, meat or fish, liver, high-mercury fish, caffeine over 200 mg a day.</div>';}
+ /* template */
+ h+='<details><summary>Sample day at '+d.tmpl+' kcal ('+esc({veg:'vegetarian',jain:'Jain',vegan:'vegan',egg:'eggetarian',nonveg:'non-vegetarian'}[p.diet])+')</summary>';
+ h+='<div class="tbl"><table><tr><th>Meal</th><th>1,200 kcal base</th></tr>'+DAY1200[p.diet].map((m,i)=>'<tr><td>'+MEALNAMES[i]+'</td><td>'+esc(m)+'</td></tr>').join('')+'</table></div>';
+ if(d.tmpl>1200){const s=SCALE[d.tmpl];h+='<p class="small" style="margin-top:6px"><b>To reach '+d.tmpl+' kcal, add across the day:</b> rotli '+s.rot+'; dal or legumes '+s.dal+'; milk, curd or soy '+s.milk+'; '+esc(s.pro)+'; nuts '+s.nuts+'; oil '+s.oil+'. Protein comes to about '+s.prot+'.</p>';}
+ else h+='<p class="small" style="margin-top:6px">Oil 3 tsp. Protein about 65–75 g; top up with a milk, curd, soy or whey serving if your target is higher.</p>';
+ if(p.diet==='jain')h+='<p class="small">Jain: no root vegetables, eggs, meat or honey. Dinner before sunset is built in.</p>';
+ h+='</details>';
+ h+='<details><summary>Protein sources that fit your diet</summary><div class="tbl"><table><tr><th>Food</th><th>Portion</th><th class="num">kcal</th><th class="num">Protein g</th></tr>'+PROT[p.diet].map(r=>'<tr><td>'+r[0]+'</td><td>'+r[1]+'</td><td class="num">'+r[2]+'</td><td class="num">'+r[3]+'</td></tr>').join('')+'</table></div><p class="small">Values are approximate; check against IFCT 2017. Food first; plain whey or soy powder only if you cannot reach the target.</p></details>';
+ const sw=p.cuisine==='guj'?SWAPS_GUJ:p.cuisine==='ind'?SWAPS_IND:SWAPS_INTL;
+ h+='<details><summary>Swaps that save the most</summary><div class="tbl"><table><tr><th>Instead of</th><th>Swap to</th><th>Saves</th></tr>'+sw.map(r=>'<tr><td>'+esc(r[0])+'</td><td>'+esc(r[1])+'</td><td>'+esc(r[2])+'</td></tr>').join('')+'</table></div></details>';
+ h+='</section>';
+
+ /* GLP-1 module */
+ if(o.glpModule||o.glpStopped){
+  h+='<section class="card"><h2><span class="eyebrow">02b</span>On a GLP-1 or tirzepatide</h2>';
+  if(o.glpModule){
+   h+='<div class="two"><div><h3>Eating on the drug</h3><ul class="tight">';
+   h+=li(['Protein first at every meal: 20–30 g, 4–5 small meals.','Small, low-fat meals. No fried farsan or heavy ghee. Stop at first fullness. Do not lie down for 2–3 hours after eating.','Nausea: dry snacks (khakhra, roasted chana), ginger, cold or bland food, sip fluids between meals rather than with them.','Constipation: raise fibre slowly to 25–35 g, 2–2.5 L fluid, isabgol at night, daily walk.','Hydration 2–2.5 L or more; more in summer or on an SGLT2 drug. Dizziness: ask about lowering BP medicines.','Never below '+d.floor+' kcal for more than a week. If you cannot eat enough, use milk, curd, a soy or whey shake.','Multivitamin is reasonable. Check B12 if vegetarian or on metformin. Watch for extreme tiredness, heavy hair loss, flaky skin, easy bruising.']);
+   h+='</ul></div><div><h3>Keeping muscle</h3><ul class="tight">';
+   h+=li(['In the semaglutide STEP 1 trial, 38% of weight lost was lean tissue. Resistance training at least 2–3 days a week is not optional on these drugs.','Protein '+d.prot+' g a day ('+d.pk+' g/kg).','Track the 30-second sit-to-stand count monthly. If it falls, muscle is going.','In a 2021 NEJM trial, exercise plus liraglutide kept weight off better than the drug alone, and regain after stopping was 5 kg less.','Keep cardio moderate for 2–4 weeks after each dose increase. Snack and fluids before sessions.']);
+   h+='</ul></div></div>';
+   h+='<div class="banner warn" style="margin-top:10px"><h3>See a doctor for</h3><ul>'+li(['Severe belly pain (pancreas or gallbladder).','Vomiting over 24 hours.','Low glucose if also on insulin or a sulfonylurea; the doctor may lower those doses.','Sudden painless vision loss (very rare NAION risk with semaglutide).','Diabetic retinopathy: eye checks, because fast glucose lowering can briefly worsen it.'])+'</ul></div>';
+  }
+  h+='<h3 style="margin-top:10px">After stopping</h3><p class="small">In the STEP 1 extension, people regained about two-thirds of what they lost within a year. In SURMOUNT-4, those switched to placebo regained 14% of body weight in 52 weeks. About two in three people without diabetes stop within a year in real-world data. The drug does the first year; muscle, habits and a maintenance plan do the rest.</p><ul class="tight">'+li(['Protein 1.2 g/kg or more, kept up.','200–300 minutes of activity a week plus strength training 2–3 days.','Weigh weekly. If 2 kg comes back: a 2-week reset of food logging and 30 extra minutes of activity.','Doctor review if regain passes 5% of body weight.'])+'</ul>';
+  h+='</section>';
+ }
+
+ /* cardio */
+ h+='<section class="card"><h2><span class="eyebrow">03</span>Cardio, ranked for you</h2>';
+ h+='<p class="small">Ranked by joint load, your injuries and conditions, then by how easy each is to keep doing. Calorie figures use your weight. Pick two or three from the top; add one as variety.</p>';
+ h+='<ol class="rank tight">';
+ o.cardio.forEach(r=>{const c=CARDIO[r.k];h+='<li><span class="pill '+r.worst+'">'+pillTxt[r.worst]+'</span> <b>'+c.n+'</b> <span class="small">· ~'+o.vol.perMin(r.k)+' kcal/min · knee load '+esc(c.knee)+'</span><br><span class="small">'+esc(c.why)+(r.reasons.length?' <i>'+esc('Flagged for: '+[...new Set(r.reasons)].map(x=>flagName[x]||x).join(', '))+'.</i>':'')+'</span></li>';});
+ h+='</ol>';
+ h+='<div class="stats" style="margin-top:12px"><div class="stat"><div class="k">Weekly goal</div><div class="v">'+o.vol.weeklyGoal+' min</div><div class="n">moderate (can talk, not sing)</div></div><div class="stat"><div class="k">Start at</div><div class="v">week '+o.vol.startWk+'</div><div class="n">of the build below</div></div><div class="stat"><div class="k">Maintenance</div><div class="v" style="font-size:1rem">'+o.vol.maint+'</div><div class="n">what keeps weight off</div></div></div>';
+ h+='<details><summary>12-week build'+(o.vol.slow?' (stretch each block to 3 weeks: 16–20 weeks total)':'')+'</summary><div class="tbl"><table><tr><th>Weeks</th><th>Sessions</th><th>Minutes each</th><th class="num">Weekly total</th><th>Effort (0–10)</th></tr>'+o.build.map(b=>'<tr'+(b[0]===o.vol.startWk?' style="background:var(--soft)"':'')+'><td>'+b[0]+'–'+b[1]+'</td><td>'+b[2]+'</td><td>'+b[3]+'</td><td class="num">'+b[4]+'–'+b[5]+'</td><td>'+b[6]+'</td></tr>').join('')+'</table></div><p class="small">Raise weekly minutes by no more than 10–20%. Change time before intensity. If tiredness lasts over 48 hours, repeat the block. Vigorous minutes count double. Walking 10–15 minutes after each meal counts and helps glucose.</p></details>';
+ h+='</section>';
+
+ /* resistance */
+ const rt=o.rt;
+ h+='<section class="card"><h2><span class="eyebrow">04</span>Strength training</h2>';
+ if(rt.lvl===null){h+='<p>First 6 weeks after birth: breathing, pelvic floor and gentle walking only. Strength training returns after the 6-week check.</p>';}
+ else{
+  const L=RT_LEVEL[rt.lvl];
+  h+='<p class="small">'+(rt.glp?'<b>Compulsory on GLP-1 drugs.</b> ':'')+'Without it, a quarter to a third of what you lose is muscle. Two days a week is enough to start.</p>';
+  h+='<div class="stats"><div class="stat"><div class="k">Level</div><div class="v" style="font-size:1rem">'+esc(L.n)+'</div></div><div class="stat"><div class="k">Frequency</div><div class="v" style="font-size:1rem">'+esc(L.freq)+'</div></div><div class="stat"><div class="k">Sets and reps</div><div class="v" style="font-size:1rem">'+esc(L.sets)+'</div></div><div class="stat"><div class="k">Effort</div><div class="v" style="font-size:1rem">'+esc(L.effort)+'</div><div class="n">rest '+esc(L.rest)+'</div></div></div>';
+  h+='<h3>Programme: '+({body:'bodyweight',bands:'resistance bands',db:'dumbbells',gym:'gym'}[rt.eq])+'</h3><div class="tbl"><table><tr><th>Movement</th><th>Exercise (easy → harder)</th></tr>'+RT_PROG[rt.eq].map(r=>'<tr><td>'+r[0]+'</td><td>'+esc(r[1])+'</td></tr>').join('')+'</table></div>';
+  h+='<p class="small" style="margin-top:6px"><b>Progress rule:</b> when you reach the top of the rep range on every set with good form twice in a row, go one step up: next dumbbell or band, a harder version, or one more set. If pain is above 3/10 during or the next day, go one step back. Do all movements each session; alternate two slightly different sessions (A and B).</p>';
+  h+='<div class="proto"><b>How to do the basics.</b> Sit-to-stand: feet hip-width, lean forward, stand without hands, sit down over 3 seconds. Glute bridge: knees bent, squeeze buttocks, lift hips into a straight line, hold 2 seconds. Row: pull elbows back, squeeze shoulder blades. Dead bug: on your back, lower opposite arm and leg slowly while the low back stays pressed down.</div>';
+  if(p.pool&&false){}
+  if(p.equip.includes('pool'))h+='<p class="small" style="margin-top:6px">Pool: water walking, squats and arm pushes in chest-deep water make a good extra session, but keep 2 land sessions a week for bone and muscle.</p>';
+ }
+ if(rt.mods.length){h+='<h3 style="margin-top:10px">Changes for you</h3><ul class="tight">'+rt.mods.map(m=>'<li><b>'+esc(m[0])+':</b> '+esc(m[1].join(' '))+'</li>').join('')+'</ul>';}
+ if(p.age>=60)h+='<div class="note">Balance on 3 days a week: tandem stand 30 s, single-leg stand at a wall 10–30 s each side, heel-to-toe walking 10 steps. Add power (stand up fast, sit slow) once steady. This is what prevents falls.</div>';
+ h+='</section>';
+
+ /* yoga */
+ const Y=YOGA[o.yoga];
+ h+='<section class="card"><h2><span class="eyebrow">05</span>Yoga</h2><p class="small">Yoga adds little to weight loss on its own; it helps sleep, stress, back pain and blood pressure, and it keeps people in the habit. 20–30 minutes, 3–6 days a week, in the evening or on strength rest days.</p>';
+ h+='<h3>'+esc(Y.n)+'</h3><ol class="tight">'+li(Y.seq)+'</ol>';
+ if(o.yoga!=='prenatal'&&o.yoga!=='pp'&&o.yoga!=='gentle')h+='<p class="small" style="margin-top:6px"><b>Surya Namaskar progression:</b> weeks 1–2, 2–4 slow rounds (knee-down plank, half squat); weeks 3–4, 4–6 rounds; weeks 5–8, 6–12 rounds; after 8 weeks, 12–24 faster rounds count as cardio. Use fists if wrists hurt; the chair version if knees hurt.</p>';
+ h+='<p class="small" style="margin-top:6px"><b>Breathing:</b> Anulom-Vilom and Bhramari suit everyone. Kapalbhati, Bhastrika and breath-holding are avoided in pregnancy, high blood pressure, heart disease, glaucoma, hernia, recent abdominal or eye surgery, epilepsy and the first 3 months postpartum.</p>';
+ if(o.yogaAvoid.length)h+='<div class="banner warn" style="margin-top:8px"><h3>Avoid</h3><ul>'+li(o.yogaAvoid)+'</ul></div>';
+ h+='</section>';
+
+ /* rehab */
+ if(o.rehab.length){
+  h+='<section class="card"><h2><span class="eyebrow">06</span>Rehab to run alongside</h2><p class="small">Do these daily or on strength days as the warm-up. Pain up to 3/10 that settles within 24 hours is acceptable. Stop for sharp pain, swelling, giving way or pain above 5/10.</p>';
+  o.rehab.forEach(r=>{h+='<div class="proto"><b>'+esc(r.t)+'</b><ul class="tight">'+li(r.p)+'</ul><p class="small" style="margin-top:4px"><b>See a doctor for:</b> '+esc(r.red)+'</p></div>';});
+  h+='</section>';
+ }
+
+ /* diabetes module */
+ if(o.t2d){
+  h+='<section class="card"><h2><span class="eyebrow">07</span>Glucose and exercise</h2><ul class="tight">'+li(['150 minutes or more a week over at least 3 days, never 2 days off in a row. Strength 2–3 days on non-consecutive days (ADA).','A 10–15 minute walk after each meal lowers the after-meal spike more than one long walk.','Insulin or sulfonylurea: glucose under 100 mg/dL before exercise means 15–20 g carbs first; over 250 with ketones or feeling unwell means no exercise. Lows can come hours later, so check at bedtime.','Feet: check daily, closed shoes outdoors, soft footwear at home and in the temple instead of bare feet.','Eye exam yearly. Proliferative retinopathy: no vigorous exercise, heavy lifting or head-down positions until cleared.','Hydration matters more on an SGLT2 drug.'])+'</ul></section>';
+ }
+
+ /* habits */
+ h+='<section class="card"><h2><span class="eyebrow">'+(o.t2d?'08':'07')+'</span>Habits that keep it off</h2><div class="two"><div><ul class="tight">'+li(['Weigh weekly, same day, same time. Log food at least 3 days a week.','Steps: add 1,000 a day every 2 weeks up to 7,000–10,000. Benefit flattens around 6,000–8,000 after 60.','Sleep 7–9 hours. Short sleep predicted regain at 1 year in the S-LITE trial.','Attach each new habit to something you already do: walk after lunch, pelvic floor at every red light, protein with the morning tea. A habit takes about 66 days to become automatic.','Festival weeks count as maintenance weeks: one plate, one sweet, a 15-minute walk after.','After every 8–10% lost, take a 4–8 week maintenance break at the new weight before cutting again.'])+'</ul></div><div><h3>What the long-term keepers do</h3><p class="small">People in the US National Weight Control Registry (average 30 kg lost, kept off 5+ years) eat breakfast, weigh weekly, watch little TV, and do about an hour of activity most days, mostly walking. This is an observational group, so it shows habits that go with success, not proof.</p>'+(o.timeline?'<p class="small" style="margin-top:6px"><b>Your timeline:</b> about '+o.timeline+' weeks for '+p.target+' kg, plateaus included. '+(p.target>=20?'Twenty kilos or more is usually 9–12 months; medical review along the way is sensible.':'')+(p.target>=30?' Thirty kilos or more usually takes 12–24 months and often needs a conversation about medicines or surgery.':'')+'</p>':'')+'<h3 style="margin-top:8px">If weight comes back</h3><p class="small">The 2 kg rule: when 2 kg returns, run a 2-week reset of food logging and 30 extra minutes a week. A lapse is data, not failure.</p></div></div></section>';
+
+ /* referrals */
+ h+='<section class="card"><h2><span class="eyebrow">'+(o.t2d?'09':'08')+'</span>When to get help</h2><ul class="tight">'+li(o.refer)+'</ul></section>';
+
+ $('out').innerHTML=h;
+ $('fsWomen').style.display=p.sex==='M'?'none':'';
+ try{localStorage.setItem('lifestyleRx',JSON.stringify(serialize()));}catch(e){}
+}
+
+/* ---------- persistence, sample, copy ---------- */
+const FIELDS=['sex','age','ht','wt','waist','target','act','time','preg','prebmi','sbp','dbp','glpPhase','diet','cuisine','fast'];
+const GROUPS=['equip','injCur','injOld','wom','cond','meds','sym'];
+function serialize(){const s={};FIELDS.forEach(f=>s[f]=$(f).value);GROUPS.forEach(g=>s[g]=checked(g));return s;}
+function apply(s){FIELDS.forEach(f=>{if(s[f]!==undefined)$(f).value=s[f];});GROUPS.forEach(g=>{document.querySelectorAll('#'+g+' input').forEach(i=>{i.checked=(s[g]||[]).includes(i.value);});});}
+const SAMPLE={sex:'M',age:52,ht:170,wt:92,waist:104,target:20,act:'sed',time:180,preg:'none',prebmi:'',sbp:138,dbp:88,glpPhase:'stable',diet:'veg',cuisine:'guj',fast:'farali',equip:['bands'],injCur:['knee'],injOld:['back'],wom:[],cond:['t2d','fld'],meds:['tirz','met'],sym:[]};
+$('btnSample').addEventListener('click',()=>{apply(SAMPLE);render();toast('Example profile loaded');});
+$('btnReset').addEventListener('click',()=>{$('profile').reset();document.querySelectorAll('#profile input[type=checkbox]').forEach(i=>i.checked=false);render();});
+$('btnCopy').addEventListener('click',()=>{const t=$('out').innerText;const done=()=>toast('Plan copied');const fail=()=>{const r=document.createRange();r.selectNodeContents($('out'));const s=getSelection();s.removeAllRanges();s.addRange(r);toast('Select-all done; press copy');};
+ if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done,fail);}else fail();});
+function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800);}
+$('profile').addEventListener('input',render);
+$('profile').addEventListener('change',render);
+$('profile').addEventListener('submit',e=>e.preventDefault());
+let saved=null;try{saved=JSON.parse(localStorage.getItem('lifestyleRx'));}catch(e){}
+if(saved)apply(saved);else apply(SAMPLE);
+render();
+})();
+</script>
+
+</body>
+</html>
