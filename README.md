@@ -10,8 +10,9 @@ No server, no login, no subscription. Each tool is a single HTML file that runs 
 | **Protein Planner 2.1** | `protein/index.html` | The patient's phone: daily protein from home food, with low-cost supplements only to fill the gap |
 | **Aahar 1.2.1** | `me/index.html` | Anyone's phone: BMI, daily targets, ICMR "My Plate", tap what you ate, the basic rules — self-care, no doctor needed |
 | **Lifestyle Rx 1.3** | `lifestyle/index.html` | Weight-loss planner with a Learn section: calories and protein, cardio ranked by joint load, strength, yoga, rehab; rules for GLP-1 drugs, diabetes, hypertension, injuries, pregnancy and older age |
+| **BMI & Pregnancy Weight Gain** | `bmi/index.html` | Quick phone calculator: Indian adult BMI and pregnancy weight gain |
 
-Live copies: https://coolboss.github.io/madhuvan-nutrition/ · https://coolboss.github.io/madhuvan-nutrition/protein/ · https://coolboss.github.io/madhuvan-nutrition/me/ · https://coolboss.github.io/madhuvan-nutrition/lifestyle/
+Live copies: https://coolboss.github.io/madhuvan-nutrition/ · https://coolboss.github.io/madhuvan-nutrition/protein/ · https://coolboss.github.io/madhuvan-nutrition/me/ · https://coolboss.github.io/madhuvan-nutrition/lifestyle/ · https://coolboss.github.io/madhuvan-nutrition/bmi/
 
 Built by Dr Rajesh Parikh, obstetrician, Vadodara, with Claude, for his own practice; shared in the hope it is useful to other small clinics and nursing homes.
 
