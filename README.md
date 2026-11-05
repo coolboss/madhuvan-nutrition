@@ -9,7 +9,7 @@ No server, no login, no subscription. Each tool is a single HTML file that runs 
 | **Nutrition Workstation 3.6** | `index.html` | The clinic desk: assessment, targets, diet plan, recall, labs, glucose diary, patient sheets |
 | **Protein Planner 2.1** | `protein/index.html` | The patient's phone: daily protein from home food, with low-cost supplements only to fill the gap |
 | **Aahar 1.1** | `me/index.html` | Anyone's phone: BMI, daily targets, ICMR "My Plate", tap what you ate, the basic rules — self-care, no doctor needed |
-| **Lifestyle Rx 1.1** | `lifestyle/index.html` | Weight-loss planner with a Learn section: calories and protein, cardio ranked by joint load, strength, yoga, rehab; rules for GLP-1 drugs, diabetes, hypertension, injuries, pregnancy and older age |
+| **Lifestyle Rx 1.2** | `lifestyle/index.html` | Weight-loss planner with a Learn section: calories and protein, cardio ranked by joint load, strength, yoga, rehab; rules for GLP-1 drugs, diabetes, hypertension, injuries, pregnancy and older age |
 
 Live copies: https://coolboss.github.io/madhuvan-nutrition/ · https://coolboss.github.io/madhuvan-nutrition/protein/ · https://coolboss.github.io/madhuvan-nutrition/me/ · https://coolboss.github.io/madhuvan-nutrition/lifestyle/
 

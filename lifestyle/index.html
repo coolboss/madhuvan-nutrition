@@ -246,7 +246,7 @@ footer ul{padding-left:18px;margin:6px 0}
       <label class="f"><span class="l">Diet type</span>
         <select id="diet"><option value="veg">Vegetarian</option><option value="jain">Jain</option><option value="vegan">Vegan</option><option value="egg">Eggetarian</option><option value="nonveg">Non-vegetarian</option></select></label>
       <label class="f"><span class="l">Cuisine</span>
-        <select id="cuisine"><option value="guj">Gujarati</option><option value="ind">Other Indian</option><option value="intl">International</option></select></label>
+        <select id="cuisine"><option value="guj">Gujarati</option><option value="north">North Indian</option><option value="south">South Indian</option><option value="intl">International</option></select></label>
       <label class="f"><span class="l">Fasting days</span>
         <select id="fast"><option value="none">None</option><option value="farali">Ekadashi / Navratri (farali)</option><option value="jain">Jain upvas / Paryushan</option><option value="ramadan">Ramadan</option></select></label>
     </div>
@@ -350,13 +350,13 @@ footer ul{padding-left:18px;margin:6px 0}
       <li>Exercise, less alcohol and a 5–10% weight loss each lower blood pressure further.</li>
     </ul></details>
 
-  <details><summary>The Gujarati plate: five fixes</summary>
+  <details><summary>The Indian plate: the fixes that matter most</summary>
     <ul class="tight">
-      <li>Take the sugar and jaggery out of dal, kadhi and sabzi. Use kokum, lemon or tomato for the sour note.</li>
-      <li>Fried farsan is the biggest hidden calorie source. Swap fafda, gathiya, sev and bhajia for khaman, dhokla, roasted chana or sprouts.</li>
-      <li>Rotli count down, protein count up: two plain rotli with extra sabzi, dal and curd beats four with ghee.</li>
-      <li>Chai: four sweet cups a day is 120 calories of sugar. Half a teaspoon or none.</li>
-      <li>Half the plate vegetables, a quarter protein, a quarter bajra, jowar or whole wheat. Rice one katori, not two.</li>
+      <li><b>Everywhere:</b> half the plate vegetables, a quarter protein, a quarter whole grain or millet. Rice one katori, not two. Sweet tea or coffee four times a day is 120 calories of sugar; half a teaspoon or none.</li>
+      <li><b>Gujarat:</b> take the sugar and jaggery out of dal, kadhi and sabzi. Swap fried farsan (fafda, gathiya, sev, bhajia) for khaman, dhokla, roasted chana or sprouts. Two plain rotli with extra sabzi, dal and curd beats four with ghee.</li>
+      <li><b>North:</b> paratha with less oil and a protein filling, not potato. Rajma and chole are good protein; cream, butter and makhani gravies are not. Phulka instead of naan or puri.</li>
+      <li><b>South:</b> idli and dosa are mostly rice; the protein is in the sambar, sundal, dal and curd, so take a full katori. Ragi dosa or adai beats plain dosa. Go easy on coconut chutney and oil in the tadka.</li>
+      <li><b>Everywhere:</b> papad and pickle are salt. One or neither, not both at every meal.</li>
     </ul></details>
 
   <details><summary>Fasting, festivals and Garba</summary>
@@ -488,13 +488,54 @@ const PROT={
  egg:[['Egg','1','70','6'],['Cooked dal','1 katori','100','6–7'],['Paneer','50 g','130','9'],['Hung curd','100 g','90','8–10'],['Chana / rajma','1 katori','150','7–9'],['Toned milk','200 ml','120','6–7'],['Soya chunks (dry)','25 g','85','13'],['Roasted chana','30 g','110','6']],
  nonveg:[['Chicken / fish, cooked','100 g','150–170','22–30'],['Egg','1','70','6'],['Cooked dal','1 katori','100','6–7'],['Paneer','50 g','130','9'],['Hung curd','100 g','90','8–10'],['Chana / rajma','1 katori','150','7–9'],['Toned milk','200 ml','120','6–7']]
 };
-const DAY1200={
- veg:['Unsweetened tea with toned milk + 5 almonds','2 moong chilla + 100 g hung curd','1 fruit','1 rotli + dal (no sugar) + sabzi + salad + chaas','Sprouts chaat','1 bajra rotla + 50 g paneer bhurji + sabzi'],
- jain:['Unsweetened tea with toned milk + 5 almonds','Besan chilla (no onion) + 100 g curd','1 fruit','1 rotli + dal (no sugar) + non-root sabzi (dudhi, turia, cabbage) + chaas','30 g roasted chana','1 bajra rotla + 50 g paneer + sabzi, before sunset'],
- vegan:['Soy-milk tea + 5 almonds','2 moong chilla + 100 g tofu bhurji','1 fruit','1 rotli + dal + sabzi + ½ katori soya curry + salad','Sprouts chaat','100 g tofu + sabzi + 1 bajra rotla'],
- egg:['Unsweetened tea with toned milk + 5 almonds','2-egg omelette + 1 rotli','1 fruit','1 rotli + dal (no sugar) + sabzi + salad + chaas','Boiled egg + sprouts','1 bajra rotla + 50 g paneer + sabzi'],
- nonveg:['Unsweetened tea with toned milk + 5 almonds','2-egg omelette + 1 rotli','1 fruit','1 rotli + 100 g chicken or fish + sabzi + salad','Boiled egg + sprouts','100 g fish or chicken + sabzi + 1 rotla']
+const DAYS={
+ guj:{
+  veg:['Unsweetened tea with toned milk + 5 almonds','2 moong chilla + 100 g hung curd','1 fruit','1 rotli + dal (no sugar) + sabzi + salad + chaas','Sprouts chaat','1 bajra rotla + 50 g paneer bhurji + sabzi'],
+  jain:['Unsweetened tea with toned milk + 5 almonds','Besan chilla (no onion) + 100 g curd','1 fruit','1 rotli + dal (no sugar) + non-root sabzi (dudhi, turia, cabbage) + chaas','30 g roasted chana','1 bajra rotla + 50 g paneer + sabzi, before sunset'],
+  vegan:['Soy-milk tea + 5 almonds','2 moong chilla + 100 g tofu bhurji','1 fruit','1 rotli + dal + sabzi + ½ katori soya curry + salad','Sprouts chaat','100 g tofu + sabzi + 1 bajra rotla'],
+  egg:['Unsweetened tea with toned milk + 5 almonds','2-egg omelette + 1 rotli','1 fruit','1 rotli + dal (no sugar) + sabzi + salad + chaas','Boiled egg + sprouts','1 bajra rotla + 50 g paneer + sabzi'],
+  nonveg:['Unsweetened tea with toned milk + 5 almonds','2-egg omelette + 1 rotli','1 fruit','1 rotli + 100 g chicken or fish + sabzi + salad','Boiled egg + sprouts','100 g fish or chicken + sabzi + 1 rotla']
+ },
+ north:{
+  veg:['Tea with toned milk, no sugar + 5 almonds','1 stuffed paneer paratha (1 tsp oil) + 100 g curd','1 fruit','1 phulka + rajma (1 katori) + sabzi + salad + lassi (no sugar)','Roasted chana + a glass of chaas','1 phulka + dal tadka (little oil) + 50 g paneer sabzi'],
+  jain:['Tea with toned milk, no sugar + 5 almonds','1 paneer paratha (no onion) + 100 g curd','1 fruit','1 phulka + chole (1 katori) + lauki sabzi + salad','Roasted chana','1 phulka + moong dal + 50 g paneer sabzi, before sunset'],
+  vegan:['Soy-milk tea + 5 almonds','1 missi roti + 100 g tofu bhurji','1 fruit','1 phulka + rajma (1 katori) + sabzi + salad','Roasted chana + peanuts','1 phulka + dal + 100 g tofu sabzi'],
+  egg:['Tea with toned milk, no sugar + 5 almonds','2-egg bhurji + 1 phulka','1 fruit','1 phulka + chole (1 katori) + sabzi + salad + chaas','1 boiled egg + cucumber','1 phulka + dal + 50 g paneer sabzi'],
+  nonveg:['Tea with toned milk, no sugar + 5 almonds','2-egg bhurji + 1 phulka','1 fruit','1 phulka + 100 g chicken curry (little oil) + sabzi + salad','1 boiled egg','100 g grilled chicken or fish + dal + sabzi']
+ },
+ south:{
+  veg:['Filter coffee with toned milk, no sugar','3 idli + 1 katori sambar + chutney (little coconut)','1 fruit','½ katori rice + 1 katori sambar + poriyal + 100 g curd','Sundal (boiled chana) 1 katori','2 ragi dosa + 1 katori dal or paneer curry'],
+  jain:['Filter coffee with toned milk, no sugar','3 idli + sambar without onion, garlic, drumstick roots + coconut chutney','1 fruit','½ katori rice + sambar (no roots) + cabbage poriyal + 100 g curd','Sundal 1 katori','2 ragi dosa + paruppu (dal) + paneer, before sunset'],
+  vegan:['Black coffee or tea','3 idli + 1 katori sambar + chutney','1 fruit','½ katori rice + 1 katori sambar + poriyal + 100 g tofu pepper fry','Sundal 1 katori','2 ragi dosa + 1 katori dal + soya chunks curry'],
+  egg:['Filter coffee with toned milk, no sugar','2 egg dosa + chutney','1 fruit','½ katori rice + sambar + poriyal + 100 g curd','1 boiled egg + sundal','2 ragi dosa + egg curry'],
+  nonveg:['Filter coffee with toned milk, no sugar','2 egg dosa + chutney','1 fruit','½ katori rice + 100 g fish curry (little oil) + poriyal + rasam','Sundal 1 katori','2 ragi dosa + 100 g chicken curry or dal']
+ },
+ intl:{
+  veg:['Coffee or tea, no sugar','Oats 40 g cooked in milk + 100 g Greek yoghurt + berries','1 fruit','Lentil soup 1 bowl + whole-grain bread 1 slice + large salad with olive oil','Hummus 3 tbsp + vegetable sticks','Paneer or halloumi 80 g grilled + roasted vegetables + ½ cup quinoa'],
+  jain:['Coffee or tea, no sugar','Oats in milk + Greek yoghurt + fruit','1 fruit','Lentil soup + whole-grain bread + salad (no onion, garlic, root vegetables)','Hummus-free dip: Greek yoghurt + cucumber','Paneer 80 g grilled + roasted peppers, courgette + ½ cup quinoa, before sunset'],
+  vegan:['Black coffee or tea','Oats cooked in soy milk + chia + berries','1 fruit','Lentil soup + whole-grain bread + salad with olive oil','Hummus 3 tbsp + vegetable sticks','Tofu 150 g stir-fry + vegetables + ½ cup brown rice'],
+  egg:['Coffee or tea, no sugar','2-egg omelette with vegetables + 1 slice whole-grain toast','1 fruit','Bean salad 1 bowl + whole-grain bread + Greek yoghurt','1 boiled egg + nuts 10 g','Paneer or cottage cheese 100 g + roasted vegetables + ½ cup quinoa'],
+  nonveg:['Coffee or tea, no sugar','2-egg omelette with vegetables + 1 slice whole-grain toast','1 fruit','Grilled chicken 100 g + large salad + ½ cup brown rice','Greek yoghurt 100 g + nuts 10 g','Baked fish 120 g + roasted vegetables + 1 small potato']
+ }
 };
+const PROT_X={
+ north:[['Rajma / chole, cooked','1 katori','150','8–9'],['Dal tadka (little oil)','1 katori','110','6–7'],['Paneer','50 g','130','9'],['Curd / lassi without sugar','150 ml','90','5'],['Besan or missi roti','1','130','5–6'],['Soya chunks (dry)','25 g','85','13'],['Egg','1','70','6'],['Chicken, cooked','100 g','165','25'],['Milk, toned','200 ml','120','6–7']],
+ south:[['Sambar','1 katori','100','5–6'],['Idli','1','60','2'],['Sundal (boiled chana)','1 katori','150','8'],['Curd','150 g','90','5'],['Ragi dosa','1','90','3'],['Paruppu / dal','1 katori','100','6–7'],['Egg','1','70','6'],['Fish, cooked','100 g','150','22–25'],['Chicken, cooked','100 g','165','25'],['Tofu / paneer','100 g','120–260','10–18']],
+ intl:[['Greek yoghurt','100 g','60–100','8–10'],['Eggs','2','140','12'],['Lentil / bean soup','1 bowl','180','10–12'],['Hummus','3 tbsp','120','4'],['Cottage cheese','100 g','100','11'],['Tofu','150 g','150','15'],['Chicken breast','100 g','165','30'],['Fish (salmon, tuna, cod)','120 g','150–240','25–30'],['Oats (dry)','40 g','150','5'],['Quinoa, cooked','½ cup','110','4']]
+};
+function protList(p){
+ if(p.cuisine==='guj')return PROT[p.diet];
+ const base=PROT_X[p.cuisine]||PROT_X.north;
+ const nv=['Egg','Eggs','Chicken, cooked','Chicken breast','Fish, cooked','Fish (salmon, tuna, cod)'];
+ const eggOnly=['Egg','Eggs'];
+ const dairy=['Paneer','Curd / lassi without sugar','Milk, toned','Curd','Greek yoghurt','Cottage cheese'];
+ return base.filter(r=>{
+  if(p.diet==='nonveg')return true;
+  if(p.diet==='egg')return !nv.includes(r[0])||eggOnly.includes(r[0]);
+  if(p.diet==='vegan')return !nv.includes(r[0])&&!dairy.includes(r[0])&&r[0]!=='Tofu / paneer'||r[0]==='Tofu / paneer';
+  return !nv.includes(r[0]);
+ }).map(r=>p.diet==='vegan'&&r[0]==='Tofu / paneer'?['Tofu','100 g','120','10–14']:r);
+}
 const MEALNAMES=['Early morning','Breakfast','Mid-morning','Lunch','Evening snack','Dinner'];
 const SCALE={1200:{rot:0,dal:'—',milk:0,pro:'—',nuts:'—',oil:'3 tsp',prot:'65–75 g'},1500:{rot:'+1',dal:'+½ katori',milk:'+1 serving',pro:'—',nuts:'+10 g',oil:'4 tsp',prot:'75–85 g'},1800:{rot:'+2',dal:'+1 katori',milk:'+2 servings',pro:'+50 g paneer/tofu, +1 egg or +50 g meat',nuts:'+15 g',oil:'5 tsp',prot:'90–100 g'},2100:{rot:'+3',dal:'+1 katori',milk:'+2 servings',pro:'+100 g paneer/tofu, +2 eggs or +100 g meat',nuts:'+20 g',oil:'5–6 tsp',prot:'105–120 g'}};
 const SWAPS_GUJ=[['Dal or kadhi with 2 tsp sugar/jaggery','No sugar; kokum, lemon or tomato for sourness','30–40 kcal per katori'],['Fafda / gathiya 50 g','2 steamed khaman or dhokla, or roasted chana','~150 kcal'],['4 rotli with ghee','2 plain rotli + extra sabzi + curd or dal','~200 kcal, more protein'],['2 katori white rice','1 katori rice + 1 katori dal or sprouts, or a millet rotla','~150 kcal'],['4 sweet chai','½ tsp sugar or none, toned milk','~120 kcal'],['3 thepla breakfast','1 thepla + curd + sprouts, or moong/besan chilla','+12–15 g protein'],['Fried muthiya / bhajia','Steamed or air-fried','~150 kcal'],['Shrikhand / basundi','Hung curd with fruit','~150 kcal'],['Sev usal','Sprout usal without sev','~150 kcal'],['Cold drinks / juice','Chaas, lemon water without sugar','100–150 kcal'],['Papad + achar at every meal','One or neither; both are mostly salt','Salt']];
@@ -837,14 +878,14 @@ function render(){
  h+='</div></div>';
  if(o.iom){h+='<div class="note"><b>Pregnancy weight gain (IOM 2009, from pre-pregnancy BMI '+(p.prebmi||p.bmi).toFixed(1)+'):</b> total '+o.iom[0]+'; '+o.iom[1]+' in the 2nd and 3rd trimesters; 0.5–2 kg in the 1st. Extra 350 kcal/day from the 2nd trimester. Folic acid before conception and through the 1st trimester; iron-folic acid and calcium from the 2nd. Avoid alcohol, unpasteurised milk or paneer, raw egg, meat or fish, liver, high-mercury fish, caffeine over 200 mg a day.</div>';}
  /* template */
- h+='<details><summary>Sample day at '+d.tmpl+' kcal ('+esc({veg:'vegetarian',jain:'Jain',vegan:'vegan',egg:'eggetarian',nonveg:'non-vegetarian'}[p.diet])+')</summary>';
- h+='<div class="tbl"><table><tr><th>Meal</th><th>1,200 kcal base</th></tr>'+DAY1200[p.diet].map((m,i)=>'<tr><td>'+MEALNAMES[i]+'</td><td>'+esc(m)+'</td></tr>').join('')+'</table></div>';
+ h+='<details><summary>Sample day at '+d.tmpl+' kcal ('+esc({guj:'Gujarati',north:'North Indian',south:'South Indian',intl:'international'}[p.cuisine])+', '+esc({veg:'vegetarian',jain:'Jain',vegan:'vegan',egg:'eggetarian',nonveg:'non-vegetarian'}[p.diet])+')</summary>';
+ h+='<div class="tbl"><table><tr><th>Meal</th><th>1,200 kcal base</th></tr>'+DAYS[p.cuisine][p.diet].map((m,i)=>'<tr><td>'+MEALNAMES[i]+'</td><td>'+esc(m)+'</td></tr>').join('')+'</table></div>';
  if(d.tmpl>1200){const s=SCALE[d.tmpl];h+='<p class="small" style="margin-top:6px"><b>To reach '+d.tmpl+' kcal, add across the day:</b> rotli '+s.rot+'; dal or legumes '+s.dal+'; milk, curd or soy '+s.milk+'; '+esc(s.pro)+'; nuts '+s.nuts+'; oil '+s.oil+'. Protein comes to about '+s.prot+'.</p>';}
  else h+='<p class="small" style="margin-top:6px">Oil 3 tsp. Protein about 65–75 g; top up with a milk, curd, soy or whey serving if your target is higher.</p>';
  if(p.diet==='jain')h+='<p class="small">Jain: no root vegetables, eggs, meat or honey. Dinner before sunset is built in.</p>';
  h+='</details>';
- h+='<details><summary>Protein sources that fit your diet</summary><div class="tbl"><table><tr><th>Food</th><th>Portion</th><th class="num">kcal</th><th class="num">Protein g</th></tr>'+PROT[p.diet].map(r=>'<tr><td>'+r[0]+'</td><td>'+r[1]+'</td><td class="num">'+r[2]+'</td><td class="num">'+r[3]+'</td></tr>').join('')+'</table></div><p class="small">Values are approximate; check against IFCT 2017. Food first; plain whey or soy powder only if you cannot reach the target.</p></details>';
- const sw=p.cuisine==='guj'?SWAPS_GUJ:p.cuisine==='ind'?SWAPS_IND:SWAPS_INTL;
+ h+='<details><summary>Protein sources that fit your diet</summary><div class="tbl"><table><tr><th>Food</th><th>Portion</th><th class="num">kcal</th><th class="num">Protein g</th></tr>'+protList(p).map(r=>'<tr><td>'+r[0]+'</td><td>'+r[1]+'</td><td class="num">'+r[2]+'</td><td class="num">'+r[3]+'</td></tr>').join('')+'</table></div><p class="small">Values are approximate; check against IFCT 2017. Food first; plain whey or soy powder only if you cannot reach the target.</p></details>';
+ const sw=p.cuisine==='guj'?SWAPS_GUJ:p.cuisine==='intl'?SWAPS_INTL:SWAPS_IND;
  h+='<details><summary>Swaps that save the most</summary><div class="tbl"><table><tr><th>Instead of</th><th>Swap to</th><th>Saves</th></tr>'+sw.map(r=>'<tr><td>'+esc(r[0])+'</td><td>'+esc(r[1])+'</td><td>'+esc(r[2])+'</td></tr>').join('')+'</table></div></details>';
  h+='</section>';
 
@@ -927,7 +968,7 @@ function render(){
 const FIELDS=['sex','age','ht','wt','waist','target','act','time','preg','prebmi','sbp','dbp','glpPhase','diet','cuisine','fast'];
 const GROUPS=['equip','injCur','injOld','wom','cond','meds','sym'];
 function serialize(){const s={};FIELDS.forEach(f=>s[f]=$(f).value);GROUPS.forEach(g=>s[g]=checked(g));return s;}
-function apply(s){FIELDS.forEach(f=>{if(s[f]!==undefined)$(f).value=s[f];});GROUPS.forEach(g=>{document.querySelectorAll('#'+g+' input').forEach(i=>{i.checked=(s[g]||[]).includes(i.value);});});}
+function apply(s){if(s.cuisine==='ind')s.cuisine='north';FIELDS.forEach(f=>{if(s[f]!==undefined)$(f).value=s[f];});GROUPS.forEach(g=>{document.querySelectorAll('#'+g+' input').forEach(i=>{i.checked=(s[g]||[]).includes(i.value);});});}
 const SAMPLE={sex:'M',age:52,ht:170,wt:92,waist:104,target:20,act:'sed',time:180,preg:'none',prebmi:'',sbp:138,dbp:88,glpPhase:'stable',diet:'veg',cuisine:'guj',fast:'farali',equip:['bands'],injCur:['knee'],injOld:['back'],wom:[],cond:['t2d','fld'],meds:['tirz','met'],sym:[]};
 $('btnSample').addEventListener('click',()=>{apply(SAMPLE);render();toast('Example profile loaded');});
 $('btnReset').addEventListener('click',()=>{$('profile').reset();document.querySelectorAll('#profile input[type=checkbox]').forEach(i=>i.checked=false);render();});
