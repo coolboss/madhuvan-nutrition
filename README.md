@@ -6,9 +6,9 @@ No server, no login, no subscription. Each tool is a single HTML file that runs 
 
 | Tool | Path | For |
 |---|---|---|
-| **Nutrition Workstation 3.5** | `index.html` | The clinic desk: assessment, targets, diet plan, recall, labs, glucose diary, patient sheets |
+| **Nutrition Workstation 3.6** | `index.html` | The clinic desk: assessment, targets, diet plan, recall, labs, glucose diary, patient sheets |
 | **Protein Planner 2.1** | `protein/index.html` | The patient's phone: daily protein from home food, with low-cost supplements only to fill the gap |
-| **Aahar 1.0** | `me/index.html` | Anyone's phone: BMI, daily targets, ICMR "My Plate", tap what you ate, the basic rules — self-care, no doctor needed |
+| **Aahar 1.1** | `me/index.html` | Anyone's phone: BMI, daily targets, ICMR "My Plate", tap what you ate, the basic rules — self-care, no doctor needed |
 
 Live copies: https://coolboss.github.io/madhuvan-nutrition/ · https://coolboss.github.io/madhuvan-nutrition/protein/ · https://coolboss.github.io/madhuvan-nutrition/me/
 
@@ -84,6 +84,7 @@ Both tools are static pages. Fork this repository and turn on GitHub Pages (Sett
 These tools are clinical decision aids for qualified clinicians. Values are estimates, reference intakes are defaults you are expected to verify, and every target or flag is a starting point for clinical judgement. The treating doctor remains responsible for every prescription. See `LICENSE`.
 
 ## Changelog
+- **3.6 / Aahar 1.1 (5 Nov 2026)** — Severe-scrutiny release after an independent clinical review (37 findings, all addressed). Template fitter rewritten: 1–3 rotli per main meal (2 in GDM), rice ½–1½ katori, energy gap filled with milk, dal, dahi, fruit, nuts, paneer, egg before cereals; fallbacks when an exclusion empties a meal; protein-short warning. Whole pregnancy now uses pregnancy micronutrient targets (first trimester was getting non-pregnant folate). New patients no longer get a weight-loss deficit by default. Jain patients keep condition templates. GDM macro split sums to 100%. Protein on continuous adjusted weight above BMI 25, 1.2 g/kg during restriction; energy on adjusted weight for obese pregnant/lactating women; +300 kcal for underweight adults. Ferritin, TSH (trimester-specific), HDL, BP-before-20-weeks and non-GDM pregnancy glucose flags corrected; glucose slots named "2 h after"; low readings flagged. Anaemia template no longer pairs dairy or tea with iron meals; sugared nimbu pani replaced. MoHFW supplement schedule wording. Lactation gets alcohol, caffeine and fish cards. Mohanthal, sukhdi, basundi portions corrected; unfortified bread values. Aahar: never advises weight loss in pregnancy or lactation, requires pre-pregnancy weight for BMI, no deficit under 18 or over 60, fixed vegetable/fruit/milk minimums, sugar capped at 25 g (0 in diabetes), health chips now change targets and tips, potatoes no longer count as vegetables, fried food and sweets penalised in the plate score, cereal line reads as a per-meal example.
 - **Aahar 1.0 (4 Nov 2026)** — new self-service app at `/me/`.
 - **3.5 (4 Nov 2026)** — Public release: neutral branding with first-run clinic setup and optional `clinic-config.js`; MIT licence; Protein Planner takes the clinic name from the link or config instead of hard-coding it.
 - **3.4 (3 Nov 2026)** — Category-moulded screens; hard exclusions; labs with flags, trends and BP chart; glucose diary; diet cost and shopping list; portion guide; farali and Ramzan templates; staff UI in Gujarati/Hindi; two-way patient report code.
