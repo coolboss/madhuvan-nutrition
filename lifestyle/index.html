@@ -94,6 +94,17 @@ footer ul{padding-left:18px;margin:6px 0}
 .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:var(--accent);color:var(--accent-ink);padding:8px 14px;border-radius:5px;font-size:.9rem;opacity:0;transition:opacity .2s;pointer-events:none}
 .toast.show{opacity:1}
 @media (prefers-reduced-motion:reduce){.toast{transition:none}}
+@media print{
+  body{background:#fff;color:#000;font-size:11pt;padding:0}
+  #profile,.btns,#learn,.toast,header.top p{display:none!important}
+  .grid{display:block}
+  .card{border:1px solid #999;break-inside:avoid;page-break-inside:avoid;margin-bottom:10px;padding:10px}
+  details{display:block}details>summary{list-style:none}details:not([open])>*:not(summary){display:block}
+  .banner{border-left:4px solid #000;background:#eee}
+  .stat{background:#f4f4f4}
+  footer{font-size:9pt}
+  a[href]::after{content:""}
+}
 </style>
 </head>
 <body>
@@ -109,6 +120,7 @@ footer ul{padding-left:18px;margin:6px 0}
     <a href="#learn" style="font-family:var(--display);font-weight:600;padding:9px 16px;border-radius:5px;border:1px solid var(--accent);color:var(--accent);text-decoration:none">Learn</a>
     <button id="btnSample" class="ghost" type="button">Load example</button>
     <button id="btnReset" class="ghost" type="button">Clear</button>
+    <button id="btnPrint" class="ghost" type="button">Print / save PDF</button>
     <button id="btnCopy" type="button">Copy plan</button>
   </div>
 </header>
@@ -972,6 +984,7 @@ function apply(s){if(s.cuisine==='ind')s.cuisine='north';FIELDS.forEach(f=>{if(s
 const SAMPLE={sex:'M',age:52,ht:170,wt:92,waist:104,target:20,act:'sed',time:180,preg:'none',prebmi:'',sbp:138,dbp:88,glpPhase:'stable',diet:'veg',cuisine:'guj',fast:'farali',equip:['bands'],injCur:['knee'],injOld:['back'],wom:[],cond:['t2d','fld'],meds:['tirz','met'],sym:[]};
 $('btnSample').addEventListener('click',()=>{apply(SAMPLE);render();toast('Example profile loaded');});
 $('btnReset').addEventListener('click',()=>{$('profile').reset();document.querySelectorAll('#profile input[type=checkbox]').forEach(i=>i.checked=false);render();});
+$('btnPrint').addEventListener('click',()=>{document.querySelectorAll('#out details').forEach(d=>d.open=true);setTimeout(()=>window.print(),50);});
 $('btnCopy').addEventListener('click',()=>{const t=$('out').innerText;const done=()=>toast('Plan copied');const fail=()=>{const r=document.createRange();r.selectNodeContents($('out'));const s=getSelection();s.removeAllRanges();s.addRange(r);toast('Select-all done; press copy');};
  if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done,fail);}else fail();});
 function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1800);}
