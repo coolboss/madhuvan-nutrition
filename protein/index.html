@@ -11,7 +11,7 @@
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hind+Vadodara:wght@400;500;600;700&family=Hind:wght@400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hind+Vadodara:wght@400;500;600;700&family=Hind:wght@400;500;600;700&display=swap" media="print" onload="this.media='all'">
 <style>
 :root{
   --bg:#F4F6F1; --surface:#FFFFFF; --sunk:#E9EDE5; --line:#D5DDD3;
@@ -665,7 +665,14 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",
     const b=m[1].replace(/-/g,"+").replace(/_/g,"/");
     const o=JSON.parse(decodeURIComponent(escape(atob(b))));
     const keys=["mode","tri","lact","method","perkg","fixed","diet","eggs","supp","wt","ht","excl","cond","shop","custom","mult","swap","removed","name","note","lang","clinic"];
-    for(const k of keys) if(k in o) st[k]=o[k];
+    const known=k=>k in S||/^c\d$/.test(k), one=(v,a)=>a.includes(String(v))?String(v):null, num=(v,lo,hi)=>{v=parseFloat(v);return Number.isFinite(v)?Math.min(hi,Math.max(lo,v)):null}, txt=(v,n)=>String(v??"").slice(0,n), list=(v,ok)=>Array.isArray(v)?v.filter(x=>typeof x==="string"&&ok(x)):[];
+    const clean={mode:one(o.mode,["preg","lact","gen"]),tri:one(o.tri,["1","2","3"]),lact:one(o.lact,["1","2"]),method:one(o.method,["auto","perkg","fixed"]),perkg:num(o.perkg,0.6,2.5),fixed:num(o.fixed,20,250),diet:one(o.diet,["veg","nonveg"]),eggs:one(o.eggs,["yes","no"]),supp:one(o.supp,["none","balanced","easy"]),wt:num(o.wt,30,160),ht:o.ht===""||o.ht==null?"":(num(o.ht,100,220)??""),
+      excl:list(o.excl,x=>EXCL.includes(x)),cond:list(o.cond,x=>["gdm","kidney","lactose"].includes(x)),shop:one(o.shop,["local","online"]),
+      custom:(Array.isArray(o.custom)?o.custom:[]).slice(0,8).filter(c=>c&&typeof c==="object").map(c=>({n:txt(c.n,40),p:num(c.p,0,60)||0,c:num(c.c,0,5000)||0,w:c.w==="online"?"online":"local"})).filter(c=>c.n&&c.p),
+      mult:{},swap:{},removed:list(o.removed,x=>known(x)),name:txt(o.name,60),note:txt(o.note,300),lang:one(o.lang,["en","gu","hi"]),clinic:txt(o.clinic,80)};
+    if(o.mult&&typeof o.mult==="object") for(const k in o.mult){ const v=num(o.mult[k],0.5,3); if(known(k)&&v) clean.mult[k]=v; }
+    if(o.swap&&typeof o.swap==="object") for(const k in o.swap){ if(known(k)&&typeof o.swap[k]==="string"&&known(o.swap[k])) clean.swap[k]=o.swap[k]; }
+    for(const k of keys) if(k in o&&clean[k]!==null&&clean[k]!==undefined) st[k]=clean[k];
     st.fromDoc=true; save();
     history.replaceState(null,"",location.pathname+location.search);
   }catch(e){}
@@ -930,7 +937,8 @@ $("#cadd").onclick=()=>{ const n=$("#cn").value.trim(), p=+$("#cp").value, c=+$(
 function makeLink(){
   const o={}; for(const k of ["mode","tri","lact","method","perkg","fixed","diet","eggs","supp","wt","ht","excl","cond","shop","custom","mult","swap","removed","name","note"]) o[k]=st[k]; o.lang=lang;
   const b=btoa(unescape(encodeURIComponent(JSON.stringify(o)))).replace(/\+/g,"-").replace(/\//g,"_").replace(/=+$/,"");
-  return location.origin+location.pathname+"#p="+b;
+  const site=(window.CLINIC_CONFIG&&window.CLINIC_CONFIG.siteUrl)||"";const base=location.protocol.startsWith("http")?location.origin+location.pathname:(site?site.replace(/\/?$/,"/")+"protein/":location.href.split("#")[0]);
+  return base+"#p="+b;
 }
 $("#copyLink").onclick=()=>{ const u=makeLink(); const ok=()=>{$("#linkMsg").textContent=t("linkCopied");}; const fb=()=>{$("#linkMsg").textContent=u;}; try{navigator.clipboard.writeText(u).then(ok,fb);}catch(e){fb();} };
 $("#waLink").onclick=()=>{ const T=target(); const msg=`${t("waHead")}\n${st.name?st.name+"\n":""}${t("waTarget")}: ${T.t} g/${t("waDay").toLowerCase()}\n${makeLink()}`; window.open("https://wa.me/?text="+encodeURIComponent(msg),"_blank"); };
@@ -1032,7 +1040,7 @@ function renderFoods(){
 /* ============ TODAY'S TALLY ============ */
 let tally={date:"",counts:{}};
 try{ tally=JSON.parse(localStorage.getItem("mpp2-tally")||"{}")||tally; }catch(e){}
-const today=()=>new Date().toISOString().slice(0,10);
+const today=()=>{const d=new Date();return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0')};
 if(tally.date!==today()){ tally={date:today(),counts:{}}; }
 const saveT=()=>{ try{localStorage.setItem("mpp2-tally",JSON.stringify(tally));}catch(e){} };
 $("#tq").oninput=renderTally; $("#tcat").onchange=renderTally;
